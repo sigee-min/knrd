@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Bow ship top-down -->
+  <polygon points="12,31 16,27 34,26 48,28 54,32 48,36 34,38 16,37 12,33" fill="#8b5a2b" stroke="#3b2a17" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Mast base -->
+  <rect x="28" y="24" width="4" height="16" rx="1" fill="#c8b08a" stroke="#3b2a17" stroke-width="1"/>
+  <!-- Arrows volley (stylized) -->
+  <g stroke="#704a24" stroke-width="2">
+    <line x1="36" y1="26" x2="50" y2="21"/>
+    <line x1="36" y1="30" x2="50" y2="25"/>
+    <line x1="36" y1="34" x2="50" y2="29"/>
+  </g>
+  <!-- Oars hint -->
+  <g stroke="#704a24" stroke-width="2">
+    <line x1="20" y1="29" x2="15" y2="26"/>
+    <line x1="20" y1="35" x2="15" y2="38"/>
+  </g>
+</svg>

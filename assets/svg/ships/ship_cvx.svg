@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64">
+  <!-- CVX: carrier flight deck top-down with angled deck -->
+  <rect x="8" y="18" width="64" height="28" rx="3" fill="#4b5a67" stroke="#2e3a44" stroke-width="2"/>
+  <!-- Angled deck area -->
+  <polygon points="44,18 72,18 72,46 56,46" fill="#4b5a67" stroke="#2e3a44" stroke-width="2"/>
+  <!-- Centerline and runway markings -->
+  <line x1="12" y1="32" x2="60" y2="32" stroke="#d5dde6" stroke-width="1" stroke-dasharray="3 3" opacity="0.8"/>
+  <line x1="46" y1="40" x2="70" y2="36" stroke="#d5dde6" stroke-width="1"/>
+  <!-- Island (starboard/bottom) -->
+  <rect x="54" y="36" width="12" height="8" rx="1" fill="#9fb0c0" stroke="#2e3a44" stroke-width="1.2"/>
+  <line x1="60" y1="36" x2="60" y2="32" stroke="#2e3a44" stroke-width="1.5"/>
+  <circle cx="60" cy="31" r="1.6" fill="#b8c8d6" stroke="#2e3a44" stroke-width="1"/>
+</svg>

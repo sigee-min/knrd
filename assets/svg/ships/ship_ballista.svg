@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Ballista ship top-down -->
+  <polygon points="12,31 16,27 34,26 48,28 54,32 48,36 34,38 16,37 12,33" fill="#7e5126" stroke="#3b2917" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="27" y="26" width="10" height="12" rx="1" fill="#c4a97a" stroke="#3b2917" stroke-width="1"/>
+  <!-- Ballista bed and limbs -->
+  <polygon points="37,24 50,22 50,26 37,28" fill="#9f7b4e" stroke="#3b2917" stroke-width="1"/>
+  <g stroke="#5f3f1d" stroke-width="1.2">
+    <line x1="39" y1="25" x2="49" y2="23.5"/>
+    <line x1="39" y1="26.2" x2="49" y2="24.7"/>
+  </g>
+  <!-- Oars -->
+  <g stroke="#5f3f1d" stroke-width="2">
+    <line x1="20" y1="29" x2="15" y2="26"/>
+    <line x1="24" y1="29" x2="19" y2="26.5"/>
+    <line x1="20" y1="35" x2="15" y2="38"/>
+    <line x1="24" y1="35" x2="19" y2="37.5"/>
+  </g>
+</svg>

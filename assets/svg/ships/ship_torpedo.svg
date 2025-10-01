@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <!-- Torpedo boat top-down -->
+  <polygon points="6,30 16,24 34,23 46,26 50,30 46,34 34,37 16,36" fill="#446a86" stroke="#223241" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="20" y="25" width="10" height="10" rx="1" fill="#7aa1b9" stroke="#223241" stroke-width="1"/>
+  <!-- Torpedo tubes (stylized) -->
+  <line x1="44" y1="28" x2="49" y2="28" stroke="#223241" stroke-width="2"/>
+  <line x1="44" y1="32" x2="49" y2="32" stroke="#223241" stroke-width="2"/>
+</svg>

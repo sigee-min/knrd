@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Hull silhouette (frigate), bow to the right -->
+  <path d="M10 32 L18 26 L36 24 L50 26 L58 32 L50 38 L36 40 L18 38 Z" fill="#627c92" stroke="#2a3a4c" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- Forecastle turret -->
+  <circle cx="50" cy="32" r="3" fill="#b2c0cf" stroke="#2a3a4c" stroke-width="1"/>
+  <line x1="53" y1="32" x2="57" y2="32" stroke="#2a3a4c" stroke-width="2"/>
+
+  <!-- VLS block (stylized) -->
+  <g transform="translate(40,28)" fill="#9fb1c5" stroke="#2a3a4c" stroke-width="0.6">
+    <rect x="-3" y="0" width="2" height="2"/>
+    <rect x="0" y="0" width="2" height="2"/>
+    <rect x="-3" y="3" width="2" height="2"/>
+    <rect x="0" y="3" width="2" height="2"/>
+  </g>
+
+  <!-- Superstructure -->
+  <rect x="20" y="25" width="13" height="14" rx="1" fill="#8fb1cf" stroke="#2a3a4c" stroke-width="1"/>
+  <rect x="22.5" y="24" width="8" height="3" fill="#a7c3db"/>
+
+  <!-- Mast -->
+  <line x1="26.5" y1="24" x2="26.5" y2="20" stroke="#2a3a4c" stroke-width="1.5"/>
+  <circle cx="26.5" cy="19" r="1.5" fill="#a7c3db" stroke="#2a3a4c" stroke-width="1"/>
+
+  <!-- Helipad marking at stern -->
+  <circle cx="14" cy="32" r="6" fill="none" stroke="#c9d7e4" stroke-width="1"/>
+  <line x1="14" y1="27.5" x2="14" y2="36.5" stroke="#c9d7e4" stroke-width="1"/>
+  <line x1="10.5" y1="32" x2="17.5" y2="32" stroke="#c9d7e4" stroke-width="1"/>
+
+  <!-- Centerline -->
+  <line x1="12" y1="32" x2="55" y2="32" stroke="#c9d7e4" stroke-width="0.75" stroke-dasharray="2 2" opacity="0.7"/>
+</svg>

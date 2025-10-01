@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 64">
+  <!-- KDDX destroyer top-down -->
+  <path d="M6 32 L14 26 L32 24 L50 26 L66 32 L50 38 L32 40 L14 38 Z" fill="#3f5670" stroke="#1c2836" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="26" y="25" width="14" height="14" rx="1" fill="#7592af" stroke="#1c2836" stroke-width="1"/>
+  <rect x="42" y="27" width="10" height="10" rx="1" fill="#92aac2" stroke="#1c2836" stroke-width="1"/>
+  <circle cx="64" cy="32" r="3" fill="#b8c8d6" stroke="#1c2836" stroke-width="1"/>
+  <!-- Helipad -->
+  <circle cx="12" cy="32" r="5" fill="none" stroke="#c9d7e4" stroke-width="1"/>
+</svg>

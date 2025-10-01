@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Panokseon top-down -->
+  <polygon points="10,32 16,26 34,24 48,26 54,32 48,38 34,40 16,38" fill="#8b5a2b" stroke="#3b2a17" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Two-tier pavilion deckhouses -->
+  <rect x="18" y="25" width="10" height="14" rx="1" fill="#c8b08a" stroke="#6b5a3a" stroke-width="1"/>
+  <rect x="36" y="25" width="10" height="14" rx="1" fill="#c8b08a" stroke="#6b5a3a" stroke-width="1"/>
+  <!-- Side armor boards -->
+  <rect x="16" y="28" width="2" height="10" fill="#7a4a1f"/>
+  <rect x="46" y="28" width="2" height="10" fill="#7a4a1f"/>
+</svg>

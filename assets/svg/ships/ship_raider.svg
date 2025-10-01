@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <!-- Raider top-down -->
+  <polygon points="8,30 18,24 36,23 48,26 52,30 48,34 36,37 18,36" fill="#6e4030" stroke="#2f1f17" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="24" y="24" width="10" height="12" rx="1" fill="#9b6850" stroke="#2f1f17" stroke-width="1"/>
+  <line x1="46" y1="30" x2="51" y2="30" stroke="#2f1f17" stroke-width="2"/>
+</svg>

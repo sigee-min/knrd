@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 64">
+  <!-- FFX-III frigate top-down -->
+  <path d="M8 32 L16 26 L34 24 L50 26 L64 32 L50 38 L34 40 L16 38 Z" fill="#3f5670" stroke="#1c2836" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Superstructure -->
+  <rect x="28" y="25" width="14" height="14" rx="1" fill="#7592af" stroke="#1c2836" stroke-width="1"/>
+  <!-- VLS block -->
+  <g transform="translate(44,28)" fill="#8ea4ba" stroke="#1c2836" stroke-width="0.6">
+    <rect x="-3" y="0" width="2" height="2"/>
+    <rect x="0" y="0" width="2" height="2"/>
+    <rect x="-3" y="3" width="2" height="2"/>
+    <rect x="0" y="3" width="2" height="2"/>
+  </g>
+  <!-- Helipad -->
+  <circle cx="14" cy="32" r="5" fill="none" stroke="#c9d7e4" stroke-width="1"/>
+</svg>

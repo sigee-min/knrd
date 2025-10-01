@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Wooden hull with pointed bow (top-down) -->
+  <polygon points="12,31 16,27 34,26 48,28 54,32 48,36 34,38 16,37 12,33" fill="#7e5126" stroke="#3b2917" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- Central deck platform / tower base -->
+  <rect x="26" y="26" width="10" height="12" rx="1" fill="#c4a97a" stroke="#3b2917" stroke-width="1"/>
+
+  <!-- Repeating crossbow rack (hwacha-like) -->
+  <polygon points="36,24 48,22 48,26 36,28" fill="#9f7b4e" stroke="#3b2917" stroke-width="1"/>
+  <!-- Bolt array -->
+  <g stroke="#5f3f1d" stroke-width="1">
+    <line x1="38" y1="25" x2="46" y2="23.5"/>
+    <line x1="38" y1="26" x2="46" y2="24.5"/>
+    <line x1="38" y1="27" x2="46" y2="25.5"/>
+  </g>
+
+  <!-- Oars along sides -->
+  <g stroke="#5f3f1d" stroke-width="2">
+    <line x1="20" y1="29" x2="15" y2="26"/>
+    <line x1="24" y1="29" x2="19" y2="26.5"/>
+    <line x1="20" y1="35" x2="15" y2="38"/>
+    <line x1="24" y1="35" x2="19" y2="37.5"/>
+  </g>
+</svg>

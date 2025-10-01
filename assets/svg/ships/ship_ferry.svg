@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <!-- Ferry top-down -->
+  <polygon points="8,24 14,20 28,19 36,21 40,24 36,27 28,29 14,28" fill="#9a6a3a" stroke="#432b16" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="18" y="18" width="8" height="12" rx="1" fill="#cbb48e" stroke="#432b16" stroke-width="1"/>
+  <!-- Flag at mast -->
+  <line x1="22" y1="18" x2="22" y2="14" stroke="#432b16" stroke-width="1.5"/>
+  <polygon points="22,14 26,15.5 22,17" fill="#d9c9a8"/>
+</svg>

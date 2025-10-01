@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <linearGradient id="g-mythic" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#e74c3c" />
+      <stop offset="1" stop-color="#a93226" />
+    </linearGradient>
+  </defs>
+  <path d="M6 30l9-13h18l9 13-9 6H15z" fill="url(#g-mythic)" stroke="#7b241c" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M18 17l3-6h6l3 6z" fill="#ffd7d1" stroke="#cb4335" stroke-width="1"/>
+  <circle cx="24" cy="25" r="3" fill="#6c2019"/>
+</svg>

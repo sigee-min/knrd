@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <linearGradient id="g-rare" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#5aa1e3" />
+      <stop offset="1" stop-color="#3c6faa" />
+    </linearGradient>
+  </defs>
+  <path d="M6 30l7-11h22l7 11-7 6H13z" fill="url(#g-rare)" stroke="#294972" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M18 20l3-6h6l3 6z" fill="#d6ecff" stroke="#6391ce" stroke-width="1"/>
+  <circle cx="24" cy="27" r="3" fill="#274066"/>
+</svg>

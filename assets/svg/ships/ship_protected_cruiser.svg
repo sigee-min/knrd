@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 64">
+  <!-- Protected cruiser top-down -->
+  <path d="M10 32 L16 27 L34 26 L48 28 L58 32 L48 36 L34 38 L16 37 Z" fill="#5d7a96" stroke="#2a3a4c" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="24" y="27" width="12" height="10" rx="1" fill="#8fb1cf" stroke="#2a3a4c" stroke-width="1"/>
+  <circle cx="52" cy="32" r="2.5" fill="#b8c8d6" stroke="#2a3a4c" stroke-width="1"/>
+</svg>

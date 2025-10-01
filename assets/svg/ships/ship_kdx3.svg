@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- KDX-III Aegis top-down -->
+  <path d="M6 32 L14 26 L30 24 L46 26 L58 32 L46 38 L30 40 L14 38 Z" fill="#425a76" stroke="#1f2b3b" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="22" y="25" width="12" height="14" rx="1" fill="#7fa0c0" stroke="#1f2b3b" stroke-width="1"/>
+  <rect x="38" y="27" width="10" height="10" rx="1" fill="#98b6d2" stroke="#1f2b3b" stroke-width="1"/>
+  <circle cx="56" cy="32" r="3" fill="#b8c8d6" stroke="#1f2b3b" stroke-width="1"/>
+  <circle cx="12" cy="32" r="5" fill="none" stroke="#c9d7e4" stroke-width="1"/>
+</svg>

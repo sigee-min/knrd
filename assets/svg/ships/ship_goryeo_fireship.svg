@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Goryeo fireship top-down -->
+  <polygon points="12,31 16,27 34,26 48,28 54,32 48,36 34,38 16,37 12,33" fill="#8a5a2b" stroke="#3e2a16" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Fire marker at bow -->
+  <circle cx="50" cy="32" r="3" fill="#e25822"/>
+</svg>

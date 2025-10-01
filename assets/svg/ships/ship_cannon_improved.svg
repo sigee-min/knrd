@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 64">
+  <!-- Improved cannon ship top-down -->
+  <polygon points="10,32 16,26 34,24 48,26 58,32 48,38 34,40 16,38" fill="#7f4e24" stroke="#382614" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Triple mounts -->
+  <circle cx="26" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
+  <circle cx="36" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
+  <circle cx="46" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
+  <!-- Bow casemate -->
+  <rect x="52" y="29" width="6" height="6" rx="1" fill="#975728" stroke="#382614" stroke-width="1"/>
+</svg>

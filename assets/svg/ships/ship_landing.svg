@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 60">
+  <!-- Landing craft top-down with bow ramp -->
+  <rect x="10" y="24" width="52" height="12" rx="2" fill="#667a8a" stroke="#2e3a44" stroke-width="2"/>
+  <polygon points="62,24 70,30 62,36" fill="#7c8e9c" stroke="#2e3a44" stroke-width="1"/>
+  <rect x="16" y="24" width="12" height="12" rx="1" fill="#96a9b8" stroke="#2e3a44" stroke-width="1"/>
+</svg>

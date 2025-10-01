@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Pohang-class corvette top-down -->
+  <path d="M6 32 L16 24 L34 23 L48 26 L58 32 L48 38 L34 41 L16 40 Z" fill="#4d6f8e" stroke="#233244" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="20" y="25" width="12" height="14" rx="1" fill="#86a7c2" stroke="#233244" stroke-width="1"/>
+  <rect x="36" y="27" width="10" height="10" rx="1" fill="#a0bad1" stroke="#233244" stroke-width="1"/>
+  <circle cx="56" cy="32" r="2.5" fill="#b8c8d6" stroke="#233244" stroke-width="1"/>
+</svg>

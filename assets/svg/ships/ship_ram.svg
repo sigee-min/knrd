@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Ram ship top-down with reinforced bow -->
+  <polygon points="12,31 16,27 34,26 48,28 54,32 48,36 34,38 16,37 12,33" fill="#7c4d24" stroke="#3a2715" stroke-width="2" stroke-linejoin="round"/>
+  <polygon points="52,30 58,32 52,34" fill="#a0552a" stroke="#3a2715" stroke-width="1"/>
+</svg>

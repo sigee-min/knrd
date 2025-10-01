@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Goryeo cannon ship top-down -->
+  <polygon points="12,31 16,27 34,26 48,28 54,32 48,36 34,38 16,37 12,33" fill="#7f4e24" stroke="#382614" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="26" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
+  <circle cx="34" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
+  <circle cx="42" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
+</svg>

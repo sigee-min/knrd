@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 64">
+  <!-- Armored gunboat (Goryeo) top-down -->
+  <polygon points="10,32 16,27 34,26 48,28 56,32 48,36 34,38 16,37" fill="#6f4420" stroke="#342413" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Casemate/armor roof -->
+  <rect x="23" y="26" width="14" height="12" rx="1" fill="#8b6031" stroke="#342413" stroke-width="1"/>
+  <!-- Bow gun -->
+  <circle cx="52" cy="32" r="3" fill="#6d6d6d" stroke="#2c2c2c" stroke-width="1"/>
+  <line x1="55" y1="32" x2="60" y2="32" stroke="#2c2c2c" stroke-width="2"/>
+  <!-- Shields along flanks -->
+  <rect x="18" y="28" width="2" height="10" fill="#9b6a3a"/>
+  <rect x="20.5" y="28" width="2" height="10" fill="#9b6a3a"/>
+</svg>

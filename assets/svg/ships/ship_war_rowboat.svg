@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <!-- War rowboat top-down -->
+  <polygon points="12,30 18,27 30,26 40,28 48,30 40,32 30,34 18,33" fill="#8f6132" stroke="#3d2716" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="18" y1="33" x2="14" y2="39" stroke="#6e4d26" stroke-width="3"/>
+  <line x1="24" y1="33" x2="20" y2="39" stroke="#6e4d26" stroke-width="3"/>
+</svg>

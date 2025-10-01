@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 64">
+  <!-- Shield ship top-down with side shields -->
+  <polygon points="10,32 16,26 34,24 48,26 58,32 48,38 34,40 16,38" fill="#6f4420" stroke="#342413" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="14" y="28" width="2" height="10" fill="#9b6a3a"/>
+  <rect x="52" y="28" width="2" height="10" fill="#9b6a3a"/>
+</svg>

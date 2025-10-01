@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <!-- Fast attack craft top-down -->
+  <polygon points="6,30 16,24 34,23 46,26 54,30 46,34 34,37 16,36" fill="#2f6b6b" stroke="#163b3b" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="22" y="24" width="12" height="12" rx="1" fill="#6db3b3" stroke="#163b3b" stroke-width="1"/>
+  <circle cx="46" cy="30" r="2.5" fill="#a7b7c8" stroke="#163b3b" stroke-width="1"/>
+</svg>

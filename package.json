@@ -1,0 +1,12 @@
+{
+  "name": "choicoco",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "esbuild src/main.js --bundle --format=iife --outfile=dist/bundle.js --sourcemap",
+    "build:watch": "esbuild src/main.js --bundle --format=iife --outfile=dist/bundle.js --sourcemap --watch"
+  },
+  "devDependencies": {
+    "esbuild": "^0.21.0"
+  }
+}

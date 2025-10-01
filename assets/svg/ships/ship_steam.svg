@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 64">
+  <!-- Steam trader top-down -->
+  <polygon points="10,32 16,28 34,27 46,29 58,32 46,35 34,37 16,36" fill="#5f7486" stroke="#2a3540" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="24" y="24" width="10" height="10" rx="1" fill="#8ea3b0" stroke="#2a3540" stroke-width="1"/>
+  <!-- Funnel -->
+  <circle cx="30" cy="21" r="3" fill="#cbd5dc" stroke="#2a3540" stroke-width="1"/>
+</svg>

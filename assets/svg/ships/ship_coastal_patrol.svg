@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <!-- Coastal patrol craft top-down -->
+  <polygon points="8,30 16,25 32,24 44,26 52,30 44,34 32,36 16,35" fill="#537592" stroke="#293a4a" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="23" y="25" width="10" height="10" rx="1" fill="#8fa9bd" stroke="#293a4a" stroke-width="1"/>
+  <circle cx="46" cy="30" r="2.5" fill="#a7b7c8" stroke="#293a4a" stroke-width="1"/>
+</svg>

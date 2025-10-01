@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64">
+  <!-- Future AEGIS destroyer top-down -->
+  <path d="M6 32 L14 26 L34 24 L52 26 L74 32 L52 38 L34 40 L14 38 Z" fill="#38506a" stroke="#182434" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Superstructure -->
+  <rect x="30" y="23" width="14" height="18" rx="1" fill="#6f8aa4" stroke="#182434" stroke-width="1"/>
+  <!-- VLS grid -->
+  <g transform="translate(52,27)" fill="#8aa2b9" stroke="#182434" stroke-width="0.6">
+    <rect x="0" y="0" width="3" height="3"/>
+    <rect x="4" y="0" width="3" height="3"/>
+    <rect x="0" y="4" width="3" height="3"/>
+    <rect x="4" y="4" width="3" height="3"/>
+  </g>
+  <!-- Bow gun -->
+  <circle cx="72" cy="32" r="3.5" fill="#b8c8d6" stroke="#182434" stroke-width="1"/>
+</svg>

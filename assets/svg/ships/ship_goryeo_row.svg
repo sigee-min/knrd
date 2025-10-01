@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <!-- Goryeo rowed ship top-down -->
+  <polygon points="12,30 16,26 34,25 46,27 48,30 46,33 34,35 16,34" fill="#7c4d24" stroke="#3a2715" stroke-width="2" stroke-linejoin="round"/>
+  <g stroke="#6e4d26" stroke-width="3">
+    <line x1="18" y1="33" x2="14" y2="39"/>
+    <line x1="24" y1="33" x2="20" y2="39"/>
+  </g>
+</svg>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>K해군 랜덤 디펜스</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app">
+      <main class="view-area">
+        <section class="battlefield">
+          <canvas id="game-canvas" width="960" height="540"></canvas>
+          <div id="game-cursor" class="game-cursor hidden"></div>
+        </section>
+        <div class="hud-top">
+          <div class="hud-cluster">
+            <div class="resource-group">
+              <div class="resource-panel">
+                <span class="resource">
+                  <img src="assets/svg/icons/icon_gold.svg" alt="Gold" />
+                  <span id="gold-display">0</span>
+                </span>
+                <span class="resource">
+                  <img src="assets/svg/icons/icon_essence.svg" alt="Essence" />
+                  <span id="essence-display">0</span>
+                </span>
+                <span class="resource">
+                  <img src="assets/svg/icons/icon_round.svg" alt="Round" />
+                  <span id="round-display">1</span>
+                </span>
+                <span class="resource">
+                  <img src="assets/svg/icons/icon_boss.svg" alt="Era" />
+                  <span id="era-display">고대</span>
+                </span>
+              </div>
+              <div class="shipyard-display">
+                <img src="assets/svg/icons/icon_shipyard.svg" alt="Shipyard" />
+                <div class="shipyard-text">
+                  <span class="label">조선소</span>
+                  <span id="dockyard-usage">0/0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="wave-info" class="wave-card">
+            <p class="placeholder">웨이브 정보를 불러오는 중...</p>
+          </div>
+        </div>
+        <div class="hud-bottom">
+          <section class="panel minimap-panel">
+            <header class="panel-title">미니맵</header>
+            <div class="panel-body">
+              <canvas id="minimap" width="220" height="220"></canvas>
+            </div>
+          </section>
+          <section class="panel unit-panel">
+            <div class="panel-body">
+              <div class="unit-hotkeys">Q 건조 / W 강화 / E 시대 / B 조선소 / R 속도 / 화살표 카메라 · 우클릭 이동</div>
+              <div id="selection-info" class="unit-panel-body">
+                <p class="placeholder">유닛 또는 적을 선택하세요.</p>
+              </div>
+            </div>
+          </section>
+          <section class="panel command-panel">
+            <header class="panel-title">명령</header>
+            <div class="panel-body">
+              <div id="command-grid" class="command-grid"></div>
+            </div>
+          </section>
+        </div>
+        <div id="wave-status" class="hud-help">대기</div>
+      </main>
+      <div id="scene-lobby" class="scene-overlay">
+        <div class="lobby-shell">
+          <header class="lobby-hero">
+            <span class="lobby-tag">당직 서면서 하던 그 맛</span>
+            <h1 class="lobby-title">K해군 랜덤 디펜스</h1>
+            <p class="lobby-blurb">시대를 넘어 함대를 키우고, 몰려오는 적의 파도를 방어하세요.</p>
+          </header>
+          <nav class="lobby-menu">
+            <button id="btn-play" class="lobby-menu__item lobby-menu__item--primary">
+              <strong>싱글 플레이</strong>
+              <span>솔로 캠페인을 시작합니다</span>
+            </button>
+            <button class="lobby-menu__item lobby-menu__item--locked" disabled>
+              <strong>멀티 플레이</strong>
+              <span>미구현 · 추후 공개 예정</span>
+              <span class="menu-lock" aria-hidden="true">🔒</span>
+            </button>
+            <button id="btn-settings" class="lobby-menu__item">
+              <strong>옵션</strong>
+              <span>게임 설정을 조정합니다</span>
+            </button>
+            <button id="btn-exit" class="lobby-menu__item">
+              <strong>종료</strong>
+              <span>게임을 종료합니다</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+      <div id="scene-settings" class="scene-overlay hidden">
+        <div class="scene-panel">
+          <h2>설정</h2>
+          <div class="setting-list">
+            <label class="setting-row">
+              <span>웨이브 종료 시 이자 적용</span>
+              <input type="checkbox" id="setting-interest" checked />
+            </label>
+            <label class="setting-row">
+              <span>자동 전체화면</span>
+              <input type="checkbox" id="setting-auto-fullscreen" />
+            </label>
+            <label class="setting-row">
+              <span>마우스 감도</span>
+              <div class="setting-control">
+                <input type="range" id="setting-sensitivity" min="0.5" max="2.0" step="0.1" value="1.0" />
+                <span id="setting-sensitivity-value">1.0</span>
+              </div>
+            </label>
+            <label class="setting-row">
+              <span>카메라 이동 속도</span>
+              <div class="setting-control">
+                <input type="range" id="setting-pan-speed" min="0.5" max="2.0" step="0.1" value="1.0" />
+                <span id="setting-pan-speed-value">1.0</span>
+              </div>
+            </label>
+            <div class="help-card">
+              <strong>명령 도움말</strong>
+              <ul>
+                <li>Q 건조 · Shift+Q 연속 건조</li>
+                <li>W 강화 · Shift+W 선택 유닛 일괄 강화</li>
+                <li>E 시대 업 (포인트 필요)</li>
+                <li>R 속도 토글 · S 선택 해제</li>
+                <li>B 조선소 증설 · Del 판매</li>
+                <li>Z 전체 선택 · X 배치 가이드</li>
+                <li>마우스 우클릭: 이동 명령</li>
+                <li>화살표 키: 카메라 이동 · 드래그 박스: 다중 선택</li>
+              </ul>
+            </div>
+          </div>
+          <div class="scene-actions">
+            <button id="btn-settings-to-lobby" class="scene-btn subtle">로비로</button>
+            <div class="flex-spacer"></div>
+            <button id="btn-settings-back" class="scene-btn primary">돌아가기</button>
+          </div>
+        </div>
+      </div>
+      <div id="scene-gameover" class="scene-overlay hidden">
+        <div class="scene-panel scene-panel--gameover">
+          <h2 id="gameover-title">방어 실패</h2>
+          <p id="gameover-message">적 병력 포화!</p>
+          <div id="gameover-stats" class="gameover-stats"></div>
+          <div class="scene-actions gameover-actions">
+            <button id="btn-gameover-retry" class="scene-btn primary">다시 도전</button>
+            <button id="btn-gameover-lobby" class="scene-btn">로비로</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="dist/bundle.js"></script>
+  </body>
+</html>
