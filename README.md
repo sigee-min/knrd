@@ -26,12 +26,18 @@
    npm run build
    ```
    `dist/bundle.js`가 생성되며, `index.html`을 정적 서버로 제공하면 됩니다.
-3. 개발 모드 (자동 번들)
+3. 개발 서버 (자동 번들 + 정적 서버)
+   ```bash
+   npm run dev
+   ```
+   브라우저에서 `http://localhost:5173/index.html`로 접속하세요. (CORS 에러 방지)
+
+4. 개발 모드 (자동 번들)
    ```bash
    npm run build:watch
    ```
    파일 변경 시 자동으로 `dist/bundle.js`를 갱신합니다.
-4. 정적 서버 실행 (선택 사항)
+5. 정적 서버 실행 (선택 사항)
    ```bash
    npx serve .
    ```

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "esbuild src/main.js --bundle --format=iife --outfile=dist/bundle.js --sourcemap",
-    "build:watch": "esbuild src/main.js --bundle --format=iife --outfile=dist/bundle.js --sourcemap --watch"
+    "build:watch": "esbuild src/main.js --bundle --format=iife --outfile=dist/bundle.js --sourcemap --watch",
+    "dev": "esbuild src/main.js --bundle --format=iife --outfile=dist/bundle.js --sourcemap --watch --servedir=. --serve=5173"
   },
   "devDependencies": {
     "esbuild": "^0.21.0"

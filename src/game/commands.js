@@ -424,6 +424,25 @@ function ensureSelectionUpdate() {
   commandCallbacks.onSelectionChanged?.();
 }
 
+function canSkipCurrentWave() {
+  if (GAME_STATE.scene !== 'game') return { ok: false, reason: '게임 중 아님' };
+  if (!GAME_STATE.waveActive) return { ok: false, reason: '라운드 진행 중 아님' };
+  if (GAME_STATE.round === 0) return { ok: false, reason: '준비 라운드' };
+  if (Array.isArray(GAME_STATE.enemies) && GAME_STATE.enemies.length > 0) {
+    return { ok: false, reason: '적이 남아있습니다' };
+  }
+  if (GAME_STATE.isBossWave) {
+    if (!GAME_STATE.bossSpawned) return { ok: false, reason: '보스 대기 중' };
+    if (GAME_STATE.bossMustDie) return { ok: false, reason: '보스 생존 중' };
+    return { ok: true };
+  }
+  const target = GAME_STATE.spawnTarget ?? 0;
+  if ((GAME_STATE.spawnedThisWave ?? 0) < target) {
+    return { ok: false, reason: '스폰 진행 중' };
+  }
+  return { ok: true };
+}
+
 /**
  * Queues or executes a command triggered by UI or hotkeys.
  * @param {string} command
@@ -431,11 +450,22 @@ function ensureSelectionUpdate() {
  */
 function handleCommand(command, options = {}) {
   const { shift = false, bossKey = null, rarity = null } = options;
-  const gameOnly = new Set(['roll', 'upgrade', 'fusion', 'dockyard', 'sell', 'era', 'speed', 'cancel', 'guide', 'selectAll', 'options', 'pause', 'boss', 'summonBoss', 'shop', 'purchase', 'unitEraUpgrade']);
+  const gameOnly = new Set(['roll', 'upgrade', 'fusion', 'dockyard', 'sell', 'era', 'speed', 'cancel', 'guide', 'selectAll', 'options', 'pause', 'boss', 'summonBoss', 'shop', 'purchase', 'unitEraUpgrade', 'skip']);
   if (GAME_STATE.scene !== 'game' && gameOnly.has(command)) {
     return;
   }
   switch (command) {
+    case 'skip': {
+      const { ok, reason } = canSkipCurrentWave();
+      if (!ok) {
+        setWaveStatus(`스킵 불가: ${reason}`);
+        break;
+      }
+      // Force wave timer to zero; update loop will transition to next wave.
+      GAME_STATE.waveTimer = 0;
+      setWaveStatus('라운드 스킵');
+      break;
+    }
     case 'boss':
       GAME_STATE.commandMode = 'boss';
       renderCommandPanel(true);

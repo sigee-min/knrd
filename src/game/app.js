@@ -50,6 +50,8 @@ import { ENEMY_LIBRARY } from '../data/enemyLibrary.js';
 import { getEnemySprite } from './enemySprites.js';
 import { getBossSprite } from './bossSprites.js';
 import { getTowerSprite } from './shipSprites.js';
+import { initAudio, playSound } from './audio.js';
+import { initYouTubeMiniPlayer, togglePlay as ytTogglePlay, nextVideo as ytNextVideo, unmuteAndPlay as ytUnmuteAndPlay } from './youtubePlayer.js';
 
 let canvas;
 let ctx;
@@ -111,8 +113,8 @@ async function toggleFullscreen() {
 }
 
 const WORLD = {
-  width: 1900,
-  height: 1900,
+  width: 2400,
+  height: 1200,
 };
 
 const battlefieldEl = document.querySelector('.battlefield');
@@ -657,6 +659,21 @@ function resizeCanvas() {
   GAME_STATE.pointer.screenX = clamp(GAME_STATE.pointer.screenX, 0, CAMERA.width);
   GAME_STATE.pointer.screenY = clamp(GAME_STATE.pointer.screenY, 0, CAMERA.height);
   GAME_STATE.pointer.inside = false;
+  // Resize minimap canvas to maintain 2:1 rectangular ratio and match panel width
+  if (minimapCanvas && minimapCtx) {
+    const container = minimapCanvas.parentElement;
+    if (container) {
+      const cs = getComputedStyle(container);
+      const padX = parseFloat(cs.paddingLeft || '0') + parseFloat(cs.paddingRight || '0');
+      const available = Math.max(200, Math.floor(container.clientWidth - padX));
+      const miniWidth = available;
+      const miniHeight = Math.max(80, Math.floor(miniWidth / 2));
+      minimapCanvas.style.width = `${miniWidth}px`;
+      minimapCanvas.style.height = `${miniHeight}px`;
+      minimapCanvas.width = miniWidth;
+      minimapCanvas.height = miniHeight;
+    }
+  }
   updateHUD();
   updateCustomCursor();
 }
@@ -713,6 +730,8 @@ function spawnBoss() {
   GAME_STATE.bossGraceTimer = 0;
   GAME_STATE.minimapBossAlert = 2.5;
   setWaveStatus('보스 출현!');
+  // Loud cue for boss spawn
+  playSound('boss_spawn', { volume: 0.9 });
 }
 
 function getBossEraForKey(key) {
@@ -810,6 +829,14 @@ function computeBossRewardByLevel(level) {
 }
 
 function ensureBossSummonUnlocked(key, name, icon, level) {
+  // Compute per-boss cooldown based on difficulty (level).
+  // Higher level bosses get longer cooldowns.
+  const computeBossSummonCooldown = (lvl) => {
+    const lv = Math.max(1, Math.floor(lvl || 1));
+    // 10-level bands: 1~10:120s, 11~20:180s, 21~30:240s, ...
+    const band = Math.floor((lv - 1) / 10); // 0-based
+    return 120 + band * 60;
+  };
   if (!key) return;
   if (!Array.isArray(GAME_STATE.bossSummons)) {
     GAME_STATE.bossSummons = [];
@@ -824,6 +851,7 @@ function ensureBossSummonUnlocked(key, name, icon, level) {
     existing.hp = Math.round(statsNow.hp);
     existing.reward = totalGold;
     existing.essence = rewards.essence;
+    existing.cooldownBase = computeBossSummonCooldown(existing.level);
     return existing;
   }
   GAME_STATE.bossSummons.push({
@@ -832,6 +860,7 @@ function ensureBossSummonUnlocked(key, name, icon, level) {
     icon: icon || 'assets/svg/icons/icon_boss.svg',
     unlocked: true,
     cooldownRemaining: 0,
+    cooldownBase: computeBossSummonCooldown(level),
     hp: Math.round(statsNow.hp),
     reward: totalGold,
     essence: rewards.essence,
@@ -1242,6 +1271,12 @@ function updateProjectiles(delta) {
       const hits = isCrit ? 2 : 1;
       const baseDamage = rollDamage(projectile.damage);
       dealDamage(enemy, baseDamage, projectile.style, hits);
+      // Impact SFX (throttled)
+      if (projectileType === PROJECTILE_TYPES.EXPLOSIVE) {
+        playSound('explosion', { volume: 0.5, throttleMs: 60 });
+      } else {
+        playSound('hit', { volume: 0.22, throttleMs: 35 });
+      }
       if (projectileType === PROJECTILE_TYPES.PIERCING) {
         projectile.hitEnemyIds.push(enemy.id);
         continue;
@@ -1342,11 +1377,21 @@ function endWave() {
     GAME_STATE.spawnAccumulator = 0;
     GAME_STATE.spawnedThisWave = 0;
     GAME_STATE.bossCountdown = CONFIG.wave.bossInterval;
+    GAME_STATE.sceneReturn = 'lobby';
     renderCommandPanel(true);
     updateHUD();
     setWaveStatus('모든 웨이브 방어 성공!', { persistent: true });
+    const stats = buildGameOverStats(MAX_WAVES);
+    showGameOverOverlay('게임 클리어', {
+      title: '방어 성공',
+      message: '모든 웨이브 방어에 성공했습니다!',
+      stats,
+    });
+    playSound('victory', { volume: 0.9 });
     return;
   }
+  // Wave clear cue when proceeding to next round
+  playSound('wave_clear', { volume: 0.6 });
   GAME_STATE.round = nextRound;
   startWave();
 }
@@ -1384,6 +1429,9 @@ function startWave(initial = false) {
     statusMessage = '다음 라운드';
   }
   setWaveStatus(statusMessage, statusOptions);
+  if (!isPrepWave) {
+    playSound('wave_start', { volume: 0.5 });
+  }
 }
 
 function onCanvasContextMenu(event) {
@@ -2189,8 +2237,22 @@ function setupEventListeners() {
   document.addEventListener('webkitfullscreenchange', resizeCanvas);
   document.addEventListener('msfullscreenchange', resizeCanvas);
   document.addEventListener('contextmenu', onGlobalContextMenu, { capture: true });
+  // Music widget controls
+  elements.youtubeBtnPlay?.addEventListener('click', () => {
+    ytUnmuteAndPlay();
+    ytTogglePlay();
+  });
+  elements.youtubeBtnNext?.addEventListener('click', () => {
+    ytUnmuteAndPlay();
+    ytNextVideo();
+  });
+  // On first user interaction, try to unmute and start background music (policy compliant)
+  window.addEventListener('pointerdown', () => ytUnmuteAndPlay(), { once: true, capture: true });
   elements.playButton?.addEventListener('click', () => {
-    setScene('game', { reset: true });
+    // Open difficulty picker overlay in the lobby
+    elements.difficultyOverlay?.classList.remove('hidden');
+    // Reflect current difficulty selection highlight if any
+    updateDifficultyUI();
   });
   elements.settingsButton?.addEventListener('click', () => setScene('settings'));
   elements.exitButton?.addEventListener('click', () => {
@@ -2198,6 +2260,10 @@ function setupEventListeners() {
   });
   elements.settingsBackButton?.addEventListener('click', () => closeSettings(true));
   elements.settingsToLobbyButton?.addEventListener('click', () => closeSettings(true, 'lobby'));
+  elements.difficultyBackButton?.addEventListener('click', () => {
+    // Close difficulty picker
+    elements.difficultyOverlay?.classList.add('hidden');
+  });
   elements.settingInterest?.addEventListener('change', () => applySettingsFromUI());
   elements.settingSensitivity?.addEventListener('input', () => {
     updateSettingLabels();
@@ -2212,11 +2278,16 @@ function setupEventListeners() {
       button.addEventListener('click', () => {
         const { difficulty } = button.dataset || {};
         if (!difficulty) return;
-        if (GAME_STATE.difficulty === difficulty) {
+        // Always set difficulty
+        setDifficulty(difficulty, { silent: true });
+        // If difficulty overlay is visible, start the game immediately
+        const fromPicker = !!(elements.difficultyOverlay && !elements.difficultyOverlay.classList.contains('hidden'));
+        if (fromPicker) {
+          elements.difficultyOverlay.classList.add('hidden');
+          setScene('game', { reset: true });
+        } else {
           updateDifficultyUI();
-          return;
         }
-        setDifficulty(difficulty);
       });
     });
   }
@@ -2275,7 +2346,10 @@ function update(delta) {
     GAME_STATE.nextSummonBossKey = null;
     summonBossByKey(key);
     const entry = (GAME_STATE.bossSummons || []).find((e) => e.key === key);
-    if (entry) entry.cooldownRemaining = 120;
+    if (entry) {
+      const base = Math.max(0, Math.floor(entry.cooldownBase ?? 0));
+      entry.cooldownRemaining = base > 0 ? base : 120;
+    }
     setWaveStatus('보스 소환!');
     renderCommandPanel();
   }
@@ -2317,6 +2391,7 @@ function triggerDefeat(reason) {
   const stats = buildGameOverStats(MAX_WAVES);
   showGameOverOverlay(reason || '패배', { stats });
   updateHUD();
+  playSound('game_over', { volume: 0.8 });
 }
 
 
@@ -2335,10 +2410,22 @@ function initializeGame() {
   minimapCtx = minimapCanvas.getContext('2d');
 
   initializeGlobals({ canvas, minimapCanvas });
+  initAudio();
   applyDifficultyPreset(GAME_STATE.difficulty || 'normal');
   configureWorldGeometry();
   applyCameraSettings();
   setupEventListeners();
+  // Initialize the embedded YouTube mini player (BGM) over the minimap
+  void initYouTubeMiniPlayer({
+    containerId: 'yt-player',
+    titleElementId: 'yt-title',
+    url: 'https://www.youtube.com/watch?v=lzNKijtrqm4&list=RDlzNKijtrqm4&start_radio=1',
+    width: 160,
+    height: 90,
+    autoplay: true,
+    volume: 15,
+    rotationEverySec: 0,
+  });
   requestAnimationFrame((timestamp) => {
     GAME_STATE.lastFrame = timestamp;
     resizeCanvas();

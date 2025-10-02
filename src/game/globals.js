@@ -119,6 +119,14 @@ const COMMAND_LIBRARY = {
     icon: 'assets/svg/icons/icon_shipyard.svg',
     hint: '조선소를 증설하여 용량 +8 (비용: 현재 최대 함선 크기)',
   },
+  // Hotkey-only command (no button): round skip when cleared
+  skip: {
+    id: 'skip',
+    hotkey: 'N',
+    label: '라운드 스킵',
+    icon: 'assets/svg/icons/icon_timer.svg',
+    hint: '라운드 내 모든 적 처치 시 다음 라운드로 즉시 진행',
+  },
   sell: {
     id: 'sell',
     hotkey: 'Del',
@@ -147,6 +155,7 @@ const HOTKEY_TO_COMMAND = {
   KeyG: 'shop',
   KeyH: 'boss',
   KeyB: 'dockyard',
+  KeyN: 'skip',
   KeyC: 'options',
   KeyP: 'pause',
   Delete: 'sell',
@@ -260,7 +269,7 @@ function createConfig(canvas, minimapCanvas) {
     economy: {
       baseRollCost: 10,
       rollCostRamp: 5,
-      rollCostStep: 1,
+      rollCostStep: 5,
       upgradeBaseCost: 3,
       upgradeStep: 2,
       tierCosts: [5, 5, 5, 5, 5],

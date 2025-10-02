@@ -19,6 +19,7 @@ import {
 import { UNIT_LIBRARY, GAME_STATE, CONFIG } from './globals.js';
 import { getTowerSprite } from './shipSprites.js';
 import { setWaveStatus } from './status.js';
+import { playSound } from './audio.js';
 
 const ERA_ORDER = [
   '초기',
@@ -277,6 +278,7 @@ function executeFusion(targetIds = null) {
     setWaveStatus('융합할 수 있는 유닛이 없습니다');
     return false;
   }
+  playSound('fusion', { volume: 0.6 });
   GAME_STATE.selections.clear();
   GAME_STATE.selectedEnemy = null;
   if (survivor && GAME_STATE.towers.includes(survivor)) {
@@ -518,6 +520,7 @@ function executeRoll() {
   createTower(definition, spawn);
   GAME_STATE.gold -= cost;
   setWaveStatus(`${definition.era} ${RARITY_LABEL[definition.rarity]} ${definition.name} 배치`);
+  playSound('build', { volume: 0.5 });
   notifyHudUpdate();
   return true;
 }
@@ -594,6 +597,7 @@ function executePurchase(rarity) {
   }
   const costLabel = pkg.essence > 0 ? `정수 ${pkg.essence}개 소모` : `골드 ${pkg.cost}G 소모`;
   setWaveStatus(`${era} ${RARITY_LABEL[rarity] || rarity} ${definition.name} 획득 (${costLabel})`);
+  playSound('build', { volume: 0.5 });
   notifyHudUpdate();
   return true;
 }
@@ -654,6 +658,7 @@ function executeUnitEraUpgrade(targetId = null) {
   GAME_STATE.gold -= info.cost;
   applyDefinitionToTower(tower, definition);
   setWaveStatus(`${info.nextEra} ${RARITY_LABEL[definition.rarity] || definition.rarity} ${definition.name}로 시대 업 (-${info.cost}G)`);
+  playSound('era_up', { volume: 0.6 });
   notifyCommandLayoutChange();
   return true;
 }
@@ -698,6 +703,7 @@ function enhanceTower(tower) {
   const rarityLabel = RARITY_LABEL[tower.rarity] || tower.rarity;
   const weaponLabel = tower.weaponType ? ` · 무기 ${WEAPON_TYPE_LABEL[tower.weaponType] || tower.weaponType}` : '';
   setWaveStatus(`${tower.era} ${rarityLabel} 강화 +${newLevel} (${affected}척)${weaponLabel}`);
+  playSound('upgrade', { volume: 0.55 });
   notifySelectionChanged();
   notifyHudUpdate();
   return true;
@@ -731,6 +737,7 @@ function buildDockyard() {
   GAME_STATE.gold -= cost;
   GAME_STATE.dockyards += 1;
   setWaveStatus(`조선소 증설 완료 (총 ${GAME_STATE.dockyards}개) - ${cost}G`);
+  playSound('dockyard', { volume: 0.5 });
   notifyCommandLayoutChange(true);
   notifyHudUpdate();
   return true;
@@ -793,6 +800,7 @@ function executeSell(targetIds = null) {
     notifyCommandLayoutChange();
     const unsellNote = unsellable.length > 0 ? ` · 전설 ${unsellable.length}척 제외` : '';
     setWaveStatus(`판매 ${soldIds.size}척 +${goldGain}G${unsellNote}`);
+    playSound('sell', { volume: 0.45 });
     notifyHudUpdate();
     return true;
   }

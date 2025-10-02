@@ -91,8 +91,7 @@ body {
 .hud-bottom .minimap-panel {
   left: clamp(24px, 4vw, 48px);
   bottom: calc(var(--hotkeys-gap) + 24px);
-  width: clamp(260px, 20vw, 340px);
-  min-height: clamp(220px, 28vh, 320px);
+  width: clamp(260px, 22vw, 360px);
 }
 
 .hud-bottom .unit-panel {
@@ -515,16 +514,16 @@ body {
 .battlefield {
   position: relative;
   --available-battlefield-height: calc(100vh - var(--battlefield-top-offset));
-  --battlefield-width: min(100%, calc(var(--available-battlefield-height) * 16 / 9));
+  --battlefield-width: min(100%, calc(var(--available-battlefield-height) * 2 / 1));
   width: var(--battlefield-width);
-  height: min(calc(100vw * 0.5625), var(--available-battlefield-height));
+  height: min(calc(100vw * 0.5), var(--available-battlefield-height));
   max-height: var(--available-battlefield-height);
   margin: 0 auto;
   border: 1px solid var(--border);
   background: #121722;
   border-radius: 12px;
   overflow: hidden;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 2 / 1;
 }
 
 #game-canvas {
@@ -895,6 +894,108 @@ body {
   color: #9aa5bd;
 }
 
+/* Difficulty picker */
+.difficulty-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.difficulty-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(55, 64, 87, 0.55);
+  background: rgba(18, 23, 36, 0.86);
+  color: #d7dff3;
+  cursor: pointer;
+  transition: transform 0.15s ease, border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.difficulty-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(55, 160, 242, 0.7);
+  box-shadow: 0 14px 24px rgba(55, 160, 242, 0.18);
+}
+
+.difficulty-card.is-active {
+  border-color: var(--border-highlight);
+  box-shadow: 0 0 18px rgba(55, 160, 242, 0.22);
+}
+
+.difficulty-card .difficulty-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.difficulty-card img {
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.35));
+}
+
+.difficulty-card .difficulty-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.difficulty-card .difficulty-text strong {
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: #f3f7ff;
+}
+
+.difficulty-card .difficulty-text .desc {
+  font-size: 12px;
+  color: #aeb7c9;
+}
+
+.difficulty-card .difficulty-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(55, 64, 87, 0.6);
+  background: rgba(22, 26, 40, 0.8);
+  color: #eaf2ff;
+}
+
+/* Theming by difficulty */
+.difficulty-card[data-difficulty='normal'] .difficulty-badge {
+  border-color: rgba(55, 160, 242, 0.6);
+  color: #dff1ff;
+}
+
+.difficulty-card[data-difficulty='hard'] {
+  background: linear-gradient(135deg, rgba(243, 156, 18, 0.12), rgba(18, 23, 36, 0.86));
+}
+.difficulty-card[data-difficulty='hard'] .difficulty-badge {
+  border-color: rgba(243, 156, 18, 0.6);
+  color: #ffe9c8;
+}
+
+.difficulty-card[data-difficulty='extreme'] {
+  background: linear-gradient(135deg, rgba(231, 76, 60, 0.12), rgba(18, 23, 36, 0.86));
+}
+.difficulty-card[data-difficulty='extreme'] .difficulty-badge {
+  border-color: rgba(231, 76, 60, 0.6);
+  color: #ffe2df;
+}
+
+@media (max-width: 560px) {
+  .difficulty-card {
+    padding: 10px 12px;
+  }
+}
+
 .setting-row {
   display: flex;
   justify-content: space-between;
@@ -1021,11 +1122,81 @@ body {
 /* .minimap-frame removed (unused) */
 
 #minimap {
-  width: clamp(200px, 18vw, 280px);
-  height: clamp(200px, 18vw, 280px);
+  width: 100%;
+  aspect-ratio: 2 / 1;
   background: #0f121b;
   border-radius: 6px;
   border: 1px solid var(--border);
+}
+
+/* Mini YouTube player overlay over minimap */
+.music-widget {
+  width: 100%;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 10px;
+  background: rgba(16, 20, 32, 0.82);
+  border: 1px solid rgba(55, 64, 87, 0.6);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  pointer-events: auto;
+}
+
+.music-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.yt-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.music-widget .yt-frame iframe {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9;
+}
+
+.music-controls {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-self: flex-end;
+}
+
+.music-btn {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid rgba(55, 64, 87, 0.6);
+  background: rgba(22, 26, 40, 0.8);
+  color: #d7dff3;
+  cursor: pointer;
+  padding: 0;
+}
+
+.music-btn:hover {
+  border-color: var(--border-highlight);
+  color: var(--border-highlight);
+}
+
+.music-title {
+  font-size: 11px;
+  color: #aeb7c9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 

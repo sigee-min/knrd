@@ -10,7 +10,7 @@
     <div id="app" class="app">
       <main class="view-area">
         <section class="battlefield">
-          <canvas id="game-canvas" width="960" height="540"></canvas>
+          <canvas id="game-canvas" width="1200" height="600"></canvas>
           <div id="game-cursor" class="game-cursor hidden"></div>
         </section>
         <div class="hud-top">
@@ -51,7 +51,17 @@
           <section class="panel minimap-panel">
             <header class="panel-title">미니맵</header>
             <div class="panel-body">
-              <canvas id="minimap" width="220" height="220"></canvas>
+              <canvas id="minimap" width="240" height="120"></canvas>
+              <div id="music-widget" class="music-widget">
+                <div class="music-row">
+                  <div id="yt-player" class="yt-frame"></div>
+                  <div class="music-controls">
+                    <button id="yt-btn-play" class="music-btn" title="재생/일시정지">▶</button>
+                    <button id="yt-btn-next" class="music-btn" title="다음 곡">⏭</button>
+                  </div>
+                </div>
+                <div id="yt-title" class="music-title">배경음악 준비됨</div>
+              </div>
             </div>
           </section>
           <section class="panel unit-panel">
@@ -65,7 +75,7 @@
               <div id="command-grid" class="command-grid"></div>
             </div>
           </section>
-          <div class="unit-hotkeys unit-hotkeys--floating">Q 건조 / W 강화 / E 시대 / B 조선소 / R 속도 / 화살표 카메라 · 우클릭 이동</div>
+          <div class="unit-hotkeys unit-hotkeys--floating">Q 건조 / W 강화 / E 시대 / B 조선소 / R 속도 / N 스킵 / 화살표 카메라 · 우클릭 이동</div>
         </div>
         <div id="wave-status" class="hud-help">대기</div>
       </main>
@@ -95,6 +105,55 @@
               <span>게임을 종료합니다</span>
             </button>
           </nav>
+        </div>
+      </div>
+      <div id="scene-difficulty" class="scene-overlay hidden">
+        <div class="scene-panel">
+          <h2>난이도 선택</h2>
+          <div class="setting-list">
+            <ul class="difficulty-list">
+              <li>
+                <button type="button" class="difficulty-card" data-difficulty="normal">
+                  <span class="difficulty-left">
+                    <img src="assets/svg/icons/icon_health.svg" alt="보통" />
+                    <span class="difficulty-text">
+                      <strong>보통</strong>
+                      <span class="desc">적 체력 100%</span>
+                    </span>
+                  </span>
+                  <span class="difficulty-badge">x1</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="difficulty-card" data-difficulty="hard">
+                  <span class="difficulty-left">
+                    <img src="assets/svg/icons/icon_alert.svg" alt="어려움" />
+                    <span class="difficulty-text">
+                      <strong>어려움</strong>
+                      <span class="desc">적 체력 200%</span>
+                    </span>
+                  </span>
+                  <span class="difficulty-badge">x2</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="difficulty-card" data-difficulty="extreme">
+                  <span class="difficulty-left">
+                    <img src="assets/svg/icons/icon_boss.svg" alt="극한" />
+                    <span class="difficulty-text">
+                      <strong>극한</strong>
+                      <span class="desc">적 체력 300%</span>
+                    </span>
+                  </span>
+                  <span class="difficulty-badge">x3</span>
+                </button>
+              </li>
+            </ul>
+            <p class="muted" style="margin-top:6px;">난이도는 적 체력 배율에만 영향을 줍니다.</p>
+          </div>
+          <div class="scene-actions">
+            <button id="btn-difficulty-back" class="scene-btn subtle">취소</button>
+          </div>
         </div>
       </div>
       <div id="scene-settings" class="scene-overlay hidden">
@@ -130,6 +189,7 @@
                 <li>W 강화 · Shift+W 선택 유닛 일괄 강화</li>
                 <li>E 시대 업 (포인트 필요)</li>
                 <li>R 속도 토글 · S 선택 해제</li>
+                <li>N 라운드 스킵 (라운드 클리어 시)</li>
                 <li>B 조선소 증설 · Del 판매</li>
                 <li>Z 전체 선택 · X 배치 가이드</li>
                 <li>마우스 우클릭: 이동 명령</li>
@@ -158,5 +218,14 @@
     </div>
 
     <script src="dist/bundle.js"></script>
+    <script>
+      // Load YouTube IFrame API asynchronously for the mini player
+      (function loadYouTubeApi(){
+        if (window.YT && window.YT.Player) return;
+        var tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+      }());
+    </script>
   </body>
 </html>
