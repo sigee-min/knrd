@@ -13,6 +13,7 @@ import {
   initializeGlobals,
   updateCameraBounds,
   DIFFICULTY_PRESETS,
+  PREP_WAVE_DURATION,
 } from './globals.js';
 import { showGameOverOverlay, hideGameOverOverlay, isGameOverOverlayVisible, buildGameOverStats } from './overlay.js';
 import {
@@ -110,6 +111,8 @@ const WORLD = {
 
 const battlefieldEl = document.querySelector('.battlefield');
 let cameraInitialized = false;
+
+const EDGE_PAN_VERTICAL_FACTOR = 0.5;
 
 const RARITY_COLOR = {
   common: '#8aa0b8',
@@ -257,6 +260,7 @@ function applyCameraSettings() {
 }
 
 function getSpawnTargetForRound(round) {
+  if (round <= 0) return 0;
   const base = CONFIG.wave.spawnCountBase ?? CONFIG.wave.spawnCount ?? 40;
   const growth = CONFIG.wave.spawnCountGrowth ?? 0;
   return Math.max(1, Math.floor(base + (round - 1) * growth));
@@ -299,8 +303,9 @@ function updateCameraEdgePan(delta) {
   let dy = 0;
   if (GAME_STATE.pointer.screenX < zone) dx -= 1;
   else if (GAME_STATE.pointer.screenX > CAMERA.width - zone) dx += 1;
-  if (GAME_STATE.pointer.screenY < zone) dy -= 1;
-  else if (GAME_STATE.pointer.screenY > CAMERA.height - zone) dy += 1;
+  const verticalZone = Math.max(8, zone * EDGE_PAN_VERTICAL_FACTOR);
+  if (GAME_STATE.pointer.screenY < verticalZone) dy -= 1;
+  else if (GAME_STATE.pointer.screenY > CAMERA.height - verticalZone) dy += 1;
   if (dx || dy) {
     const length = Math.hypot(dx, dy) || 1;
     const speed = CAMERA.panSpeed * delta * GAME_STATE.speedMultiplier;
@@ -426,13 +431,13 @@ function resetForNewRun() {
   configureWorldGeometry();
   applyDifficultyPreset(GAME_STATE.difficulty || 'normal');
   GAME_STATE.gold = 50;
-  GAME_STATE.round = 1;
+  GAME_STATE.round = 0;
   GAME_STATE.eraIndex = 0;
   GAME_STATE.pendingEraUpgrades = 0;
-  GAME_STATE.waveTimer = CONFIG.wave.waveDuration;
+  GAME_STATE.waveTimer = PREP_WAVE_DURATION;
   GAME_STATE.spawnAccumulator = 0;
   GAME_STATE.spawnedThisWave = 0;
-  GAME_STATE.spawnTarget = getSpawnTargetForRound(1);
+  GAME_STATE.spawnTarget = 0;
   GAME_STATE.bossCountdown = CONFIG.wave.bossInterval;
   GAME_STATE.isBossWave = false;
   GAME_STATE.bossSpawned = false;
@@ -467,7 +472,7 @@ function resetForNewRun() {
   centerCamera();
   updateSelectionInfo();
   updateHUD();
-  setWaveStatus('전투 준비');
+  setWaveStatus('준비 라운드 대기 중');
   updateCustomCursor();
   hideGameOverOverlay();
 }
@@ -730,8 +735,8 @@ function scaleEnemyStats() {
   };
 }
 
-function scaleBossStats() {
-  const round = Math.max(1, GAME_STATE.round);
+function scaleBossStats(roundOverride) {
+  const round = Math.max(1, roundOverride ?? GAME_STATE.round);
   const difficulty = Math.max(1, Math.floor(round / CONFIG.wave.bossInterval));
   const roundScaling = 1 + (round - 1) * 0.12;
   const ease = getEarlyWaveEase(round);
@@ -773,6 +778,37 @@ function computeBossRewardByLevel(level) {
     goldBonus = 0;
   }
   return { essence, goldBonus };
+}
+
+function ensureBossSummonUnlocked(key, name, icon, level) {
+  if (!key) return;
+  if (!Array.isArray(GAME_STATE.bossSummons)) {
+    GAME_STATE.bossSummons = [];
+  }
+  const statsNow = scaleBossStats(level);
+  const rewards = computeBossRewardByLevel(level);
+  const totalGold = (CONFIG.wave.bossReward ?? 0) + (rewards.goldBonus ?? 0);
+  const existing = GAME_STATE.bossSummons.find((entry) => entry.key === key);
+  if (existing) {
+    existing.unlocked = true;
+    existing.level = level ?? existing.level;
+    existing.hp = Math.round(statsNow.hp);
+    existing.reward = totalGold;
+    existing.essence = rewards.essence;
+    return existing;
+  }
+  GAME_STATE.bossSummons.push({
+    key,
+    name: name || '보스',
+    icon: icon || 'assets/svg/icons/icon_boss.svg',
+    unlocked: true,
+    cooldownRemaining: 0,
+    hp: Math.round(statsNow.hp),
+    reward: totalGold,
+    essence: rewards.essence,
+    level,
+  });
+  return GAME_STATE.bossSummons[GAME_STATE.bossSummons.length - 1];
 }
 
 function getCurrentPattern() {
@@ -1201,14 +1237,19 @@ function handleEnemyDeath(enemy) {
     const extra = computeBossRewardByLevel(level);
     GAME_STATE.essence = (GAME_STATE.essence ?? 0) + (extra.essence ?? 0);
     GAME_STATE.gold += (extra.goldBonus ?? 0);
+    let statusMessage = '소환 보스 처치! 추가 보상을 획득했습니다.';
     // Wave boss grants era upgrade and records unlock key
     if (enemy.isWaveBoss) {
-      GAME_STATE.pendingEraUpgrades += 1;
-      GAME_STATE.lastWaveBossKey = enemy.bossKey || GAME_STATE.lastWaveBossKey;
+      if (enemy.bossKey) {
+        GAME_STATE.lastWaveBossKey = enemy.bossKey;
+        const bossName = enemy.displayName || enemy.name || `${enemy.era || ''} 보스`.trim();
+        ensureBossSummonUnlocked(enemy.bossKey, bossName || '웨이브 보스', enemy.icon || 'assets/svg/icons/icon_boss.svg', level);
+      }
+      statusMessage = '웨이브 보스 처치! 보상 획득';
     }
     GAME_STATE.bossMustDie = false;
     GAME_STATE.bossGraceTimer = 0;
-    setWaveStatus('보스 처치! 시대 업 가능');
+    setWaveStatus(statusMessage);
     renderCommandPanel();
   }
 }
@@ -1273,41 +1314,38 @@ function endWave() {
 }
 
 function startWave(initial = false) {
-  GAME_STATE.waveTimer = CONFIG.wave.waveDuration;
+  const isPrepWave = GAME_STATE.round === 0;
+  GAME_STATE.waveTimer = isPrepWave ? PREP_WAVE_DURATION : CONFIG.wave.waveDuration;
   GAME_STATE.spawnAccumulator = 0;
   GAME_STATE.spawnedThisWave = 0;
-  GAME_STATE.spawnTarget = getSpawnTargetForRound(GAME_STATE.round);
+  GAME_STATE.spawnTarget = isPrepWave ? 0 : getSpawnTargetForRound(GAME_STATE.round);
   GAME_STATE.bossSpawnTimer = 0;
   GAME_STATE.bossSpawned = false;
-  GAME_STATE.isBossWave = GAME_STATE.round % CONFIG.wave.bossInterval === 0;
+  GAME_STATE.isBossWave = !isPrepWave && GAME_STATE.round % CONFIG.wave.bossInterval === 0;
   GAME_STATE.waveActive = true;
   // Ensure base boss summon unlock and unlock previous wave boss every 10 rounds (round 1, 11, 21 ...)
   if (!Array.isArray(GAME_STATE.bossSummons)) GAME_STATE.bossSummons = [];
-  const ensureEntry = (key, name, icon, level) => {
-    const existing = GAME_STATE.bossSummons.find((e) => e.key === key);
-    if (existing) {
-      existing.unlocked = true;
-      return;
-    }
-    const statsNow = scaleBossStats();
-    const rewards = computeBossRewardByLevel(level);
-    const totalGold = (CONFIG.wave.bossReward ?? 0) + (rewards.goldBonus ?? 0);
-    GAME_STATE.bossSummons.push({ key, name, icon, unlocked: true, cooldownRemaining: 0, hp: Math.round(statsNow.hp), reward: totalGold, essence: rewards.essence, level });
-  };
-  // Base unlock at round 1
+  // Base unlock at round 1 when first entering combat
   if (GAME_STATE.round === 1 && GAME_STATE.bossSummons.length === 0) {
-    ensureEntry('boss_ancient_galley', '고대 보스', 'assets/svg/icons/icon_boss.svg', 1);
+    ensureBossSummonUnlocked('boss_ancient_galley', '고대 보스', 'assets/svg/icons/icon_boss.svg', 1);
   }
-  // Every 10+1 round unlock last wave boss if available
   if (GAME_STATE.round > 1 && (GAME_STATE.round - 1) % 10 === 0 && GAME_STATE.lastWaveBossKey) {
-    const lastBossLevel = GAME_STATE.round - 1; // 10, 20, 30, 40 ...
-    ensureEntry(GAME_STATE.lastWaveBossKey, '정예 보스', 'assets/svg/icons/icon_boss.svg', lastBossLevel);
+    const lastBossLevel = GAME_STATE.round - 1;
+    ensureBossSummonUnlocked(GAME_STATE.lastWaveBossKey, '정예 보스', 'assets/svg/icons/icon_boss.svg', lastBossLevel);
   }
-  setWaveStatus(GAME_STATE.isBossWave
-    ? '보스 라운드 준비'
-    : initial
-    ? '전투 시작'
-    : '다음 라운드');
+  let statusMessage;
+  let statusOptions = {};
+  if (isPrepWave) {
+    statusMessage = '준비 라운드! Q 건조 · W 강화 · B 조선소 증설.';
+    statusOptions = { duration: PREP_WAVE_DURATION * 1000 };
+  } else if (GAME_STATE.isBossWave) {
+    statusMessage = '보스 라운드 준비';
+  } else if (GAME_STATE.round === 1) {
+    statusMessage = '전투 시작';
+  } else {
+    statusMessage = '다음 라운드';
+  }
+  setWaveStatus(statusMessage, statusOptions);
 }
 
 function onCanvasContextMenu(event) {
@@ -1365,7 +1403,8 @@ function updateWaveInfo() {
   }
 
   const waveNumber = Math.min(GAME_STATE.round, MAX_WAVES);
-  const isFinalWave = waveNumber === MAX_WAVES;
+  const isPrepWave = GAME_STATE.round === 0;
+  const isFinalWave = !isPrepWave && waveNumber === MAX_WAVES;
   const gameCleared = !GAME_STATE.running && !GAME_STATE.waveActive && isFinalWave;
 
   if (gameCleared) {
@@ -1390,28 +1429,37 @@ function updateWaveInfo() {
 
   const difficultyPreset = DIFFICULTY_PRESETS[GAME_STATE.difficulty] || DIFFICULTY_PRESETS.normal;
   const difficultyLabel = difficultyPreset.label;
-  const waveTypeLeft = `웨이브 <strong class=\"em\">${waveNumber}</strong>/<strong class=\"muted\">${MAX_WAVES}</strong> · <strong class=\"em\">${difficultyLabel}</strong>${GAME_STATE.isBossWave ? ' · <span class=\"boss\">보스</span>' : ''}`;
+  const waveTypeLeft = isPrepWave
+    ? '<strong class="em">준비 라운드</strong> · 함대를 준비하세요'
+    : `웨이브 <strong class=\"em\">${waveNumber}</strong>/<strong class=\"muted\">${MAX_WAVES}</strong> · <strong class=\"em\">${difficultyLabel}</strong>${GAME_STATE.isBossWave ? ' · <span class=\"boss\">보스</span>' : ''}`;
   let progress = 0;
   let statusLine = '';
-
+  const timerRemain = Math.max(0, Math.floor(GAME_STATE.waveTimer));
   const spawnTarget = GAME_STATE.spawnTarget || getSpawnTargetForRound(GAME_STATE.round);
 
-  if (GAME_STATE.isBossWave) {
-    if (GAME_STATE.bossSpawned) {
-      progress = 1;
-      statusLine = '보스 전투 진행 중';
+  if (GAME_STATE.waveActive) {
+    if (isPrepWave) {
+      const elapsed = Math.max(0, PREP_WAVE_DURATION - GAME_STATE.waveTimer);
+      progress = PREP_WAVE_DURATION > 0 ? Math.min(1, elapsed / PREP_WAVE_DURATION) : 1;
+      statusLine = `준비 시간 ${timerRemain}s · Q: 건조 · W: 강화 · B: 조선소`;
+    } else if (GAME_STATE.isBossWave) {
+      if (GAME_STATE.bossSpawned) {
+        progress = 1;
+        statusLine = '보스 전투 진행 중';
+      } else {
+        progress = Math.min(1, CONFIG.wave.bossSpawnDelay === 0 ? 1 : GAME_STATE.bossSpawnTimer / CONFIG.wave.bossSpawnDelay);
+        const remain = Math.max(0, CONFIG.wave.bossSpawnDelay - GAME_STATE.bossSpawnTimer);
+        statusLine = `보스 등장까지 <strong class=\"em\">${remain.toFixed(1)}</strong>초`;
+      }
     } else {
-      progress = Math.min(1, CONFIG.wave.bossSpawnDelay === 0 ? 1 : GAME_STATE.bossSpawnTimer / CONFIG.wave.bossSpawnDelay);
-      const remain = Math.max(0, CONFIG.wave.bossSpawnDelay - GAME_STATE.bossSpawnTimer);
-      statusLine = `보스 등장까지 <strong class=\"em\">${remain.toFixed(1)}</strong>초`;
+      progress = spawnTarget === 0 ? 1 : Math.min(1, GAME_STATE.spawnedThisWave / spawnTarget);
+      const spawnRate = CONFIG.wave.spawnDuration > 0 ? (spawnTarget / CONFIG.wave.spawnDuration) : 0;
+      statusLine = `<strong class=\"em\">${GAME_STATE.spawnedThisWave}</strong>/<strong>${spawnTarget}</strong> 스폰 · <strong class=\"em\">${spawnRate.toFixed(1)}</strong>/s`;
     }
   } else {
-    progress = spawnTarget === 0 ? 1 : Math.min(1, GAME_STATE.spawnedThisWave / spawnTarget);
-    const spawnRate = CONFIG.wave.spawnDuration > 0 ? (spawnTarget / CONFIG.wave.spawnDuration) : 0;
-    statusLine = `<strong class=\"em\">${GAME_STATE.spawnedThisWave}</strong>/<strong>${spawnTarget}</strong> 스폰 · <strong class=\"em\">${spawnRate.toFixed(1)}</strong>/s`;
+    progress = 0;
+    statusLine = isPrepWave ? '준비 중' : '다음 웨이브 준비 중';
   }
-
-  const timerRemain = Math.max(0, Math.floor(GAME_STATE.waveTimer));
   const timerLine = GAME_STATE.paused ? '정지 중' : `남은 <strong class=\"em\">${timerRemain}</strong>초`;
   const progressPercent = Math.round(progress * 100);
   const enemyInfo = `적 활동 <strong class=\"em\">${GAME_STATE.enemies.length}</strong>/<strong>${CONFIG.wave.defeatThreshold}</strong>`;
@@ -1466,7 +1514,7 @@ function updateHUD() {
   }
   elements.round.textContent = GAME_STATE.round;
   const eraLabel = ERA_ORDER[GAME_STATE.eraIndex];
-  elements.era.textContent = GAME_STATE.pendingEraUpgrades > 0 ? `${eraLabel} (+${GAME_STATE.pendingEraUpgrades})` : eraLabel;
+  elements.era.textContent = eraLabel;
   if (elements.bossCountdown) {
     elements.bossCountdown.textContent = GAME_STATE.isBossWave ? '보스' : GAME_STATE.bossCountdown;
   }
@@ -1492,10 +1540,6 @@ function updateHUD() {
     const rollCost = getRollCost();
     goldBadge.classList.toggle('is-warning', GAME_STATE.gold < rollCost);
     goldBadge.classList.toggle('is-ready', GAME_STATE.gold >= rollCost);
-  }
-  const eraBadge = elements.era?.closest('.resource');
-  if (eraBadge) {
-    eraBadge.classList.toggle('is-ready', GAME_STATE.pendingEraUpgrades > 0);
   }
   const roundBadge = elements.round?.closest('.resource');
   if (roundBadge) {

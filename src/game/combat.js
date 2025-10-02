@@ -38,6 +38,15 @@ const RARITY_LABEL = {
   primordial: '태초',
 };
 
+const UNIT_ERA_UPGRADE_COST = 5;
+
+const PURCHASE_PACKAGES = {
+  unique: { rarity: 'unique', cost: 0, essence: 1 },
+  legendary: { rarity: 'legendary', cost: 0, essence: 2 },
+  mythic: { rarity: 'mythic', cost: 0, essence: 8 },
+  primordial: { rarity: 'primordial', cost: 0, essence: 10 },
+};
+
 const MAX_FUSION_TIER = 3;
 
 const RARITY_CRIT_CHANCE = {
@@ -442,8 +451,48 @@ function createTower(definition, spawn) {
   return tower;
 }
 
+function applyDefinitionToTower(tower, definition) {
+  if (!tower || !definition) return;
+  tower.rarity = definition.rarity;
+  tower.tierIndex = RARITY_ORDER.indexOf(definition.rarity);
+  tower.name = definition.name;
+  tower.unitId = definition.id;
+  tower.era = definition.era;
+  tower.baseDamage = definition.baseDamage;
+  tower.fireRate = definition.fireRate;
+  tower.range = definition.range;
+  tower.projectileSpeed = definition.projectileSpeed;
+  tower.upgDamage = definition.upgDamage;
+  tower.baseDamageBase = definition.baseDamage;
+  tower.upgDamageBase = definition.upgDamage;
+  tower.size = typeof definition.size === 'number' ? definition.size : getShipSize(definition.rarity);
+  tower.weaponType = definition.weaponType || tower.weaponType || null;
+  const resolvedWeaponType = tower.weaponType;
+  tower.projectileType = definition.projectileType
+    || (resolvedWeaponType ? DEFAULT_PROJECTILE_TYPE_BY_WEAPON[resolvedWeaponType] : null)
+    || tower.projectileType
+    || PROJECTILE_TYPES.NORMAL;
+  tower.explosionRadiusBase = definition.explosionRadius ?? tower.explosionRadiusBase ?? null;
+  tower.explosionRadius = definition.explosionRadius ?? tower.explosionRadiusBase ?? tower.explosionRadius;
+  tower.critChance = typeof definition.critChance === 'number'
+    ? definition.critChance
+    : (RARITY_CRIT_CHANCE[definition.rarity] ?? tower.critChance ?? 0.05);
+  const sharedLevel = getSharedUpgradeLevel(tower.weaponType, tower.era, tower.tierIndex);
+  tower.upgradeLevel = sharedLevel;
+  tower.cooldown = 0;
+  applyFootprintFromSprite(tower);
+  updateFusionScaling(tower);
+  applyFusionBonuses(tower);
+  GAME_STATE.selections.clear();
+  GAME_STATE.selectedEnemy = null;
+  GAME_STATE.selections.add(tower.id);
+  notifySelectionChanged();
+  notifyHudUpdate();
+}
+
 function getRollCost() {
-  const step = Math.floor((GAME_STATE.round - 1) / CONFIG.economy.rollCostRamp);
+  const effectiveRound = Math.max(1, GAME_STATE.round);
+  const step = Math.floor((effectiveRound - 1) / CONFIG.economy.rollCostRamp);
   return CONFIG.economy.baseRollCost + step * CONFIG.economy.rollCostStep;
 }
 
@@ -454,7 +503,7 @@ function executeRoll() {
     return false;
   }
   if (!hasAvailableShipyardCapacity(GAME_STATE.towers, GAME_STATE.dockyards)) {
-    setWaveStatus('조선소 용량 부족');
+    setWaveStatus('조선소 용량 부족! B로 증설하세요.');
     return false;
   }
   const rarity = chooseRarity();
@@ -473,8 +522,141 @@ function executeRoll() {
   return true;
 }
 
+function getPurchasePackages() {
+  return PURCHASE_PACKAGES;
+}
+
+function getPurchaseInfo(rarity) {
+  const pkg = PURCHASE_PACKAGES[rarity];
+  if (!pkg) {
+    return { available: false, reason: '알 수 없는 등급', cost: 0, essenceCost: 0 };
+  }
+  const cost = pkg.cost;
+  const essenceCost = pkg.essence ?? 0;
+  const hasCapacity = hasAvailableShipyardCapacity(GAME_STATE.towers, GAME_STATE.dockyards);
+  if (!hasCapacity) {
+    return { available: false, reason: '조선소 용량 부족', cost, essenceCost };
+  }
+  if (cost > 0 && GAME_STATE.gold < cost) {
+    return { available: false, reason: '골드 부족', cost, essenceCost };
+  }
+  if (essenceCost > 0 && (GAME_STATE.essence ?? 0) < essenceCost) {
+    return { available: false, reason: '정수 부족', cost, essenceCost };
+  }
+  const eraIndex = clamp(GAME_STATE.eraIndex ?? 0, 0, ERA_ORDER.length - 1);
+  const era = ERA_ORDER[eraIndex];
+  const pool = (UNIT_LIBRARY[era] || []).filter((unit) => unit.rarity === rarity);
+  if (pool.length === 0) {
+    return { available: false, reason: '현재 시대에 해당 등급 함선 없음', cost, essenceCost };
+  }
+  return {
+    available: true,
+    reason: '',
+    cost,
+    essenceCost,
+    era,
+    poolSize: pool.length,
+  };
+}
+
+function executePurchase(rarity) {
+  const pkg = PURCHASE_PACKAGES[rarity];
+  if (!pkg) {
+    setWaveStatus('구입 불가: 알려지지 않은 등급');
+    return false;
+  }
+  const info = getPurchaseInfo(rarity);
+  if (!info.available) {
+    setWaveStatus(info.reason || '구입 불가');
+    return false;
+  }
+  const era = info.era;
+  const pool = (UNIT_LIBRARY[era] || []).filter((unit) => unit.rarity === rarity);
+  if (pool.length === 0) {
+    setWaveStatus('구입 실패: 해당 함선이 없습니다');
+    return false;
+  }
+  const selected = pool[Math.floor(lcgRandom() * pool.length)] || pool[0];
+  const definition = { ...selected, era };
+  const jitterAngle = lcgRandom() * Math.PI * 2;
+  const jitterRadius = 18 + lcgRandom() * 12;
+  const spawn = clampToInnerRing(
+    CONFIG.orbit.centerX + Math.cos(jitterAngle) * jitterRadius,
+    CONFIG.orbit.centerY + Math.sin(jitterAngle) * jitterRadius,
+    32
+  );
+  createTower(definition, spawn);
+  if (pkg.cost > 0) {
+    GAME_STATE.gold -= pkg.cost;
+  }
+  if (pkg.essence > 0) {
+    GAME_STATE.essence = Math.max(0, (GAME_STATE.essence ?? 0) - pkg.essence);
+  }
+  const costLabel = pkg.essence > 0 ? `정수 ${pkg.essence}개 소모` : `골드 ${pkg.cost}G 소모`;
+  setWaveStatus(`${era} ${RARITY_LABEL[rarity] || rarity} ${definition.name} 획득 (${costLabel})`);
+  notifyHudUpdate();
+  return true;
+}
+
+function getUnitEraUpgradeInfo(tower) {
+  if (!tower) {
+    return { available: false, reason: '선택된 유닛 없음', cost: UNIT_ERA_UPGRADE_COST };
+  }
+  const currentEraIdx = ERA_ORDER.indexOf(tower.era);
+  if (currentEraIdx === -1) {
+    return { available: false, reason: '알 수 없는 시대', cost: UNIT_ERA_UPGRADE_COST };
+  }
+  if (currentEraIdx >= ERA_ORDER.length - 1) {
+    return { available: false, reason: '최종 시대입니다', cost: UNIT_ERA_UPGRADE_COST };
+  }
+  const nextEra = ERA_ORDER[currentEraIdx + 1];
+  const pool = (UNIT_LIBRARY[nextEra] || []).filter((unit) => unit.rarity === tower.rarity);
+  if (pool.length === 0) {
+    return { available: false, reason: '다음 시대에 해당 등급 함선 없음', cost: UNIT_ERA_UPGRADE_COST };
+  }
+  if (GAME_STATE.gold < UNIT_ERA_UPGRADE_COST) {
+    return { available: false, reason: `골드 부족 (필요 ${UNIT_ERA_UPGRADE_COST}G)`, cost: UNIT_ERA_UPGRADE_COST, nextEra, poolSize: pool.length };
+  }
+  return {
+    available: true,
+    reason: '',
+    cost: UNIT_ERA_UPGRADE_COST,
+    nextEra,
+    pool,
+    poolSize: pool.length,
+  };
+}
+
+function executeUnitEraUpgrade(targetId = null) {
+  let tower = null;
+  if (targetId != null) {
+    tower = GAME_STATE.towers.find((t) => t.id === targetId) || null;
+  } else {
+    const selection = Array.from(GAME_STATE.selections);
+    tower = GAME_STATE.towers.find((t) => t.id === selection[0]) || null;
+  }
+  if (!tower) {
+    setWaveStatus('선택된 유닛 없음');
+    return false;
+  }
+  const info = getUnitEraUpgradeInfo(tower);
+  if (!info.available) {
+    setWaveStatus(info.reason || '시대 업 불가');
+    return false;
+  }
+  const definition = {
+    ...info.pool[Math.floor(lcgRandom() * info.pool.length)] || info.pool[0],
+    era: info.nextEra,
+  };
+  GAME_STATE.gold -= info.cost;
+  applyDefinitionToTower(tower, definition);
+  setWaveStatus(`${info.nextEra} ${RARITY_LABEL[definition.rarity] || definition.rarity} ${definition.name}로 시대 업 (-${info.cost}G)`);
+  notifyCommandLayoutChange();
+  return true;
+}
+
 function getTierUpgradeCost(tower) {
-  if (tower.tierIndex >= RARITY_ORDER.length - 1) {
+  if (!tower || tower.tierIndex >= RARITY_ORDER.length - 1) {
     return Infinity;
   }
   return CONFIG.economy.tierCosts[tower.tierIndex];
@@ -483,84 +665,6 @@ function getTierUpgradeCost(tower) {
 function getEnhanceCost(tower) {
   const sharedLevel = getSharedUpgradeLevel(tower.weaponType, tower.era, tower.tierIndex);
   return CONFIG.economy.upgradeBaseCost + sharedLevel * CONFIG.economy.upgradeStep;
-}
-
-function upgradeTowerTier(tower) {
-  // Era upgrade: keep rarity, evolve to same-rarity unit from the next era (random, bias-respecting).
-  const currentEraIdx = Math.max(0, ERA_ORDER.indexOf(tower.era));
-  if (currentEraIdx >= ERA_ORDER.length - 1) {
-    setWaveStatus('최종 시대입니다');
-    return false;
-  }
-  const cost = getTierUpgradeCost(tower);
-  if (GAME_STATE.gold < cost) {
-    setWaveStatus('골드 부족');
-    return false;
-  }
-  const rarity = tower.rarity;
-  const targetEra = ERA_ORDER[currentEraIdx + 1];
-  const sameEra = ERA_ORDER[currentEraIdx];
-
-  // Candidate pool: next era, same rarity
-  let candidates = (UNIT_LIBRARY[targetEra] || [])
-    .filter((u) => u.rarity === rarity)
-    .map((u) => ({ ...u, era: targetEra }));
-
-  // Evolution bias removed: keep candidate pool purely by era/rarity.
-
-  // Fallback: same era, same rarity
-  if (candidates.length === 0) {
-    candidates = (UNIT_LIBRARY[sameEra] || [])
-      .filter((u) => u.rarity === rarity)
-      .map((u) => ({ ...u, era: sameEra }));
-  }
-
-  // Final fallback: drawer constrained by rarity (may consider unlocked eras)
-  const definition = candidates.length > 0
-    ? candidates[Math.floor(lcgRandom() * candidates.length)]
-    : drawUnitDefinition(rarity);
-
-  GAME_STATE.gold -= cost;
-  tower.rarity = definition.rarity; // unchanged rarity
-  tower.tierIndex = RARITY_ORDER.indexOf(definition.rarity);
-  tower.name = definition.name;
-  tower.unitId = definition.id;
-  tower.era = definition.era;
-  tower.baseDamage = definition.baseDamage;
-  tower.fireRate = definition.fireRate;
-  tower.range = definition.range;
-  tower.projectileSpeed = definition.projectileSpeed;
-  tower.upgDamage = definition.upgDamage;
-  tower.baseDamageBase = definition.baseDamage;
-  tower.upgDamageBase = definition.upgDamage;
-  tower.size = getShipSize(tower.rarity);
-  if (typeof definition.size === 'number') {
-    tower.size = definition.size;
-  }
-  tower.weaponType = definition.weaponType || tower.weaponType || null;
-  const resolvedWeaponType = tower.weaponType;
-  tower.projectileType = definition.projectileType
-    || (resolvedWeaponType ? DEFAULT_PROJECTILE_TYPE_BY_WEAPON[resolvedWeaponType] : null)
-    || tower.projectileType
-    || PROJECTILE_TYPES.NORMAL;
-  tower.explosionRadiusBase = definition.explosionRadius ?? tower.explosionRadiusBase ?? null;
-  tower.explosionRadius = definition.explosionRadius ?? tower.explosionRadiusBase ?? tower.explosionRadius;
-  tower.critChance = typeof definition.critChance === 'number'
-    ? definition.critChance
-    : (RARITY_CRIT_CHANCE[tower.rarity] ?? tower.critChance ?? 0.05);
-  const sharedLevel = getSharedUpgradeLevel(tower.weaponType, tower.era, tower.tierIndex);
-  tower.upgradeLevel = sharedLevel;
-  tower.cooldown = 0;
-  applyFootprintFromSprite(tower);
-  updateFusionScaling(tower);
-  applyFusionBonuses(tower);
-  setWaveStatus(`시대 업! ${definition.era} ${RARITY_LABEL[definition.rarity]} ${definition.name}`);
-  GAME_STATE.selections.clear();
-  GAME_STATE.selectedEnemy = null;
-  GAME_STATE.selections.add(tower.id);
-  notifySelectionChanged();
-  notifyHudUpdate();
-  return true;
 }
 
 // Derive collider/selection radii from current sprite size so that larger historical ships have larger footprints
@@ -612,29 +716,7 @@ function executeUpgrade(targetId = null) {
     setWaveStatus('유효하지 않은 유닛');
     return false;
   }
-
-  const upgraded = upgradeTowerTier(tower);
-  if (!upgraded) {
-    return enhanceTower(tower);
-  }
-  return true;
-}
-
-function attemptEraUpgrade() {
-  if (GAME_STATE.pendingEraUpgrades <= 0) {
-    setWaveStatus('시대 업그레이드 불가');
-    return false;
-  }
-  if (GAME_STATE.eraIndex >= ERA_ORDER.length - 1) {
-    setWaveStatus('최종 시대 도달');
-    return false;
-  }
-  GAME_STATE.pendingEraUpgrades -= 1;
-  GAME_STATE.eraIndex += 1;
-  setWaveStatus(`시대 상승: ${ERA_ORDER[GAME_STATE.eraIndex]}`);
-  notifyCommandLayoutChange();
-  notifyHudUpdate();
-  return true;
+  return enhanceTower(tower);
 }
 
 function buildDockyard() {
@@ -763,8 +845,13 @@ export {
   getTierUpgradeCost,
   getEnhanceCost,
   executeRoll,
+  getPurchasePackages,
+  getPurchaseInfo,
+  executePurchase,
+  UNIT_ERA_UPGRADE_COST,
+  getUnitEraUpgradeInfo,
+  executeUnitEraUpgrade,
   executeUpgrade,
-  attemptEraUpgrade,
   buildDockyard,
   executeSell,
   canSellTower,

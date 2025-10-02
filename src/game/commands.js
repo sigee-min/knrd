@@ -19,13 +19,19 @@ import {
   getEnhanceCost,
   executeRoll,
   executeUpgrade,
-  attemptEraUpgrade,
   buildDockyard,
   executeSell,
   canSellTower,
   getSellValue,
   executeFusion,
   canFuseTower,
+  getPurchasePackages,
+  getPurchaseInfo,
+  executePurchase,
+  UNIT_ERA_UPGRADE_COST,
+  getUnitEraUpgradeInfo,
+  executeUnitEraUpgrade,
+  RARITY_LABEL,
 } from './combat.js';
 import {
   registerSelectionCallbacks,
@@ -41,6 +47,14 @@ const commandCallbacks = {
   onCloseSettings: null,
   onOpenSettings: null,
   onGuideToggle: null,
+};
+
+const SHOP_RARITY_ORDER = ['unique', 'legendary', 'mythic', 'primordial'];
+const SHOP_LABELS = {
+  unique: '유니크 구입',
+  legendary: '전설 구입',
+  mythic: '신화 구입',
+  primordial: '태초 구입',
 };
 
 /**
@@ -81,9 +95,9 @@ function getCommandLayout() {
   }
   const selectionCount = GAME_STATE.selections.size;
   if (selectionCount === 0) {
-    return ['roll', 'dockyard', 'era', 'speed', 'boss'];
+    return ['roll', 'dockyard', 'era', 'speed', 'boss', 'shop'];
   }
-  return ['upgrade', 'fusion', 'era', 'guide', 'sell', 'boss'];
+  return ['upgrade', 'fusion', 'era', 'guide', 'sell'];
 }
 
 function refreshCommandStates() {
@@ -166,11 +180,31 @@ function refreshCommandStates() {
   }
   const eraButton = COMMAND_TO_ELEMENT.era;
   if (eraButton) {
-    const available = GAME_STATE.pendingEraUpgrades > 0;
-    eraButton.disabled = !available;
-    eraButton.classList.toggle('ready', available);
-    const baseHint = COMMAND_LIBRARY.era.hint || '시대 업 포인트 사용';
-    eraButton.title = available ? `남은 시대 업 ${GAME_STATE.pendingEraUpgrades}개\n${baseHint}` : `${baseHint}\n시대 업 포인트 필요`;
+    if (towers.length === 0) {
+      eraButton.disabled = true;
+      eraButton.classList.remove('ready');
+      const baseHint = COMMAND_LIBRARY.era.hint || '';
+      eraButton.title = baseHint ? `유닛 선택 필요\n${baseHint}` : '유닛 선택 필요';
+    } else {
+      const infos = towers.map((tower) => getUnitEraUpgradeInfo(tower));
+      const availableInfos = infos.filter((info) => info.available);
+      const ready = availableInfos.length > 0;
+      eraButton.disabled = !ready;
+      eraButton.classList.toggle('ready', ready);
+      const baseHint = COMMAND_LIBRARY.era.hint || '';
+      let status;
+      if (ready) {
+        if (availableInfos.length === towers.length) {
+          status = `선택 ${towers.length}척 시대 업 · 필요 ${UNIT_ERA_UPGRADE_COST}G (각각)`;
+        } else {
+          status = `시대 업 가능 ${availableInfos.length}/${towers.length}척 · 필요 ${UNIT_ERA_UPGRADE_COST}G`;
+        }
+      } else {
+        const reason = infos.find((info) => info.reason)?.reason || '시대 업 불가';
+        status = reason;
+      }
+      eraButton.title = baseHint ? `${status}\n${baseHint}` : status;
+    }
     const labelEl = eraButton.querySelector('.command-label');
     if (labelEl) {
       labelEl.textContent = COMMAND_LIBRARY.era.label;
@@ -218,6 +252,25 @@ function refreshCommandStates() {
     } else {
       sellButton.title = `판매할 유닛 없음${baseHint}`;
     }
+  }
+  const shopButton = COMMAND_TO_ELEMENT.shop;
+  if (shopButton) {
+    const packages = getPurchasePackages();
+    const essenceCosts = SHOP_RARITY_ORDER
+      .map((rarity) => packages?.[rarity]?.essence)
+      .filter((value) => typeof value === 'number' && value > 0);
+    const minEssence = essenceCosts.length > 0 ? Math.min(...essenceCosts) : 0;
+    const infoLegendary = getPurchaseInfo('legendary');
+    const anyAvailable = SHOP_RARITY_ORDER.some((rarity) => getPurchaseInfo(rarity)?.available);
+    shopButton.classList.toggle('ready', anyAvailable);
+    const hintLines = ['유니크/전설/신화/태초 함선을 즉시 구입'];
+    if (minEssence > 0) {
+      hintLines.push(`최소 필요 정수 ${minEssence}개`);
+    }
+    if (infoLegendary && !infoLegendary.available && infoLegendary.reason) {
+      hintLines.push(`현재 전설 구입 불가: ${infoLegendary.reason}`);
+    }
+    shopButton.title = hintLines.join('\n');
   }
   const speedButton = COMMAND_TO_ELEMENT.speed;
   if (speedButton) {
@@ -284,6 +337,52 @@ function renderCommandPanel(force = false) {
     grid.replaceChildren(fragment);
     return;
   }
+  if (GAME_STATE.commandMode === 'shop') {
+    const fragment = document.createDocumentFragment();
+    const packages = getPurchasePackages() || {};
+    SHOP_RARITY_ORDER.forEach((rarity, i) => {
+      const pkg = packages[rarity];
+      if (!pkg) return;
+      const info = getPurchaseInfo(rarity) || { available: false, reason: '구매 불가', cost: pkg.cost };
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'command-button';
+      btn.dataset.command = 'purchase';
+      btn.dataset.rarity = rarity;
+      btn.disabled = !info.available;
+      const costLabel = pkg.essence > 0 ? `정수 ${pkg.essence}` : `${pkg.cost}G`;
+      const titleLines = [];
+      if (pkg.essence > 0) {
+        titleLines.push(`필요 정수 ${pkg.essence}개`);
+      } else {
+        titleLines.push(`필요 골드 ${pkg.cost}G`);
+      }
+      titleLines.push(`${RARITY_LABEL[rarity] || rarity.toUpperCase()} 함선을 즉시 획득`);
+      if (!info.available && info.reason) {
+        titleLines.push(`구매 불가: ${info.reason}`);
+      }
+      btn.title = titleLines.join('\n');
+      const labelText = `${SHOP_LABELS[rarity]} (${costLabel})`;
+      btn.innerHTML = `
+        <span class="command-icon"><img src="assets/svg/icons/icon_gold.svg" alt="${SHOP_LABELS[rarity]}" /></span>
+        <span class="command-label">${labelText}</span>
+        <span class="command-hotkey">${i + 1}</span>
+      `;
+      fragment.appendChild(btn);
+    });
+    const backBtn = document.createElement('button');
+    backBtn.type = 'button';
+    backBtn.className = 'command-button';
+    backBtn.dataset.command = 'back';
+    backBtn.innerHTML = `
+      <span class="command-icon"><img src="assets/svg/cursors/cursor_cancel.svg" alt="Back" /></span>
+      <span class="command-label">되돌리기</span>
+      <span class="command-hotkey">Back</span>
+    `;
+    fragment.appendChild(backBtn);
+    grid.replaceChildren(fragment);
+    return;
+  }
   const layout = getCommandLayout();
   const signature = layout.join(',');
   if (!force && signature === currentCommandLayoutSignature) {
@@ -331,8 +430,8 @@ function ensureSelectionUpdate() {
  * @param {{shift?: boolean}} [options]
  */
 function handleCommand(command, options = {}) {
-  const { shift = false, bossKey = null } = options;
-  const gameOnly = new Set(['roll', 'upgrade', 'fusion', 'dockyard', 'sell', 'era', 'speed', 'cancel', 'guide', 'selectAll', 'options', 'pause']);
+  const { shift = false, bossKey = null, rarity = null } = options;
+  const gameOnly = new Set(['roll', 'upgrade', 'fusion', 'dockyard', 'sell', 'era', 'speed', 'cancel', 'guide', 'selectAll', 'options', 'pause', 'boss', 'summonBoss', 'shop', 'purchase', 'unitEraUpgrade']);
   if (GAME_STATE.scene !== 'game' && gameOnly.has(command)) {
     return;
   }
@@ -341,6 +440,11 @@ function handleCommand(command, options = {}) {
       GAME_STATE.commandMode = 'boss';
       renderCommandPanel(true);
       setWaveStatus('소환할 보스를 선택하세요');
+      break;
+    case 'shop':
+      GAME_STATE.commandMode = 'shop';
+      renderCommandPanel(true);
+      setWaveStatus('구입할 함선 등급을 선택하세요');
       break;
     case 'back':
       GAME_STATE.commandMode = 'main';
@@ -360,6 +464,13 @@ function handleCommand(command, options = {}) {
         break;
       }
       GAME_STATE.pendingCommands.push({ type: 'summonBoss', bossKey });
+      GAME_STATE.commandMode = 'main';
+      renderCommandPanel(true);
+      break;
+    }
+    case 'purchase': {
+      if (!rarity) return;
+      GAME_STATE.pendingCommands.push({ type: 'purchase', rarity });
       GAME_STATE.commandMode = 'main';
       renderCommandPanel(true);
       break;
@@ -421,16 +532,29 @@ function handleCommand(command, options = {}) {
       break;
     }
     case 'era':
-      if (shift) {
-        const available = GAME_STATE.pendingEraUpgrades;
-        const repeat = available > 0 ? available : 1;
-        for (let i = 0; i < repeat; i += 1) {
-          GAME_STATE.pendingCommands.push({ type: 'era' });
+      {
+        const targets = Array.from(GAME_STATE.selections);
+        if (targets.length === 0) {
+          setWaveStatus('선택된 유닛 없음');
+          break;
         }
-        setWaveStatus(available > 0 ? '시대 업그레이드 모두 적용' : '시대 업 시도');
-      } else {
-        GAME_STATE.pendingCommands.push({ type: 'era' });
-        setWaveStatus('시대 업 시도');
+        const targetIds = shift ? targets : [targets[0]];
+        const validTargets = targetIds.filter((id) => {
+          const tower = GAME_STATE.towers.find((t) => t.id === id);
+          return getUnitEraUpgradeInfo(tower).available;
+        });
+        if (validTargets.length === 0) {
+          const firstTower = GAME_STATE.towers.find((t) => t.id === targetIds[0]);
+          const reason = getUnitEraUpgradeInfo(firstTower).reason || '시대 업 불가';
+          setWaveStatus(reason);
+          break;
+        }
+        validTargets.forEach((id) => {
+          GAME_STATE.pendingCommands.push({ type: 'unitEraUpgrade', targetId: id });
+        });
+        const skipped = targetIds.length - validTargets.length;
+        const suffix = skipped > 0 ? ` (조건 미충족 ${skipped}척)` : '';
+        setWaveStatus(`시대 업 ${validTargets.length}회 예약${suffix}`);
       }
       break;
     case 'speed':
@@ -499,11 +623,6 @@ function processCommands() {
           GAME_STATE.pendingCommands = [];
         }
         break;
-      case 'era':
-        if (!attemptEraUpgrade()) {
-          GAME_STATE.pendingCommands = [];
-        }
-        break;
       case 'fusion':
         if (!executeFusion(command.targetIds ?? null)) {
           GAME_STATE.pendingCommands = [];
@@ -520,6 +639,16 @@ function processCommands() {
       case 'summonBoss':
         GAME_STATE.nextSummonBossKey = command.bossKey;
         break;
+      case 'purchase':
+        if (!executePurchase(command.rarity)) {
+          GAME_STATE.pendingCommands = [];
+        }
+        break;
+      case 'unitEraUpgrade':
+        if (!executeUnitEraUpgrade(command.targetId ?? null)) {
+          GAME_STATE.pendingCommands = [];
+        }
+        break;
       default:
         break;
     }
@@ -532,10 +661,26 @@ function onCommandClick(event) {
   const command = button.dataset.command;
   if (!command) return;
   const bossKey = button.dataset.bossKey || null;
-  handleCommand(command, { shift: event.shiftKey, bossKey });
+  const rarity = button.dataset.rarity || null;
+  handleCommand(command, { shift: event.shiftKey, bossKey, rarity });
 }
 
 function onCommandKeyDown(event) {
+  if (GAME_STATE.commandMode === 'shop') {
+    if (event.code.startsWith('Digit')) {
+      const idx = Number(event.code.replace('Digit', '')) - 1;
+      const rarity = SHOP_RARITY_ORDER[idx];
+      if (rarity) {
+        handleCommand('purchase', { rarity });
+        return true;
+      }
+      return false;
+    }
+    if (event.code === 'Escape' || event.code === 'Backspace') {
+      handleCommand('back');
+      return true;
+    }
+  }
   // Boss menu digit shortcuts and escape
   if (GAME_STATE.commandMode === 'boss') {
     if (event.code.startsWith('Digit')) {

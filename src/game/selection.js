@@ -88,10 +88,17 @@ function findTowerById(id) {
 
 function updateSelectionInfo() {
   const container = elements.selectionInfo;
-  if (!container) return;
+  const panel = elements.unitPanel;
+  if (!container || !panel) return;
   notifyCommandPanelRefresh();
   const setContent = (html) => {
     container.innerHTML = html;
+  };
+  const showPanel = () => {
+    panel.classList.remove('is-hidden');
+  };
+  const hidePanel = () => {
+    panel.classList.add('is-hidden');
   };
   const selection = Array.from(GAME_STATE.selections);
   const enemyId = GAME_STATE.selectedEnemy;
@@ -100,7 +107,8 @@ function updateSelectionInfo() {
       const enemy = GAME_STATE.enemies.find((e) => e.id === enemyId);
       if (!enemy) {
         GAME_STATE.selectedEnemy = null;
-        setContent('<p class="placeholder">유닛 또는 적을 선택하세요.</p>');
+        setContent('');
+        hidePanel();
         return;
       }
       const patternLabelMap = { boss: '보스', split: '분열', spiral: '나선', sprint: '광속', standard: '표준' };
@@ -150,17 +158,20 @@ function updateSelectionInfo() {
           <div class="unit-stats">${statsHtml}</div>
         </div>
       `;
+      showPanel();
       setContent(html);
       return;
     }
-    setContent('<p class="placeholder">유닛 또는 적을 선택하세요.</p>');
+    setContent('');
+    hidePanel();
     return;
   }
   GAME_STATE.selectedEnemy = null;
   if (selection.length === 1) {
     const tower = findTowerById(selection[0]);
     if (!tower) {
-      setContent('<p class="placeholder">유닛 또는 적을 선택하세요.</p>');
+      setContent('');
+      hidePanel();
       return;
     }
     const sprite = getTowerSprite(tower);
@@ -193,6 +204,9 @@ function updateSelectionInfo() {
       )
       .join('');
     const fusionTier = tower.fusionTier ?? 0;
+    const tierLabel = `티어 ${tower.tierIndex + 1}/${RARITY_ORDER.length}`;
+    const fusionVariant = fusionTier >= 5 ? 'prime' : fusionTier >= 3 ? 'advanced' : fusionTier >= 1 ? 'charged' : 'base';
+    const fusionBadge = `<span class="unit-fusion-tier unit-fusion-tier--${fusionVariant}">${fusionTier > 0 ? `+${fusionTier}` : '0'}</span>`;
     const html = `
       <div class="unit-detail">
         <div class="unit-summary-header">
@@ -201,9 +215,15 @@ function updateSelectionInfo() {
           </div>
           <div class="unit-meta">
             <strong>${tower.name}</strong>
-            <span>[${tower.era}] · ${rarityLabel} · 티어 ${tower.tierIndex + 1}/${RARITY_ORDER.length}</span>
-            <span>융합 티어 ${fusionTier}</span>
-            <span>무기: ${weaponLabel}</span>
+            <div class="unit-meta-line">
+              <span class="unit-era-pill">${tower.era}</span>
+              <span class="unit-rarity-text rarity-${tower.rarity}">${rarityLabel}</span>
+              <span class="unit-tier-text">${tierLabel}</span>
+            </div>
+            <div class="unit-meta-line unit-meta-line--secondary">
+              <span class="unit-fusion-label">융합 티어 ${fusionBadge}</span>
+              <span class="unit-weapon-label">무기: ${weaponLabel}</span>
+            </div>
             <div class="attack-summary">
               <img src="assets/svg/icons/icon_attack.svg" alt="공격 정보" class="attack-icon" />
               <div class="attack-tooltip">${attackSummary}</div>
@@ -213,46 +233,17 @@ function updateSelectionInfo() {
         <div class="unit-stats">${statsHtml}</div>
       </div>
     `;
+    showPanel();
     setContent(html);
     return;
   }
 
   const towers = GAME_STATE.towers.filter((t) => GAME_STATE.selections.has(t.id));
   if (towers.length === 0) {
-    setContent('<p class="placeholder">유닛 또는 적을 선택하세요.</p>');
+    setContent('');
+    hidePanel();
     return;
   }
-  const summary = towers.reduce(
-    (acc, tower) => {
-      const dmg = computeTowerDamage(tower);
-      acc.damage += dmg;
-      acc.range += tower.range;
-      acc.fireRate += tower.fireRate;
-      acc.hpPct += tower.maxHp ? (tower.hp / tower.maxHp) * 100 : 100;
-      acc.crit += tower.critChance ?? 0;
-      acc.count += 1;
-      acc.byEra[tower.era] = (acc.byEra[tower.era] || 0) + 1;
-      acc.byRarity[tower.rarity] = (acc.byRarity[tower.rarity] || 0) + 1;
-      const weaponKey = tower.weaponType || '기타';
-      acc.byWeapon[weaponKey] = (acc.byWeapon[weaponKey] || 0) + 1;
-      return acc;
-    },
-    { damage: 0, range: 0, fireRate: 0, hpPct: 0, crit: 0, count: 0, byEra: {}, byRarity: {}, byWeapon: {} }
-  );
-  const avgRange = summary.range / summary.count;
-  const avgFireRate = summary.fireRate / summary.count;
-  const avgHp = summary.hpPct / summary.count;
-  const avgCrit = summary.crit / summary.count;
-  const eraSummary = Object.entries(summary.byEra)
-    .map(([era, count]) => `${era} ${count}`)
-    .join(', ');
-  const raritySummary = Object.entries(summary.byRarity)
-    .map(([rarity, count]) => `${RARITY_LABEL[rarity] || rarity} ${count}`)
-    .join(', ');
-  const weaponSummary = Object.entries(summary.byWeapon)
-    .map(([weapon, count]) => `${WEAPON_TYPE_LABEL[weapon] || weapon} ${count}`)
-    .join(', ');
-
   const cards = towers.map((tower) => {
     const rarity = RARITY_LABEL[tower.rarity] || tower.rarity;
     const fusionTier = tower.fusionTier ?? 0;
@@ -271,22 +262,12 @@ function updateSelectionInfo() {
     `;
   }).join('');
 
-  const footer = `
-    <div class="selection-footer">
-      <div>총 ${summary.count}척 · 총 공격력 ${summary.damage.toFixed(1)}</div>
-      <div>평균 체력 ${avgHp.toFixed(0)}% · 평균 사거리 ${avgRange.toFixed(0)} · 평균 연사 ${avgFireRate.toFixed(2)}s</div>
-      <div>평균 치명타 확률 ${(avgCrit * 100).toFixed(1)}%</div>
-      <div>시대: ${eraSummary || '-'} · 등급: ${raritySummary || '-'}</div>
-      <div>무기: ${weaponSummary || '-'}</div>
-    </div>
-  `;
-
   const html = `
     <div class="multi-selection">
       <div class="multi-selection__grid">${cards}</div>
-      ${footer}
     </div>
   `;
+  showPanel();
   setContent(html);
   bindSelectionCardEvents(container);
 }
@@ -306,6 +287,7 @@ function selectAllTowers() {
 }
 
 function selectTowerAtWorldPosition(position, options = {}) {
+  const { additive = false, toggle = false, isClick = false } = options;
   let closest = null;
   let bestDist = Infinity;
   for (const tower of GAME_STATE.towers) {
@@ -318,7 +300,12 @@ function selectTowerAtWorldPosition(position, options = {}) {
     }
   }
   if (!closest) return false;
-  updateTowerSelection([closest.id], options);
+  const alreadySelected = GAME_STATE.selections.has(closest.id);
+  if (isClick && additive && !toggle && alreadySelected) {
+    updateTowerSelection([closest.id], { toggle: true });
+    return true;
+  }
+  updateTowerSelection([closest.id], { additive, toggle });
   return true;
 }
 
@@ -408,9 +395,16 @@ function applyDragSelection() {
     (tower) => tower.x >= rect.minX && tower.x <= rect.maxX && tower.y >= rect.minY && tower.y <= rect.maxY
   );
 
+  const dragDx = GAME_STATE.dragCurrentScreen.x - GAME_STATE.dragStartScreen.x;
+  const dragDy = GAME_STATE.dragCurrentScreen.y - GAME_STATE.dragStartScreen.y;
+  const isClick = Math.abs(dragDx) < 4 && Math.abs(dragDy) < 4;
+
   if (towersInRect.length > 0) {
     const ids = towersInRect.map((tower) => tower.id);
-    updateTowerSelection(ids, { additive, toggle });
+    const selectionOptions = isClick && additive && !toggle
+      ? { toggle: true }
+      : { additive, toggle };
+    updateTowerSelection(ids, selectionOptions);
     return;
   }
 
@@ -439,7 +433,7 @@ function applyDragSelection() {
     }
   }
 
-  if (selectTowerAtWorldPosition(worldPos, { additive, toggle })) {
+  if (selectTowerAtWorldPosition(worldPos, { additive, toggle, isClick })) {
     return;
   }
   if (!selectEnemyAtWorldPosition(worldPos)) {

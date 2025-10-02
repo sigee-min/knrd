@@ -6,6 +6,7 @@ const elements = {
   waveStatus: document.getElementById('wave-status'),
   waveInfo: document.getElementById('wave-info'),
   selectionInfo: document.getElementById('selection-info'),
+  unitPanel: document.querySelector('.unit-panel'),
   commandGrid: document.getElementById('command-grid'),
   commandSlots: Array.from(document.querySelectorAll('.command-slot')),
   bossCountdown: document.getElementById('boss-countdown-display'),

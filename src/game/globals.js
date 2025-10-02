@@ -2,6 +2,8 @@ import { UNIT_LIBRARY as RAW_UNIT_LIBRARY } from '../data/unitLibrary.js';
 import { DOCKYARD_CAPACITY } from '../systems/shipyard.js';
 import { MAX_SELECTION, HUD_ALERT_DEFAULT_DURATION, MAX_WAVES, BOSS_GRACE_DURATION, EARLY_EASE_ROUNDS, EARLY_EASE_MIN, EARLY_EASE_STEP } from './constants.js';
 
+const PREP_WAVE_DURATION = 15;
+
 // Build grouped unit library with 4 eras
 const UNIT_LIBRARY = {
   '초기': [
@@ -80,7 +82,7 @@ const COMMAND_LIBRARY = {
     hotkey: 'E',
     label: '시대 업',
     icon: 'assets/svg/ui/cmd_era.svg',
-    hint: '시대 업 포인트 사용',
+    hint: '5G로 선택 유닛을 다음 시대 동일 등급으로 업그레이드',
   },
   guide: {
     id: 'guide',
@@ -88,6 +90,13 @@ const COMMAND_LIBRARY = {
     label: '사거리 표시',
     icon: 'assets/svg/icons/icon_round.svg',
     hint: '선택 유닛 사거리 표시 토글',
+  },
+  shop: {
+    id: 'shop',
+    hotkey: 'G',
+    label: '구입',
+    icon: 'assets/svg/icons/icon_gold.svg',
+    hint: '정수를 사용해 고급 함선을 즉시 구입합니다',
   },
   boss: {
     id: 'boss',
@@ -135,6 +144,7 @@ const HOTKEY_TO_COMMAND = {
   KeyS: 'cancel',
   KeyZ: 'selectAll',
   KeyX: 'guide',
+  KeyG: 'shop',
   KeyH: 'boss',
   KeyB: 'dockyard',
   KeyC: 'options',
@@ -175,10 +185,10 @@ const GAME_STATE = {
   paused: false,
   gold: 50,
   essence: 0,
-  round: 1,
+  round: 0,
   eraIndex: 0,
   pendingEraUpgrades: 0,
-  waveTimer: 0,
+  waveTimer: PREP_WAVE_DURATION,
   spawnAccumulator: 0,
   spawnedThisWave: 0,
   bossCountdown: 0,
@@ -299,13 +309,13 @@ function createInitialGameState(config) {
     paused: false,
     gold: 50,
     essence: 0,
-    round: 1,
+    round: 0,
     eraIndex: 0,
     pendingEraUpgrades: 0,
-    waveTimer: config.wave.waveDuration,
+    waveTimer: PREP_WAVE_DURATION,
     spawnAccumulator: 0,
     spawnedThisWave: 0,
-    spawnTarget: config.wave.spawnCountBase ?? 40,
+    spawnTarget: 0,
     bossCountdown: config.wave.bossInterval,
     isBossWave: false,
     bossSpawned: false,
@@ -372,6 +382,7 @@ export {
   EARLY_EASE_ROUNDS,
   EARLY_EASE_MIN,
   EARLY_EASE_STEP,
+  PREP_WAVE_DURATION,
   SETTINGS,
   CAMERA,
   COMMAND_LIBRARY,
