@@ -40,6 +40,40 @@
 2. 이후 push 또는 수동으로 **Run workflow**를 실행하면 `dist/` 번들과 정적 자산(`index.html`, `styles.css`, `assets/`)이 자동으로 업로드됩니다.
 3. 배포 URL은 Actions 로그의 `Deploy to GitHub Pages` 단계에서 확인할 수 있습니다.
 
+## 블로그 · 외부 페이지에 임베드
+게임을 별도의 페이지에 호스팅한 뒤, 블로그 글 등에 간단한 스크립트 한 줄로 삽입할 수 있습니다.
+
+1. `index.html`, `styles.css`, `dist/bundle.js`, `assets/`를 정적 호스팅(예: GitHub Pages)으로 배포합니다. 예시 URL: `https://knrd.github.io/`
+2. 글 본문에 다음 스니펫을 넣습니다.
+
+```html
+<script src="https://knrd.github.io/embed.js"
+        data-game-src="https://knrd.github.io/"
+        data-width="100%"
+        data-max-width="960px"
+        data-aspect="16/9"
+        defer></script>
+```
+
+- `data-game-src`: 실제 게임이 배포된 URL (`index.html` 경로).
+- `data-width`, `data-max-width`: 임베드 영역 너비 조정(기본값 `100%`, `960px`).
+- `data-aspect`: 가로세로 비율 (`16/9` 기본).
+- `data-center="false"`, `data-background`, `data-shadow`, `data-allow-fullscreen="false"` 등 속성으로 세부 스타일을 조정할 수 있습니다.
+
+스크립트는 자동으로 반응형 컨테이너와 `iframe`을 생성하므로, 별도의 CSS 없이도 게임이 바로 표시됩니다.
+
+### iframe 단독 버전
+스크립트를 쓰기 힘든 환경이라면 `iframe` HTML만으로도 임베드할 수 있습니다.
+
+```html
+<div style="max-width:960px;margin:0 auto;aspect-ratio:16/9;">
+  <iframe src="https://knrd.github.io/"
+          style="width:100%;height:100%;border:0;box-shadow:0 16px 32px rgba(0,0,0,0.35);"
+          loading="lazy"
+          allowfullscreen></iframe>
+</div>
+```
+
 ## 프로젝트 구조
 ```
 knrd/

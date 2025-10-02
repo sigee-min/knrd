@@ -56,6 +56,12 @@ let ctx;
 let minimapCanvas;
 let minimapCtx;
 
+// Sprite default art faces to the right (0 rad). If visuals appear reversed in motion,
+// apply a global heading offset. Using Math.PI flips orientation by 180 degrees.
+// Now that ship assets are rotated at load, only enemies keep 180° offset.
+const TOWER_HEADING_OFFSET = 0;
+const ENEMY_HEADING_OFFSET = Math.PI;
+
 function getEarlyWaveEase(round) {
   if (round <= EARLY_EASE_ROUNDS) {
     const eased = EARLY_EASE_MIN + (round - 1) * EARLY_EASE_STEP;
@@ -159,6 +165,29 @@ function withAlpha(color, alpha) {
     return `rgba(${r}, ${g}, ${b}, ${normalized})`;
   }
   return color;
+}
+
+// Angle helpers for smooth sprite heading
+function normalizeAngle(angle) {
+  return Math.atan2(Math.sin(angle), Math.cos(angle));
+}
+
+function moveAngleTowards(current, target, maxStep) {
+  const delta = normalizeAngle(target - current);
+  if (Math.abs(delta) <= maxStep) return target;
+  return current + Math.sign(delta) * maxStep;
+}
+
+// Generic check if a sprite image (HTMLImageElement or Canvas) is drawable
+function isSpriteReady(img) {
+  if (!img) return false;
+  const isImgEl = (typeof Image !== 'undefined') && img instanceof Image;
+  if (isImgEl) {
+    return !!(img.complete && img.naturalWidth > 0);
+  }
+  const w = img.naturalWidth ?? img.width ?? 0;
+  const h = img.naturalHeight ?? img.height ?? 0;
+  return w > 0 && h > 0;
 }
 
 function rollDamage(baseDamage) {
@@ -982,6 +1011,15 @@ function updateTowers(delta) {
       tower.y = tower.targetY;
       tower.moving = false;
     }
+    // Initialize heading once
+    if (typeof tower.heading !== 'number' || Number.isNaN(tower.heading)) {
+      tower.heading = Math.atan2(CONFIG.orbit.centerY - tower.y, CONFIG.orbit.centerX - tower.x);
+    }
+    // Smoothly turn toward movement direction when moving; keep last heading when stationary
+    const turnRate = 4.0; // rad/s
+    const maxTurn = turnRate * effectiveDelta;
+    const desiredHeading = tower.moving ? Math.atan2(tower.targetY - tower.y, tower.targetX - tower.x) : tower.heading;
+    tower.heading = moveAngleTowards(tower.heading, desiredHeading, maxTurn);
     tower.col = Math.round((tower.x - CONFIG.grid.offsetX) / CONFIG.grid.cellSize);
     tower.row = Math.round((tower.y - CONFIG.grid.offsetY) / CONFIG.grid.cellSize);
   }
@@ -1857,12 +1895,14 @@ function renderTowers() {
     // Draw ship sprite
     const sprite = getTowerSprite(tower);
     const size = sprite.size ?? 36;
-    if (sprite.image && sprite.image.complete && sprite.image.naturalWidth > 0) {
+    if (isSpriteReady(sprite.image)) {
       ctx.save();
       ctx.translate(screenX, screenY);
-      // Slight orientation toward center for visual interest
-      const angle = Math.atan2(CONFIG.orbit.centerY - tower.y, CONFIG.orbit.centerX - tower.x);
-      ctx.rotate(angle);
+      // Use smoothed tower.heading computed in updateTowers
+      const drawAngle = typeof tower.heading === 'number'
+        ? tower.heading
+        : Math.atan2(CONFIG.orbit.centerY - tower.y, CONFIG.orbit.centerX - tower.x);
+      ctx.rotate(drawAngle + TOWER_HEADING_OFFSET);
       ctx.drawImage(sprite.image, -size / 2, -size / 2, size, size);
       ctx.restore();
     } else {
@@ -1899,7 +1939,7 @@ function renderEnemies() {
       if (sprite.image && sprite.image.complete && sprite.image.naturalWidth > 0) {
         ctx.save();
         ctx.translate(screenX, screenY);
-        ctx.rotate(heading);
+        ctx.rotate(heading + ENEMY_HEADING_OFFSET);
         const sz = sprite.size || enemy.size * 1.7;
         ctx.drawImage(sprite.image, -sz / 2, -sz / 2, sz, sz);
         ctx.restore();
@@ -1953,7 +1993,7 @@ function renderEnemies() {
       if (sprite.image && sprite.image.complete && sprite.image.naturalWidth > 0) {
         ctx.save();
         ctx.translate(screenX, screenY);
-        ctx.rotate(heading);
+        ctx.rotate(heading + ENEMY_HEADING_OFFSET);
         const sz = sprite.size || enemy.size * 1.7;
         ctx.drawImage(sprite.image, -sz / 2, -sz / 2, sz, sz);
         ctx.restore();

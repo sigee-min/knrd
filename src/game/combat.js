@@ -606,6 +606,9 @@ function getUnitEraUpgradeInfo(tower) {
   if (currentEraIdx === -1) {
     return { available: false, reason: '알 수 없는 시대', cost: UNIT_ERA_UPGRADE_COST };
   }
+  if (GAME_STATE.eraIndex <= currentEraIdx) {
+    return { available: false, reason: '현재 시대보다 낮은 함선만 시대 업 가능', cost: UNIT_ERA_UPGRADE_COST };
+  }
   if (currentEraIdx >= ERA_ORDER.length - 1) {
     return { available: false, reason: '최종 시대입니다', cost: UNIT_ERA_UPGRADE_COST };
   }
