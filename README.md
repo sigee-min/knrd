@@ -1,8 +1,10 @@
 # KNRD · Korea Navy Random Defence
 
-[게임 플레이 바로가기](https://sigee-min.github.io/knrd/)
-
 한국 해군을 모티프로 한 싱글 플레이 디펜스 게임 프로토타입입니다. 브라우저에서 canvas 기반으로 함대를 지휘하며 각 시대별로 함선을 업그레이드하고 몰려오는 적을 방어합니다.
+
+<img width="960" height="540" alt="Image" src="https://github.com/user-attachments/assets/26a6b7bd-d0cc-41ae-82b2-b095b1afbb6a" />
+
+[게임 플레이 바로가기](https://sigee-min.github.io/knrd/)
 
 ## 주요 특징
 - **실시간 디펜스 전투**: 마우스 드래그·우클릭으로 유닛을 선택하고 이동 명령을 내릴 수 있습니다.
