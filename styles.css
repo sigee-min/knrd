@@ -91,7 +91,7 @@ body {
 .hud-bottom .minimap-panel {
   left: clamp(24px, 4vw, 48px);
   bottom: calc(var(--hotkeys-gap) + 24px);
-  width: clamp(260px, 22vw, 360px);
+  width: clamp(234px, 19.8vw, 324px);
 }
 
 .hud-bottom .unit-panel {
@@ -1112,7 +1112,7 @@ body {
 .hud-bottom .minimap-panel {
   left: 24px;
   bottom: 16px;
-  width: 300px;
+  width: 270px;
 }
 
 .minimap-panel {
@@ -1127,6 +1127,7 @@ body {
   background: #0f121b;
   border-radius: 6px;
   border: 1px solid var(--border);
+  box-sizing: border-box;
 }
 
 /* Mini YouTube player overlay over minimap */
@@ -1136,12 +1137,14 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 8px;
+  padding: 0; /* remove internal padding to align width with minimap */
   border-radius: 10px;
   background: rgba(16, 20, 32, 0.82);
   border: 1px solid rgba(55, 64, 87, 0.6);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
   pointer-events: auto;
+  box-sizing: border-box;
+  position: relative; /* for overlay event player */
 }
 
 .music-row {
@@ -1157,6 +1160,18 @@ body {
   background: #000;
   border-radius: 6px;
   overflow: hidden;
+  box-sizing: border-box;
+}
+
+.yt-event {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* keep same 16:9, anchored to top, overlays main player */
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  z-index: 10;
 }
 
 .music-widget .yt-frame iframe {

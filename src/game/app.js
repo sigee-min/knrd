@@ -51,7 +51,7 @@ import { getEnemySprite } from './enemySprites.js';
 import { getBossSprite } from './bossSprites.js';
 import { getTowerSprite } from './shipSprites.js';
 import { initAudio, playSound } from './audio.js';
-import { initYouTubeMiniPlayer, togglePlay as ytTogglePlay, nextVideo as ytNextVideo, unmuteAndPlay as ytUnmuteAndPlay } from './youtubePlayer.js';
+import { initYouTubeMiniPlayer, togglePlay as ytTogglePlay, nextVideo as ytNextVideo, playEventVideo, hideEventOverlay } from './youtubePlayer.js';
 
 let canvas;
 let ctx;
@@ -732,6 +732,10 @@ function spawnBoss() {
   setWaveStatus('보스 출현!');
   // Loud cue for boss spawn
   playSound('boss_spawn', { volume: 0.9 });
+  // Play event clip overlay for 20~25s segment
+  try {
+    playEventVideo('https://www.youtube.com/shorts/6j_w126Mecs', { startSec: 20, endSec: 25 });
+  } catch (_) {}
 }
 
 function getBossEraForKey(key) {
@@ -2239,15 +2243,11 @@ function setupEventListeners() {
   document.addEventListener('contextmenu', onGlobalContextMenu, { capture: true });
   // Music widget controls
   elements.youtubeBtnPlay?.addEventListener('click', () => {
-    ytUnmuteAndPlay();
     ytTogglePlay();
   });
   elements.youtubeBtnNext?.addEventListener('click', () => {
-    ytUnmuteAndPlay();
     ytNextVideo();
   });
-  // On first user interaction, try to unmute and start background music (policy compliant)
-  window.addEventListener('pointerdown', () => ytUnmuteAndPlay(), { once: true, capture: true });
   elements.playButton?.addEventListener('click', () => {
     // Open difficulty picker overlay in the lobby
     elements.difficultyOverlay?.classList.remove('hidden');
@@ -2423,8 +2423,22 @@ function initializeGame() {
     width: 160,
     height: 90,
     autoplay: true,
-    volume: 15,
+    volume: 8,
     rotationEverySec: 0,
+    // Program decides next song with a fixed order playlist provided by user.
+    playlist: [
+      'https://www.youtube.com/watch?v=6zU8qCe3Wi0&list=PLBGGxb9ewboPS4pEcl8pdqiqsqOw_vT41&index=9',
+      'https://www.youtube.com/watch?v=0klbXBrm8Bw&list=PLBGGxb9ewboPS4pEcl8pdqiqsqOw_vT41&index=10',
+      'https://www.youtube.com/watch?v=ev7--kNpImM&list=PLBGGxb9ewboPS4pEcl8pdqiqsqOw_vT41&index=4',
+      'https://www.youtube.com/watch?v=3kwdw6EEAwk&list=PLBGGxb9ewboPS4pEcl8pdqiqsqOw_vT41&index=3',
+      'https://www.youtube.com/watch?v=7guX0JWCiVY&list=PLBGGxb9ewboPS4pEcl8pdqiqsqOw_vT41&index=6',
+      'https://www.youtube.com/watch?v=GIrzImYEpsw&list=PLBGGxb9ewboPS4pEcl8pdqiqsqOw_vT41&index=2',
+      'https://www.youtube.com/watch?v=eH7HfilYIwc&list=PLBGGxb9ewboPS4pEcl8pdqiqsqOw_vT41&index=5',
+      'https://www.youtube.com/watch?v=nFn4EcpcFtI&list=PLBGGxb9ewboPS4pEcl8pdqiqsqOw_vT41&index=7',
+      'https://www.youtube.com/watch?v=VCd1fhQOmmY&list=PLBGGxb9ewboPS4pEcl8pdqiqsqOw_vT41&index=11',
+    ],
+    shuffle: false,
+    loop: true,
   });
   requestAnimationFrame((timestamp) => {
     GAME_STATE.lastFrame = timestamp;

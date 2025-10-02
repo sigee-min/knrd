@@ -19,6 +19,7 @@ import {
 import { UNIT_LIBRARY, GAME_STATE, CONFIG } from './globals.js';
 import { getTowerSprite } from './shipSprites.js';
 import { setWaveStatus } from './status.js';
+import { playEventVideo } from './youtubePlayer.js';
 import { playSound } from './audio.js';
 
 const ERA_ORDER = [
@@ -521,6 +522,15 @@ function executeRoll() {
   GAME_STATE.gold -= cost;
   setWaveStatus(`${definition.era} ${RARITY_LABEL[definition.rarity]} ${definition.name} 배치`);
   playSound('build', { volume: 0.5 });
+  // Wave-limited event clip: when rolling UNIQUE or higher, play 14~17s segment once per round
+  try {
+    const rarityIdx = RARITY_ORDER.indexOf(definition.rarity);
+    const uniqueIdx = RARITY_ORDER.indexOf('unique');
+    if (rarityIdx >= uniqueIdx && GAME_STATE.lastUniqueEventRound !== GAME_STATE.round) {
+      GAME_STATE.lastUniqueEventRound = GAME_STATE.round;
+      playEventVideo('https://www.youtube.com/shorts/6j_w126Mecs', { startSec: 14, endSec: 17 });
+    }
+  } catch (_) {}
   notifyHudUpdate();
   return true;
 }

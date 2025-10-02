@@ -242,6 +242,8 @@ const GAME_STATE = {
   bossGraceTimer: 0,
   difficulty: 'normal',
   difficultyMultiplier: DIFFICULTY_PRESETS.normal.hpMultiplier,
+  // Event flags
+  lastUniqueEventRound: -1,
 };
 
 function createConfig(canvas, minimapCanvas) {
@@ -363,6 +365,7 @@ function createInitialGameState(config) {
     bossGraceTimer: 0,
     difficulty: 'normal',
     difficultyMultiplier: DIFFICULTY_PRESETS.normal.hpMultiplier,
+    lastUniqueEventRound: -1,
   };
 }
 

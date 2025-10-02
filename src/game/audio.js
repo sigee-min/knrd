@@ -111,12 +111,20 @@ async function loadBuffer(key) {
     buffers.set(key, buf);
     return buf;
   } catch (_) {
-    // If fetch/decode failed (e.g., file:// CORS), fall back to HTMLAudioElement.
+    // If fetch/decode failed (e.g., due to missing files or CORS), try HTMLAudioElement
     try {
       const el = new Audio();
-      el.src = url;
+      // Check codec support before assigning
+      const supportOgg = typeof el.canPlayType === 'function' && el.canPlayType('audio/ogg');
+      const supportMp3 = typeof el.canPlayType === 'function' && el.canPlayType('audio/mpeg');
+      if (!supportOgg && !supportMp3) {
+        buffers.set(key, null);
+        return null;
+      }
       el.preload = 'auto';
-      // Note: MediaElement fallback does not route through WebAudio graph.
+      el.src = url;
+      // Kick off loading
+      try { el.load?.(); } catch (_) {}
       buffers.set(key, el);
       return el;
     } catch (_) {
@@ -179,7 +187,10 @@ async function playSound(key, opts = {}) {
         asset.playbackRate = 1;
       }
       asset.volume = vol;
-      void asset.play();
+      const p = asset.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {});
+      }
     } catch (_) {}
   }
 }
