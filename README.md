@@ -1,5 +1,7 @@
 # KNRD · Korea Navy Random Defence
 
+[게임 플레이 바로가기](https://sigee-min.github.io/knrd/)
+
 한국 해군을 모티프로 한 싱글 플레이 디펜스 게임 프로토타입입니다. 브라우저에서 canvas 기반으로 함대를 지휘하며 각 시대별로 함선을 업그레이드하고 몰려오는 적을 방어합니다.
 
 ## 주요 특징
@@ -43,12 +45,12 @@
 ## 블로그 · 외부 페이지에 임베드
 게임을 별도의 페이지에 호스팅한 뒤, 블로그 글 등에 간단한 스크립트 한 줄로 삽입할 수 있습니다.
 
-1. `index.html`, `styles.css`, `dist/bundle.js`, `assets/`를 정적 호스팅(예: GitHub Pages)으로 배포합니다. 예시 URL: `https://knrd.github.io/`
+1. `index.html`, `styles.css`, `dist/bundle.js`, `assets/`를 정적 호스팅(예: GitHub Pages)으로 배포합니다. 예시 URL: `https://sigee-min.github.io/knrd/`
 2. 글 본문에 다음 스니펫을 넣습니다.
 
 ```html
-<script src="https://knrd.github.io/embed.js"
-        data-game-src="https://knrd.github.io/"
+<script src="https://sigee-min.github.io/knrd/embed.js"
+        data-game-src="https://sigee-min.github.io/knrd/"
         data-width="100%"
         data-max-width="960px"
         data-aspect="16/9"
@@ -67,7 +69,7 @@
 
 ```html
 <div style="max-width:960px;margin:0 auto;aspect-ratio:16/9;">
-  <iframe src="https://knrd.github.io/"
+  <iframe src="https://sigee-min.github.io/knrd/"
           style="width:100%;height:100%;border:0;box-shadow:0 16px 32px rgba(0,0,0,0.35);"
           loading="lazy"
           allowfullscreen></iframe>
