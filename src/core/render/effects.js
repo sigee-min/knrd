@@ -662,4 +662,7 @@ export {
   renderFloaters,
   renderRarityFloor,
   renderFusionAura,
+  withAlpha,
+  lightenColor,
+  darkenColor,
 };

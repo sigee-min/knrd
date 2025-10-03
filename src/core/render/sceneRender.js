@@ -15,6 +15,9 @@ import {
   renderRarityFloor,
   renderFusionAura,
   RARITY_COLOR,
+  withAlpha,
+  lightenColor,
+  darkenColor,
 } from './effects.js';
 import { TOWER_HEADING_OFFSET, ENEMY_HEADING_OFFSET } from '../constants/gameplay.js';
 
@@ -88,11 +91,40 @@ function renderSelectionBox(ctx) {
 }
 
 function renderTowers(ctx) {
+  const showGuide = GAME_STATE.showGuide;
+  const selections = GAME_STATE.selections || new Set();
+  const hasSelection = selections.size > 0;
   for (const tower of GAME_STATE.towers) {
     const screenX = tower.x - CAMERA.x;
     const screenY = tower.y - CAMERA.y;
     if (screenX < -24 || screenX > CAMERA.width + 24) continue;
     if (screenY < -24 || screenY > CAMERA.height + 24) continue;
+    if (showGuide) {
+      const isSelected = selections.has(tower.id);
+      if (!hasSelection || isSelected) {
+        const rangeRadius = Math.max(12, tower.range || 0);
+        if (rangeRadius > 0) {
+          const rarityColor = RARITY_COLOR[tower.rarity] || '#5aa1e3';
+          const ringColor = lightenColor(rarityColor, 0.25);
+          const fillColor = withAlpha(ringColor, 0.08);
+          ctx.save();
+          ctx.lineWidth = 2.2;
+          ctx.strokeStyle = withAlpha(ringColor, 0.85);
+          ctx.fillStyle = fillColor;
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, rangeRadius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.setLineDash([8, 6]);
+          ctx.lineWidth = 1.2;
+          ctx.strokeStyle = withAlpha(darkenColor(ringColor, 0.35), 0.9);
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, rangeRadius * 0.72, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+    }
     renderRarityFloor(ctx, tower, screenX, screenY, GAME_STATE.time ?? 0);
     renderFusionAura(ctx, tower, screenX, screenY, GAME_STATE.time ?? 0);
     const sprite = getTowerSprite(tower);
@@ -113,7 +145,7 @@ function renderTowers(ctx) {
       ctx.arc(screenX, screenY, fallbackR, 0, Math.PI * 2);
       ctx.fill();
     }
-    if (GAME_STATE.selections.has(tower.id)) {
+    if (selections.has(tower.id)) {
       ctx.strokeStyle = '#37a0f2';
       ctx.lineWidth = 2;
       ctx.beginPath();
