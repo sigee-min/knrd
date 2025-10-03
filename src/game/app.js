@@ -50,8 +50,8 @@ import { ENEMY_LIBRARY } from '../data/enemyLibrary.js';
 import { getEnemySprite } from './enemySprites.js';
 import { getBossSprite } from './bossSprites.js';
 import { getTowerSprite } from './shipSprites.js';
-import { initAudio, playSound } from './audio.js';
-import { initYouTubeMiniPlayer, togglePlay as ytTogglePlay, nextVideo as ytNextVideo, playEventVideo, hideEventOverlay } from './youtubePlayer.js';
+import { initAudio, playSound, setSfxVolumePercent } from './audio.js';
+import { initYouTubeMiniPlayer, togglePlay as ytTogglePlay, nextVideo as ytNextVideo, playEventVideo, hideEventOverlay, setBgmVolume } from './youtubePlayer.js';
 
 let canvas;
 let ctx;
@@ -413,6 +413,12 @@ function updateSettingLabels() {
   if (elements.settingPanSpeed && elements.settingPanSpeedValue) {
     elements.settingPanSpeedValue.textContent = Number(elements.settingPanSpeed.value).toFixed(1);
   }
+  if (elements.settingBgmVolume && elements.settingBgmVolumeValue) {
+    elements.settingBgmVolumeValue.textContent = `${Math.round(Number(elements.settingBgmVolume.value) || 0)}`;
+  }
+  if (elements.settingSfxVolume && elements.settingSfxVolumeValue) {
+    elements.settingSfxVolumeValue.textContent = `${Math.round(Number(elements.settingSfxVolume.value) || 0)}`;
+  }
 }
 
 function syncSettingsUI() {
@@ -426,6 +432,12 @@ function syncSettingsUI() {
   }
   if (elements.settingPanSpeed) {
     elements.settingPanSpeed.value = SETTINGS.panSpeedMultiplier.toFixed(1);
+  }
+  if (elements.settingBgmVolume) {
+    elements.settingBgmVolume.value = `${Math.round(SETTINGS.bgmVolume)}`;
+  }
+  if (elements.settingSfxVolume) {
+    elements.settingSfxVolume.value = `${Math.round(SETTINGS.sfxVolume)}`;
   }
   updateSettingLabels();
 }
@@ -442,6 +454,16 @@ function applySettingsFromUI() {
   }
   if (elements.settingPanSpeed) {
     SETTINGS.panSpeedMultiplier = parseFloat(elements.settingPanSpeed.value) || SETTINGS.panSpeedMultiplier;
+  }
+  if (elements.settingBgmVolume) {
+    const v = Math.max(0, Math.min(100, Math.round(Number(elements.settingBgmVolume.value) || SETTINGS.bgmVolume)));
+    SETTINGS.bgmVolume = v;
+    setBgmVolume(v);
+  }
+  if (elements.settingSfxVolume) {
+    const v = Math.max(0, Math.min(100, Math.round(Number(elements.settingSfxVolume.value) || SETTINGS.sfxVolume)));
+    SETTINGS.sfxVolume = v;
+    setSfxVolumePercent(v);
   }
   GAME_STATE.interestEnabled = SETTINGS.interestEnabled;
   applyCameraSettings();
@@ -2273,6 +2295,14 @@ function setupEventListeners() {
     updateSettingLabels();
     applySettingsFromUI();
   });
+  elements.settingBgmVolume?.addEventListener('input', () => {
+    updateSettingLabels();
+    applySettingsFromUI();
+  });
+  elements.settingSfxVolume?.addEventListener('input', () => {
+    updateSettingLabels();
+    applySettingsFromUI();
+  });
   if (Array.isArray(elements.difficultyButtons)) {
     elements.difficultyButtons.forEach((button) => {
       button.addEventListener('click', () => {
@@ -2411,6 +2441,8 @@ function initializeGame() {
 
   initializeGlobals({ canvas, minimapCanvas });
   initAudio();
+  // Apply initial SFX volume
+  try { setSfxVolumePercent(SETTINGS.sfxVolume); } catch (_) {}
   applyDifficultyPreset(GAME_STATE.difficulty || 'normal');
   configureWorldGeometry();
   applyCameraSettings();
@@ -2423,7 +2455,7 @@ function initializeGame() {
     width: 160,
     height: 90,
     autoplay: true,
-    volume: 8,
+    volume: SETTINGS.bgmVolume,
     rotationEverySec: 0,
     // Program decides next song with a fixed order playlist provided by user.
     playlist: [

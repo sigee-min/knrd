@@ -15,6 +15,7 @@ let programList = [];
 let currentIndex = 0;
 let doShuffle = false;
 let doLoop = true;
+let bgmVolume = 15; // 0..100
 
 function parseYouTubeUrl(url) {
   try {
@@ -126,7 +127,8 @@ async function initYouTubeMiniPlayer({
       events: {
         onReady: () => {
           try {
-            player.setVolume(volume);
+            bgmVolume = volume;
+            try { player.setVolume(bgmVolume); } catch (_) {}
             // Force unmuted playback on ready (may be blocked by browser policy)
             player.unMute();
             if (autoplay) { try { player.playVideo(); } catch (_) {} }
@@ -160,7 +162,9 @@ async function initYouTubeMiniPlayer({
             origin: window.location.origin,
           },
           events: {
-            onReady: () => {},
+            onReady: () => {
+              try { eventPlayer.setVolume(bgmVolume); } catch (_) {}
+            },
             onStateChange: (ev) => {
               if (ev && ev.data === window.YT.PlayerState.ENDED) {
                 hideEventOverlay({ resumeMain: true });
@@ -200,7 +204,7 @@ function goNext() {
     }
     currentIndex = nextIdx;
     const id = programList[currentIndex];
-    try { player.loadVideoById(id); player.playVideo(); } catch (_) {}
+    try { player.loadVideoById(id); player.setVolume(bgmVolume); player.playVideo(); } catch (_) {}
     return;
   }
   try { player.nextVideo(); } catch (_) {}
@@ -261,6 +265,7 @@ function showEventOverlay(videoId, { startSec = 0, endSec = null } = {}) {
     // Show overlay
     eventContainer.style.display = 'block';
     eventPlayer.unMute();
+    try { eventPlayer.setVolume(bgmVolume); } catch (_) {}
     if (endSec != null && endSec > 0) {
       eventPlayer.loadVideoById({ videoId, startSeconds: Math.max(0, startSec), endSeconds: endSec });
     } else if (startSec > 0) {
@@ -273,6 +278,13 @@ function showEventOverlay(videoId, { startSec = 0, endSec = null } = {}) {
   } catch (_) {
     return false;
   }
+}
+
+function setBgmVolume(percent) {
+  const p = Math.max(0, Math.min(100, Number(percent) || 0));
+  bgmVolume = p;
+  try { player && player.setVolume(bgmVolume); } catch (_) {}
+  try { eventPlayer && eventPlayer.setVolume(bgmVolume); } catch (_) {}
 }
 
 function hideEventOverlay({ resumeMain = true } = {}) {
@@ -306,6 +318,7 @@ export {
   unmuteAndPlay,
   playTemporaryClip,
   goNext,
+  setBgmVolume,
   playEventVideo,
   hideEventOverlay,
 };

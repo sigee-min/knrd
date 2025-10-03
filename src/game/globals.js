@@ -30,6 +30,8 @@ const SETTINGS = {
   pointerSensitivity: 1.0,
   panSpeedMultiplier: 1.0,
   autoFullscreen: true,
+  bgmVolume: 8,   // 0-100 (YouTube volume)
+  sfxVolume: 80,  // 0-100 (SFX master)
 };
 
 const CAMERA = {

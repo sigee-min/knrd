@@ -2,23 +2,56 @@
 // Usage: import { initAudio, playSound } from './audio.js';
 // Ensure initAudio() is called once during boot to wire unlock handlers.
 
+// You can point to exact files or let the loader try common locations using the key name.
 const SOUND_FILES = {
-  ui_click: 'assets/audios/ui_click.ogg',
-  build: 'assets/audios/build.ogg',
-  upgrade: 'assets/audios/upgrade.ogg',
-  fusion: 'assets/audios/fusion.ogg',
-  sell: 'assets/audios/sell.ogg',
-  dockyard: 'assets/audios/dockyard.ogg',
-  roll: 'assets/audios/roll.ogg',
-  era_up: 'assets/audios/era_up.ogg',
-  boss_spawn: 'assets/audios/boss_spawn.ogg',
-  wave_start: 'assets/audios/wave_start.ogg',
-  wave_clear: 'assets/audios/wave_clear.ogg',
-  victory: 'assets/audios/victory.ogg',
-  game_over: 'assets/audios/game_over.ogg',
-  hit: 'assets/audios/hit.ogg',
-  explosion: 'assets/audios/explosion.ogg',
+  // UI
+  ui_click: 'assets/svg/audios/UI인터렉션.wav',
+  // Core actions
+  build: 'assets/svg/audios/배생산.wav',
+  roll: 'assets/svg/audios/배생산.wav',
+  upgrade: 'assets/svg/audios/배강화및배시대업그레이드.wav',
+  fusion: 'assets/svg/audios/배강화및배시대업그레이드.wav',
+  era_up: 'assets/svg/audios/배강화및배시대업그레이드.wav',
+  dockyard: 'assets/svg/audios/UI인터렉션.wav',
+  sell: 'assets/svg/audios/배판매.wav',
+  // Combat impacts
+  hit: 'assets/svg/audios/배격침.wav',
+  explosion: 'assets/svg/audios/대포맟험포발사.wav',
+  // Session events (fallback to UI click to avoid 404 spam)
+  boss_spawn: 'assets/svg/audios/UI인터렉션.wav',
+  wave_start: 'assets/svg/audios/UI인터렉션.wav',
+  wave_clear: 'assets/svg/audios/UI인터렉션.wav',
+  victory: 'assets/svg/audios/UI인터렉션.wav',
+  game_over: 'assets/svg/audios/UI인터렉션.wav',
 };
+
+// Additional common directories and extensions to probe automatically
+const SOUND_BASE_DIRS = [
+  'assets/audios/',
+  'assets/audio/',
+  'assets/sfx/',
+  'assets/sounds/',
+];
+// Prefer WAV first as requested; fall back to OGG/MP3 if needed
+const SOUND_EXTS = ['.wav', '.ogg', '.mp3'];
+
+function getCandidateUrls(key) {
+  const out = [];
+  const seen = new Set();
+  const direct = SOUND_FILES[key];
+  if (Array.isArray(direct)) {
+    for (const u of direct) { if (!seen.has(u)) { seen.add(u); out.push(u); } }
+  } else if (typeof direct === 'string' && direct) {
+    if (!seen.has(direct)) { seen.add(direct); out.push(direct); }
+  }
+  for (const base of SOUND_BASE_DIRS) {
+    for (const ext of SOUND_EXTS) {
+      const u = `${base}${key}${ext}`;
+      if (!seen.has(u)) { seen.add(u); out.push(u); }
+    }
+  }
+  return out;
+}
 
 const SOUND_CATEGORY = {
   ui_click: 'ui',
@@ -53,6 +86,7 @@ const categoryGains = new Map();
 const buffers = new Map();
 const lastPlayTime = new Map(); // key -> timestamp
 const unlocked = { value: false };
+let sfxVolumeScalar = 1; // 0..1 scale applied on top of CATEGORY_GAIN.master
 
 function ensureContext() {
   if (ctx) return ctx;
@@ -61,7 +95,7 @@ function ensureContext() {
     if (!AudioCtx) return null;
     ctx = new AudioCtx();
     masterGain = ctx.createGain();
-    masterGain.gain.value = CATEGORY_GAIN.master;
+    masterGain.gain.value = CATEGORY_GAIN.master * sfxVolumeScalar;
     masterGain.connect(ctx.destination);
     for (const cat of ['ui', 'sfx', 'impact', 'boss']) {
       const g = ctx.createGain();
@@ -96,42 +130,40 @@ function initAudio() {
 
 async function loadBuffer(key) {
   if (buffers.has(key)) return buffers.get(key);
-  const url = SOUND_FILES[key];
-  if (!url) {
-    buffers.set(key, null);
-    return null;
-  }
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.arrayBuffer();
-    // Ensure audio context exists for decoding
-    if (!ensureContext()) throw new Error('No AudioContext');
-    const buf = await ctx.decodeAudioData(data.slice(0));
-    buffers.set(key, buf);
-    return buf;
-  } catch (_) {
-    // If fetch/decode failed (e.g., due to missing files or CORS), try HTMLAudioElement
+  const candidates = getCandidateUrls(key);
+  for (const url of candidates) {
     try {
-      const el = new Audio();
-      // Check codec support before assigning
-      const supportOgg = typeof el.canPlayType === 'function' && el.canPlayType('audio/ogg');
-      const supportMp3 = typeof el.canPlayType === 'function' && el.canPlayType('audio/mpeg');
-      if (!supportOgg && !supportMp3) {
-        buffers.set(key, null);
-        return null;
+      const res = await fetch(url);
+      if (!res.ok) {
+        continue;
       }
-      el.preload = 'auto';
-      el.src = url;
-      // Kick off loading
-      try { el.load?.(); } catch (_) {}
-      buffers.set(key, el);
-      return el;
-    } catch (_) {
-      buffers.set(key, null);
-      return null;
+      const data = await res.arrayBuffer();
+      if (!ensureContext()) throw new Error('No AudioContext');
+      const buf = await ctx.decodeAudioData(data.slice(0));
+      buffers.set(key, buf);
+      return buf;
+    } catch (e) {
+      // Try HTMLAudioElement fallback for this candidate
+      try {
+        const el = new Audio();
+        const supportOgg = typeof el.canPlayType === 'function' && el.canPlayType('audio/ogg');
+        const supportMp3 = typeof el.canPlayType === 'function' && el.canPlayType('audio/mpeg');
+        const supportWav = typeof el.canPlayType === 'function' && el.canPlayType('audio/wav');
+        if (!supportOgg && !supportMp3 && !supportWav) {
+          continue;
+        }
+        el.preload = 'auto';
+        el.src = url;
+        try { el.load?.(); } catch (_) {}
+        buffers.set(key, el);
+        return el;
+      } catch (_) {
+        // continue to next candidate
+      }
     }
   }
+  buffers.set(key, null);
+  return null;
 }
 
 /**
@@ -174,7 +206,7 @@ async function playSound(key, opts = {}) {
   if (typeof HTMLAudioElement !== 'undefined' && asset instanceof HTMLAudioElement) {
     const cat = SOUND_CATEGORY[key] || 'sfx';
     const baseCatVol = CATEGORY_GAIN[cat] ?? 0.5;
-    const masterVol = CATEGORY_GAIN.master ?? 1;
+    const masterVol = (CATEGORY_GAIN.master ?? 1) * sfxVolumeScalar;
     const vol = Math.max(0, Math.min(1, (opts.volume ?? 1) * baseCatVol * masterVol));
     try {
       asset.pause();
@@ -195,4 +227,10 @@ async function playSound(key, opts = {}) {
   }
 }
 
-export { initAudio, playSound };
+function setSfxVolumePercent(percent) {
+  const p = Math.max(0, Math.min(100, Number(percent) || 0));
+  sfxVolumeScalar = p / 100;
+  if (masterGain) masterGain.gain.value = CATEGORY_GAIN.master * sfxVolumeScalar;
+}
+
+export { initAudio, playSound, setSfxVolumePercent };
