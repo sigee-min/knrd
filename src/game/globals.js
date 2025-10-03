@@ -4,29 +4,26 @@ import { MAX_SELECTION, HUD_ALERT_DEFAULT_DURATION, MAX_WAVES, BOSS_GRACE_DURATI
 
 const PREP_WAVE_DURATION = 15;
 
-// Build grouped unit library with 4 eras
+// Build grouped unit library with 4 eras while tagging each unit with its active era
+function collectUnitsForEra(eraLabel, groups) {
+  const result = [];
+  for (const group of groups) {
+    const source = RAW_UNIT_LIBRARY[group] || [];
+    for (const unit of source) {
+      result.push({ ...unit, era: eraLabel });
+    }
+  }
+  return result;
+}
+
 const UNIT_LIBRARY = {
-  '초기': [
-    ...(RAW_UNIT_LIBRARY['고대'] || []),
-    ...(RAW_UNIT_LIBRARY['삼국'] || []),
-    ...(RAW_UNIT_LIBRARY['고려'] || []),
-  ],
-  '조선': [
-    ...(RAW_UNIT_LIBRARY['조선 전기'] || []),
-    ...(RAW_UNIT_LIBRARY['조선 후기'] || []),
-  ],
-  '근대': [
-    ...(RAW_UNIT_LIBRARY['개화기/대한제국'] || []),
-  ],
-  '현대': [
-    ...(RAW_UNIT_LIBRARY['현대 초창기'] || []),
-    ...(RAW_UNIT_LIBRARY['현대'] || []),
-    ...(RAW_UNIT_LIBRARY['근미래'] || []),
-  ],
+  '초기': collectUnitsForEra('초기', ['고대', '삼국', '고려']),
+  '조선': collectUnitsForEra('조선', ['조선 전기', '조선 후기']),
+  '근대': collectUnitsForEra('근대', ['개화기/대한제국']),
+  '현대': collectUnitsForEra('현대', ['현대 초창기', '현대', '근미래']),
 };
 
 const SETTINGS = {
-  interestEnabled: true,
   pointerSensitivity: 1.0,
   panSpeedMultiplier: 1.0,
   autoFullscreen: true,
@@ -86,6 +83,7 @@ const COMMAND_LIBRARY = {
     icon: 'assets/svg/ui/cmd_era.svg',
     hint: '5G로 선택 유닛을 다음 시대 동일 등급으로 업그레이드',
   },
+  // era command removed from main panel (boss kill raises era automatically)
   guide: {
     id: 'guide',
     hotkey: 'X',
@@ -208,6 +206,7 @@ const GAME_STATE = {
   bossSpawnTimer: 0,
   enemies: [],
   towers: [],
+  towerIndex: new Map(),
   projectiles: [],
   selections: new Set(),
   selectedEnemy: null,
@@ -223,7 +222,6 @@ const GAME_STATE = {
   delta: 0,
   waveActive: true,
   showGuide: false,
-  interestEnabled: true,
   dragSelecting: false,
   dragAdditive: false,
   dragToggle: false,
@@ -244,8 +242,7 @@ const GAME_STATE = {
   bossGraceTimer: 0,
   difficulty: 'normal',
   difficultyMultiplier: DIFFICULTY_PRESETS.normal.hpMultiplier,
-  // Event flags
-  lastUniqueEventRound: -1,
+  bgmUserPaused: false,
 };
 
 function createConfig(canvas, minimapCanvas) {
@@ -269,17 +266,28 @@ function createConfig(canvas, minimapCanvas) {
       defeatThreshold: 150,
       enemyReward: 1,
       bossReward: 50,
+      // Enemy defense tuning
+      baseDefense: 0,
+      defenseGrowth: 1.0, // unused in schedule-based calc (kept for fallback)
+      defenseEraStep: 10, // unused in schedule-based calc (kept for fallback)
+      // Boss defense tuning (a bit harsher)
+      baseBossDefense: 6,
+      bossDefenseGrowth: 1.2, // unused in schedule-based calc (kept for fallback)
+      bossDefenseEraStep: 14, // unused in schedule-based calc (kept for fallback)
+      bossDefenseScheduleMul: 1.3,
     },
     economy: {
       baseRollCost: 10,
       rollCostRamp: 5,
-      rollCostStep: 5,
+      rollCostStep: 0,
       upgradeBaseCost: 3,
       upgradeStep: 2,
       tierCosts: [5, 5, 5, 5, 5],
-      interestRate: 0.05,
-      interestCap: 50,
       essenceBossReward: 1,
+      interestRate: 0.1,
+      interestThreshold: 50,
+      interestCap: 50,
+      interestMinimum: 0,
     },
     rng: {
       rarity: [
@@ -324,6 +332,8 @@ function createInitialGameState(config) {
     essence: 0,
     round: 0,
     eraIndex: 0,
+    lastInterestGain: 0,
+    lastInterestAt: 0,
     pendingEraUpgrades: 0,
     waveTimer: PREP_WAVE_DURATION,
     spawnAccumulator: 0,
@@ -335,6 +345,7 @@ function createInitialGameState(config) {
     bossSpawnTimer: 0,
     enemies: [],
     towers: [],
+    towerIndex: new Map(),
     projectiles: [],
     selections: new Set(),
     selectedEnemy: null,
@@ -346,7 +357,7 @@ function createInitialGameState(config) {
     delta: 0,
     waveActive: true,
     showGuide: false,
-    interestEnabled: SETTINGS.interestEnabled,
+    
     dragSelecting: false,
     dragAdditive: false,
     dragToggle: false,
@@ -367,14 +378,20 @@ function createInitialGameState(config) {
     bossGraceTimer: 0,
     difficulty: 'normal',
     difficultyMultiplier: DIFFICULTY_PRESETS.normal.hpMultiplier,
-    lastUniqueEventRound: -1,
+    bgmUserPaused: false,
   };
 }
 
 function updateCameraBounds(canvas) {
   if (!canvas) return;
-  CAMERA.width = canvas.width;
-  CAMERA.height = canvas.height;
+  const logicalWidth = typeof canvas === 'object' && canvas !== null
+    ? Number(canvas.logicalWidth) || canvas.width
+    : canvas.width;
+  const logicalHeight = typeof canvas === 'object' && canvas !== null
+    ? Number(canvas.logicalHeight) || canvas.height
+    : canvas.height;
+  CAMERA.width = logicalWidth;
+  CAMERA.height = logicalHeight;
   CAMERA.maxX = Math.max(0, CONFIG.battlefield.width - CAMERA.width);
   CAMERA.maxY = Math.max(0, CONFIG.battlefield.height - CAMERA.height);
   CAMERA.edgeZone = Math.min(120, Math.min(CAMERA.width, CAMERA.height) * 0.12);
