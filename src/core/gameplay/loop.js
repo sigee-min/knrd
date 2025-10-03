@@ -53,6 +53,28 @@ export function getEarlyWaveEase(round) {
   return 1;
 }
 
+function getRoundGrowthSlope(round) {
+  const r = Math.max(1, Math.floor(round));
+  if (r <= 10) return 0.12;
+  if (r <= 20) return 0.15;
+  if (r <= 30) return 0.18;
+  if (r <= 40) return 0.22;
+  return 0.25;
+}
+
+function getRoundScaling(round) {
+  const slope = getRoundGrowthSlope(round);
+  const r = Math.max(1, Math.floor(round));
+  return 1 + (r - 1) * slope;
+}
+
+function getDecadeMultiplier(round) {
+  const normalized = Math.max(1, Math.floor(round));
+  const tiers = Math.floor((normalized - 1) / 10);
+  if (tiers <= 0) return 1;
+  return 1.5 ** tiers;
+}
+
 export function rollDamage(baseDamage) {
   const variance = 0.9 + lcgRandom() * 0.2;
   return baseDamage * variance;
@@ -193,12 +215,13 @@ export function summonBossByKey(bossKey) {
 
 export function scaleEnemyStats() {
   const round = Math.max(1, GAME_STATE.round);
-  const roundFactor = 1 + (round - 1) * 0.18;
+  const roundScaling = getRoundScaling(round);
   const ease = getEarlyWaveEase(round);
   const baseDefense = (CONFIG.wave.baseDefense ?? 0) + (round - 1) * (CONFIG.wave.defenseGrowth ?? 0);
   const hpMultiplier = GAME_STATE.difficultyMultiplier ?? 1;
+  const decadeMultiplier = getDecadeMultiplier(round);
   return {
-    hp: 150 * roundFactor * ease * hpMultiplier,
+    hp: 150 * roundScaling * ease * hpMultiplier * decadeMultiplier,
     angularSpeed: 0.35 + (round - 1) * 0.02,
     defense: baseDefense * ease,
   };
@@ -207,11 +230,12 @@ export function scaleEnemyStats() {
 export function scaleBossStats(roundOverride) {
   const round = Math.max(1, roundOverride ?? GAME_STATE.round);
   const difficulty = Math.max(1, Math.floor(round / CONFIG.wave.bossInterval));
-  const roundScaling = 1 + (round - 1) * 0.12;
+  const roundScaling = getRoundScaling(round);
   const ease = getEarlyWaveEase(round);
   const hpMultiplier = GAME_STATE.difficultyMultiplier ?? 1;
+  const decadeMultiplier = getDecadeMultiplier(round);
   return {
-    hp: 4000 * difficulty * roundScaling * ease * hpMultiplier,
+    hp: 4000 * difficulty * roundScaling * ease * hpMultiplier * decadeMultiplier,
     angularSpeed: 0.25 + difficulty * 0.01,
     defense:
       ((CONFIG.wave.baseBossDefense ?? CONFIG.wave.baseDefense ?? 0) +
@@ -272,7 +296,7 @@ export function ensureBossSummonUnlocked(key, name, icon, level) {
     existing.hp = Math.round(statsNow.hp);
     existing.reward = totalGold;
     existing.essence = rewards.essence;
-    existing.cooldownBase = computeBossSummonCooldown(existing.level);
+    existing.cooldownBase = computeBossSummonCooldown(existing.level) * 1.4;
     return existing;
   }
   GAME_STATE.bossSummons.push({
@@ -281,7 +305,7 @@ export function ensureBossSummonUnlocked(key, name, icon, level) {
     icon: icon || 'assets/svg/icons/icon_boss.svg',
     unlocked: true,
     cooldownRemaining: 0,
-    cooldownBase: computeBossSummonCooldown(level),
+    cooldownBase: computeBossSummonCooldown(level) * 1.4,
     hp: Math.round(statsNow.hp),
     reward: totalGold,
     essence: rewards.essence,

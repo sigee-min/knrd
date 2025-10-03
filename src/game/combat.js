@@ -54,9 +54,9 @@ const UNIT_ERA_UPGRADE_COST = 5;
 
 const PURCHASE_PACKAGES = {
   unique: { rarity: 'unique', cost: 0, essence: 1 },
-  legendary: { rarity: 'legendary', cost: 0, essence: 2 },
-  mythic: { rarity: 'mythic', cost: 0, essence: 8 },
-  primordial: { rarity: 'primordial', cost: 0, essence: 10 },
+  legendary: { rarity: 'legendary', cost: 0, essence: 4 },
+  mythic: { rarity: 'mythic', cost: 0, essence: 12 },
+  primordial: { rarity: 'primordial', cost: 0, essence: 24 },
 };
 
 const MAX_FUSION_TIER = 3;
