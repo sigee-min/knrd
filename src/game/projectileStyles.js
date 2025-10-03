@@ -105,6 +105,7 @@ const spriteCache = new Map();
 function getProjectileStyle(weaponType) {
   const key = weaponType && PROJECTILE_STYLE_MAP[weaponType] ? weaponType : 'default';
   const style = PROJECTILE_STYLE_MAP[key];
+  style.weaponType = key;
   if (!style.image) {
     if (spriteCache.has(style.asset)) {
       style.image = spriteCache.get(style.asset);

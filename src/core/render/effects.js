@@ -11,13 +11,26 @@ const RARITY_COLOR = {
 };
 
 const RARITY_FLOOR_STYLES = {
-  common: { color: '#8aa0b8', alpha: 0.34, radius: 18, sparkle: 5, sparkleSize: 1.05, sparkleAlpha: 1.22, pulse: 0.018 },
-  rare: { color: '#5aa1e3', alpha: 0.36, radius: 20, sparkle: 6, sparkleSize: 1.08, sparkleAlpha: 1.24, pulse: 0.022 },
-  unique: { color: '#9b59b6', alpha: 0.4, radius: 22, sparkle: 7, sparkleSize: 1.12, sparkleAlpha: 1.27, pulse: 0.026 },
-  legendary: { color: '#f39c12', alpha: 0.45, radius: 24, sparkle: 9, sparkleSize: 1.18, sparkleAlpha: 1.3, pulse: 0.032 },
-  mythic: { color: '#e74c3c', alpha: 0.5, radius: 26, sparkle: 11, sparkleSize: 1.24, sparkleAlpha: 1.34, pulse: 0.038 },
-  primordial: { color: '#2ecc71', alpha: 0.54, radius: 28, sparkle: 12, sparkleSize: 1.28, sparkleAlpha: 1.38, pulse: 0.044 },
+  common: { color: '#6f8fd6', alpha: 0.46, radius: 18, sparkle: 6, sparkleSize: 1.08, sparkleAlpha: 1.32, pulse: 0.022 },
+  rare: { color: '#2f83ff', alpha: 0.5, radius: 20, sparkle: 7, sparkleSize: 1.12, sparkleAlpha: 1.38, pulse: 0.026 },
+  unique: { color: '#b548ff', alpha: 0.54, radius: 22, sparkle: 8, sparkleSize: 1.16, sparkleAlpha: 1.42, pulse: 0.03 },
+  legendary: { color: '#ff8f1f', alpha: 0.6, radius: 24, sparkle: 10, sparkleSize: 1.22, sparkleAlpha: 1.48, pulse: 0.036 },
+  mythic: { color: '#ff5036', alpha: 0.66, radius: 26, sparkle: 12, sparkleSize: 1.28, sparkleAlpha: 1.54, pulse: 0.042 },
+  primordial: { color: '#28d88c', alpha: 0.7, radius: 28, sparkle: 13, sparkleSize: 1.32, sparkleAlpha: 1.6, pulse: 0.048 },
 };
+
+const WEAPON_DAMAGE_COLORS = {
+  default: '#ffe8a3',
+  bow: '#9effd6',
+  ballista: '#e4c3ff',
+  arquebus: '#ffbe94',
+  rifle: '#aee4ff',
+  cannon: '#ffdfac',
+  missile: '#ffadc0',
+  naval_gun: '#b5ccff',
+};
+
+const DAMAGE_OUTLINE_COLOR = '#0d121c';
 
 const FUSION_AURA_STYLES = [
   null,
@@ -133,41 +146,36 @@ function withAlpha(color, alpha) {
   }
   return color;
 }
-
-function resolveRgba(color) {
+function normalizeColor(color) {
   if (!color || typeof color !== 'string') return null;
-  const normalized = color.trim().toLowerCase();
-  if (normalized === 'transparent') return { r: 255, g: 255, b: 255, a: 0 };
-  if (normalized.startsWith('rgba') || normalized.startsWith('rgb')) {
-    return parseRgb(normalized);
-  }
-  if (normalized.startsWith('#')) {
-    return hexToRgb(normalized);
-  }
+  const trimmed = color.trim();
+  if (trimmed.startsWith('#')) return hexToRgb(trimmed);
+  if (trimmed.startsWith('rgba') || trimmed.startsWith('rgb')) return parseRgb(trimmed);
   return null;
 }
 
-function brightenColor(color, amount = 0.45) {
-  const rgba = resolveRgba(color);
-  if (!rgba) return color || '#ffffff';
+function lightenColor(color, amount = 0.2) {
+  const rgb = normalizeColor(color);
+  if (!rgb) return color || '#ffffff';
   const ratio = clamp(amount, 0, 1);
-  const r = Math.round(rgba.r + (255 - rgba.r) * ratio);
-  const g = Math.round(rgba.g + (255 - rgba.g) * ratio);
-  const b = Math.round(rgba.b + (255 - rgba.b) * ratio);
-  const alpha = rgba.a ?? 1;
+  const alpha = rgb.a ?? 1;
+  const r = Math.round(rgb.r + (255 - rgb.r) * ratio);
+  const g = Math.round(rgb.g + (255 - rgb.g) * ratio);
+  const b = Math.round(rgb.b + (255 - rgb.b) * ratio);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-function darkenColor(color, amount = 0.4) {
-  const rgba = resolveRgba(color);
-  if (!rgba) return color || 'rgba(0, 0, 0, 1)';
+function darkenColor(color, amount = 0.2) {
+  const rgb = normalizeColor(color);
+  if (!rgb) return color || '#000000';
   const ratio = clamp(amount, 0, 1);
-  const r = Math.round(rgba.r * (1 - ratio));
-  const g = Math.round(rgba.g * (1 - ratio));
-  const b = Math.round(rgba.b * (1 - ratio));
-  const alpha = rgba.a ?? 1;
+  const alpha = rgb.a ?? 1;
+  const r = Math.round(rgb.r * (1 - ratio));
+  const g = Math.round(rgb.g * (1 - ratio));
+  const b = Math.round(rgb.b * (1 - ratio));
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
+
 
 function easeOutCubic(t) {
   const clamped = clamp(t, 0, 1);
@@ -279,15 +287,23 @@ function spawnDamageFloater(x, y, rawValue, style = {}) {
 
   const effectiveStyle = style && typeof style === 'object' ? style : {};
   const baseStyle = effectiveStyle.damageColor ? effectiveStyle : getProjectileStyle(effectiveStyle.weaponType);
-  const sourceColor = baseStyle?.damageColor || effectiveStyle.color || '#fff7d6';
-  const baseOutline = effectiveStyle.outline || baseStyle?.damageOutline || '#10161f';
-  const color = brightenColor(sourceColor, 0.55);
-  const highlight = effectiveStyle.highlightColor || brightenColor(sourceColor, 0.85);
-  const outline = effectiveStyle.outline
-    ? baseOutline
-    : brightenColor(baseOutline, 0.18);
-  const glow = effectiveStyle.damageGlow || highlight;
-  const font = baseStyle?.damageFont || effectiveStyle.damageFont || '700 24px "Noto Sans KR", system-ui, sans-serif';
+  const resolvedWeaponType = effectiveStyle.weaponType
+    || style?.weaponType
+    || baseStyle?.weaponType
+    || 'default';
+
+  const weaponColor = WEAPON_DAMAGE_COLORS[resolvedWeaponType]
+    || baseStyle?.damageColor
+    || WEAPON_DAMAGE_COLORS.default;
+
+  const fillColor = effectiveStyle.color || lightenColor(weaponColor, 0.08);
+  const outlineColor = effectiveStyle.outline || darkenColor(weaponColor, 0.55) || DAMAGE_OUTLINE_COLOR;
+  const glowColor = effectiveStyle.damageGlow || withAlpha(lightenColor(weaponColor, 0.32), 0.42);
+  const highlightColor = effectiveStyle.highlight !== undefined
+    ? effectiveStyle.highlight
+    : lightenColor(weaponColor, 0.22);
+  const highlightAlpha = highlightColor ? clamp(effectiveStyle.highlightAlpha ?? 0.4, 0, 1) : 0;
+  const font = baseStyle?.damageFont || effectiveStyle.damageFont || '700 24px \"Noto Sans KR\", system-ui, sans-serif';
 
   const amount = Number.isFinite(rawValue) ? Math.round(Math.abs(rawValue)) : rawValue;
   const defaultPrefix = effectiveStyle.prefix ?? (rawValue >= 0 ? '-' : '+');
@@ -300,42 +316,48 @@ function spawnDamageFloater(x, y, rawValue, style = {}) {
     vx: effectiveStyle.vx ?? (Math.random() - 0.5) * 12,
     vy: effectiveStyle.vy ?? (-34 - Math.random() * 12),
     gravity: effectiveStyle.gravity ?? 28,
-    ttl: effectiveStyle.ttl ?? 1.4,
+    ttl: effectiveStyle.ttl ?? 1.5,
     age: 0,
     text: textValue,
-    color,
-    outline,
-    glow,
+    color: fillColor,
+    outline: outlineColor,
+    glow: glowColor,
     font,
-    highlight,
-    highlightAlpha: effectiveStyle.highlightAlpha ?? 0.85,
-    strokeWidth: effectiveStyle.strokeWidth ?? 2.8,
-    fadeTail: effectiveStyle.fadeTail ?? 0.35,
-    popScale: effectiveStyle.popScale ?? 0.16,
-    ramp: effectiveStyle.ramp ?? 0.1,
+    highlight: highlightColor,
+    highlightAlpha,
+    strokeWidth: effectiveStyle.strokeWidth ?? 2.6,
+    fadeTail: effectiveStyle.fadeTail ?? 0.24,
+    popScale: effectiveStyle.popScale ?? 0.18,
+    ramp: effectiveStyle.ramp ?? 0.08,
     wobble: effectiveStyle.wobble ?? 0,
     wobbleSpeed: effectiveStyle.wobbleSpeed ?? 0,
     wobbleOffset: Math.random() * Math.PI * 2,
-    shadowBlur: effectiveStyle.shadowBlur ?? 6,
-    outlineAlpha: effectiveStyle.outlineAlpha ?? 0.82,
+    shadowBlur: effectiveStyle.shadowBlur ?? 9,
+    outlineAlpha: effectiveStyle.outlineAlpha ?? 0.9,
     fillAlpha: effectiveStyle.fillAlpha ?? 1,
-    visibilityPower: effectiveStyle.visibilityPower ?? 0.65,
+    visibilityPower: effectiveStyle.visibilityPower ?? 0.78,
+    weaponType: resolvedWeaponType,
   };
 
+  if (!floater.highlight) {
+    floater.highlightAlpha = 0;
+  }
+
   if (effectiveStyle.crit) {
-    const critSource = effectiveStyle.critColor || '#ffe07b';
-    floater.color = brightenColor(critSource, 0.3);
-    floater.highlight = effectiveStyle.critHighlight || brightenColor(critSource, 0.75);
-    floater.highlightAlpha = effectiveStyle.critHighlightAlpha ?? 0.95;
-    floater.glow = effectiveStyle.critGlow ?? floater.highlight;
-    floater.strokeWidth = effectiveStyle.critStrokeWidth ?? 3.4;
-    floater.popScale += 0.12;
-    floater.ttl += 0.25;
+    const critBase = effectiveStyle.critColor || lightenColor(weaponColor, 0.18);
+    floater.color = critBase;
+    floater.outline = effectiveStyle.critOutline || darkenColor(critBase, 0.55) || DAMAGE_OUTLINE_COLOR;
+    floater.glow = effectiveStyle.critGlow || withAlpha(lightenColor(critBase, 0.36), 0.55);
+    floater.highlight = effectiveStyle.critHighlight || lightenColor(critBase, 0.32);
+    floater.highlightAlpha = clamp(effectiveStyle.critHighlightAlpha ?? 0.55, 0, 1);
+    floater.strokeWidth = effectiveStyle.critStrokeWidth ?? 3.6;
+    floater.popScale += 0.14;
+    floater.ttl += 0.28;
     const critValue = typeof amount === 'number' ? amount : String(textValue).replace(/[^0-9]/g, '');
     floater.text = effectiveStyle.critText || `CRIT ${critValue}`;
-    floater.shadowBlur = effectiveStyle.critShadowBlur ?? Math.max(floater.shadowBlur, 10);
-    floater.outlineAlpha = effectiveStyle.critOutlineAlpha ?? Math.min(1, floater.outlineAlpha + 0.1);
-    floater.visibilityPower = effectiveStyle.critVisibilityPower ?? 0.55;
+    floater.shadowBlur = Math.max(floater.shadowBlur, effectiveStyle.critShadowBlur ?? 14);
+    floater.outlineAlpha = effectiveStyle.critOutlineAlpha ?? floater.outlineAlpha;
+    floater.visibilityPower = effectiveStyle.critVisibilityPower ?? 0.65;
   }
 
   GAME_STATE.floaters.push(floater);

@@ -12,7 +12,6 @@
       <main class="view-area">
         <section class="battlefield">
           <canvas id="game-canvas" width="1200" height="600"></canvas>
-          <div id="game-cursor" class="game-cursor hidden"></div>
         </section>
         <div class="hud-top">
           <div class="hud-cluster">
@@ -43,6 +42,7 @@
                 </div>
               </div>
             </div>
+            
           </div>
           <div id="wave-info" class="wave-card">
             <p class="placeholder">웨이브 정보를 불러오는 중...</p>
@@ -61,7 +61,7 @@
                     <button id="yt-btn-next" class="music-btn" title="다음 곡">⏭</button>
                   </div>
                 </div>
-                <div id="yt-event-player" class="yt-frame yt-event" style="display:none"></div>
+                
                 <div id="yt-title" class="music-title">배경음악 준비됨</div>
               </div>
             </div>
@@ -72,12 +72,12 @@
             </div>
           </section>
           <section class="panel command-panel">
-            <header class="panel-title">명령</header>
+            <header id="cmd-header" class="panel-title" role="button" title="옵션 열기">옵션</header>
             <div class="panel-body">
               <div id="command-grid" class="command-grid"></div>
             </div>
           </section>
-          <div class="unit-hotkeys unit-hotkeys--floating">Q 건조 / W 강화 / E 시대 / B 조선소 / R 속도 / N 스킵 / 화살표 카메라 · 우클릭 이동</div>
+          <div class="unit-hotkeys unit-hotkeys--floating">Q 건조 / W 강화 / E 시대 업 / B 조선소 / R 속도 / N 스킵 / 화살표 카메라 · 우클릭 이동</div>
         </div>
         <div id="wave-status" class="hud-help">대기</div>
       </main>
@@ -161,22 +161,29 @@
       <div id="scene-settings" class="scene-overlay hidden">
         <div class="scene-panel">
           <h2>설정</h2>
+          <div class="settings-tabs" role="tablist">
+            <button class="settings-tab active" data-tab="general" role="tab" aria-selected="true">일반</button>
+            <button class="settings-tab" data-tab="controls" role="tab" aria-selected="false">컨트롤</button>
+            <button class="settings-tab" data-tab="audio" role="tab" aria-selected="false">오디오</button>
+            <button class="settings-tab" data-tab="help" role="tab" aria-selected="false">도움말</button>
+          </div>
+          <div class="settings-section" data-category="general">
             <div class="setting-list">
               <label class="setting-row">
-                <span>웨이브 종료 시 이자 적용</span>
-                <input type="checkbox" id="setting-interest" checked />
+                <span>자동 전체화면</span>
+                <input type="checkbox" id="setting-auto-fullscreen" />
               </label>
-            <label class="setting-row">
-              <span>자동 전체화면</span>
-              <input type="checkbox" id="setting-auto-fullscreen" />
-            </label>
-            <label class="setting-row">
-              <span>마우스 감도</span>
-              <div class="setting-control">
-                <input type="range" id="setting-sensitivity" min="0.5" max="2.0" step="0.1" value="1.0" />
-                <span id="setting-sensitivity-value">1.0</span>
-              </div>
-            </label>
+            </div>
+          </div>
+          <div class="settings-section hidden" data-category="controls">
+            <div class="setting-list">
+              <label class="setting-row">
+                <span>마우스 감도</span>
+                <div class="setting-control">
+                  <input type="range" id="setting-sensitivity" min="0.5" max="2.0" step="0.1" value="1.0" />
+                  <span id="setting-sensitivity-value">1.0</span>
+                </div>
+              </label>
               <label class="setting-row">
                 <span>카메라 이동 속도</span>
                 <div class="setting-control">
@@ -184,6 +191,10 @@
                   <span id="setting-pan-speed-value">1.0</span>
                 </div>
               </label>
+            </div>
+          </div>
+          <div class="settings-section hidden" data-category="audio">
+            <div class="setting-list">
               <label class="setting-row">
                 <span>배경음악 볼륨</span>
                 <div class="setting-control">
@@ -198,19 +209,24 @@
                   <span id="setting-sfx-volume-value">80</span>
                 </div>
               </label>
-            <div class="help-card">
-              <strong>명령 도움말</strong>
-              <ul>
-                <li>Q 건조 · Shift+Q 연속 건조</li>
-                <li>W 강화 · Shift+W 선택 유닛 일괄 강화</li>
-                <li>E 시대 업 (포인트 필요)</li>
-                <li>R 속도 토글 · S 선택 해제</li>
-                <li>N 라운드 스킵 (라운드 클리어 시)</li>
-                <li>B 조선소 증설 · Del 판매</li>
-                <li>Z 전체 선택 · X 배치 가이드</li>
-                <li>마우스 우클릭: 이동 명령</li>
-                <li>화살표 키: 카메라 이동 · 드래그 박스: 다중 선택</li>
-              </ul>
+            </div>
+          </div>
+          <div class="settings-section hidden" data-category="help">
+            <div class="setting-list">
+              <div class="help-card">
+                <strong>명령 도움말</strong>
+                <ul>
+                  <li>Q 건조 · Shift+Q 연속 건조</li>
+                  <li>W 강화 · Shift+W 선택 유닛 일괄 강화</li>
+                  <li>R 속도 토글 · S 선택 해제</li>
+                  <li>E 시대 업 (5G, 선택 필요)</li>
+                  <li>N 라운드 스킵 (라운드 클리어 시)</li>
+                  <li>B 조선소 증설 · Del 판매</li>
+                  <li>Z 전체 선택 · X 배치 가이드</li>
+                  <li>마우스 우클릭: 이동 명령</li>
+                  <li>화살표 키: 카메라 이동 · 드래그 박스: 다중 선택</li>
+                </ul>
+              </div>
             </div>
           </div>
           <div class="scene-actions">

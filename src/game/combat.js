@@ -19,7 +19,6 @@ import {
 import { UNIT_LIBRARY, GAME_STATE, CONFIG } from './globals.js';
 import { getTowerSprite } from './shipSprites.js';
 import { setWaveStatus } from './status.js';
-import { playEventVideo } from './youtubePlayer.js';
 import { playSound } from './audio.js';
 
 const ERA_ORDER = [
@@ -38,6 +37,17 @@ const RARITY_LABEL = {
   legendary: '전설',
   mythic: '신화',
   primordial: '태초',
+};
+
+// Target DPS multipliers by rarity
+// 일반: 1.0, 레어: 1.5(일반 대비 +50%), 상위 등급은 레어 기준 배율 유지
+const RARITY_DPS_MULTIPLIER = {
+  common: 1.0,
+  rare: 1.5,
+  unique: 1.8,                 // ≈ 레어의 1.8배
+  legendary: 1.8 * 1.8,        // ≈ 유니크의 1.8배 (3.24)
+  mythic: 1.8 * 1.8 * 1.5,     // ≈ 전설의 1.5배 (4.86)
+  primordial: 1.8 * 1.8 * 1.5 * 1.8, // ≈ 신화의 1.8배 (8.748)
 };
 
 const UNIT_ERA_UPGRADE_COST = 5;
@@ -123,9 +133,33 @@ function updateFusionScaling(tower) {
   if (typeof tower.upgDamageBase !== 'number') {
     tower.upgDamageBase = tower.upgDamage;
   }
-  const multiplier = Math.pow(2, tier);
-  tower.baseDamage = (tower.baseDamageBase ?? tower.baseDamage) * multiplier;
-  tower.upgDamage = (tower.upgDamageBase ?? tower.upgDamage) * multiplier;
+  // Fusion scaling rules:
+  // - Base damage doubles per fusion tier (×2^tier)
+  // - Upgrade damage grows on a curved schedule by tier:
+  //   Tier 1: +30% (×1.30)
+  //   Tier 2: +20% (×1.20)
+  //   Tier 3+: +15% each tier (×1.15 per tier from 3 onward)
+  const baseMult = Math.pow(2, tier);
+  let upgMult = 1;
+  for (let i = 1; i <= tier; i += 1) {
+    if (i === 1) upgMult *= 1.30;
+    else if (i === 2) upgMult *= 1.20;
+    else upgMult *= 1.15;
+  }
+  tower.baseDamage = (tower.baseDamageBase ?? tower.baseDamage) * baseMult;
+  tower.upgDamage = (tower.upgDamageBase ?? tower.upgDamage) * upgMult;
+}
+
+// Apply rarity-based DPS scaling. Scales both baseDamage and per-upgrade damage.
+function applyRarityScaling(tower) {
+  const mult = RARITY_DPS_MULTIPLIER[tower.rarity] ?? 1.0;
+  // Use definition baselines if available to avoid compounding on repeated calls
+  const baseBase = tower.baseDamageBase ?? tower.baseDamage;
+  const upgBase = tower.upgDamageBase ?? tower.upgDamage;
+  tower.baseDamageBase = baseBase * mult;
+  tower.upgDamageBase = upgBase * mult;
+  tower.baseDamage = tower.baseDamageBase;
+  tower.upgDamage = tower.upgDamageBase;
 }
 
 function applyFusionBonuses(tower) {
@@ -253,7 +287,7 @@ function executeFusion(targetIds = null) {
     return false;
   }
   const towers = ids
-    .map((id) => GAME_STATE.towers.find((tower) => tower.id === id))
+    .map((id) => GAME_STATE.towerIndex.get(id))
     .filter((tower) => !!tower);
   if (towers.length === 0) {
     setWaveStatus('유효한 유닛이 없습니다');
@@ -347,17 +381,11 @@ function chooseRarity() {
 }
 
 function getAvailableUnitsByRarity(rarity) {
-  const eras = ERA_ORDER.slice(0, GAME_STATE.eraIndex + 1);
-  const units = [];
-  for (const era of eras) {
-    const list = UNIT_LIBRARY[era] || [];
-    for (const unit of list) {
-      if (unit.rarity === rarity) {
-        units.push({ ...unit, era });
-      }
-    }
-  }
-  return units;
+  const eraIdx = Math.max(0, GAME_STATE.eraIndex);
+  const era = ERA_ORDER[eraIdx];
+  const pool = getEraPool(era).get(rarity);
+  if (!pool || pool.length === 0) return [];
+  return pool;
 }
 
 function drawUnitDefinition(rarity) {
@@ -370,8 +398,18 @@ function drawUnitDefinition(rarity) {
       return pick;
     }
   }
-  const fallback = UNIT_LIBRARY['초기'][0];
-  return { ...fallback, era: '초기' };
+  // Fallback: pick any unit from the current era regardless of rarity
+  const era = ERA_ORDER[Math.max(0, GAME_STATE.eraIndex)];
+  const anyList = (UNIT_LIBRARY[era] || []);
+  if (anyList.length > 0) {
+    const pick = anyList[Math.floor(lcgRandom() * anyList.length)];
+    return { ...pick, era };
+  }
+  // As a last resort (should not happen), return the very first defined unit
+  const firstEra = ERA_ORDER[0];
+  const firstList = UNIT_LIBRARY[firstEra] || [];
+  const fallback = firstList[0];
+  return { ...fallback, era: firstEra };
 }
 
 function computeTowerDamage(tower) {
@@ -443,9 +481,12 @@ function createTower(definition, spawn) {
   };
   // Compute collider and selection radii based on sprite size for proportional footprint
   applyFootprintFromSprite(tower);
+  // Rarity-based DPS tuning before fusion scaling
+  applyRarityScaling(tower);
   updateFusionScaling(tower);
   applyFusionBonuses(tower);
   GAME_STATE.towers.push(tower);
+  GAME_STATE.towerIndex.set(tower.id, tower);
   GAME_STATE.selections.clear();
   GAME_STATE.selectedEnemy = null;
   GAME_STATE.selections.add(tower.id);
@@ -484,6 +525,8 @@ function applyDefinitionToTower(tower, definition) {
   tower.upgradeLevel = sharedLevel;
   tower.cooldown = 0;
   applyFootprintFromSprite(tower);
+  // Rarity-based DPS tuning before fusion scaling
+  applyRarityScaling(tower);
   updateFusionScaling(tower);
   applyFusionBonuses(tower);
   GAME_STATE.selections.clear();
@@ -495,8 +538,10 @@ function applyDefinitionToTower(tower, definition) {
 
 function getRollCost() {
   const effectiveRound = Math.max(1, GAME_STATE.round);
-  const step = Math.floor((effectiveRound - 1) / CONFIG.economy.rollCostRamp);
-  return CONFIG.economy.baseRollCost + step * CONFIG.economy.rollCostStep;
+  const ramp = Math.max(1, CONFIG.economy.rollCostRamp || 1);
+  const stepSize = CONFIG.economy.rollCostStep ?? 0;
+  const step = Math.floor((effectiveRound - 1) / ramp);
+  return CONFIG.economy.baseRollCost + step * stepSize;
 }
 
 function executeRoll() {
@@ -522,15 +567,7 @@ function executeRoll() {
   GAME_STATE.gold -= cost;
   setWaveStatus(`${definition.era} ${RARITY_LABEL[definition.rarity]} ${definition.name} 배치`);
   playSound('build', { volume: 0.5 });
-  // Wave-limited event clip: when rolling UNIQUE or higher, play 14~17s segment once per round
-  try {
-    const rarityIdx = RARITY_ORDER.indexOf(definition.rarity);
-    const uniqueIdx = RARITY_ORDER.indexOf('unique');
-    if (rarityIdx >= uniqueIdx && GAME_STATE.lastUniqueEventRound !== GAME_STATE.round) {
-      GAME_STATE.lastUniqueEventRound = GAME_STATE.round;
-      playEventVideo('https://www.youtube.com/shorts/6j_w126Mecs', { startSec: 14, endSec: 17 });
-    }
-  } catch (_) {}
+  // Event video removed
   notifyHudUpdate();
   return true;
 }
@@ -647,10 +684,10 @@ function getUnitEraUpgradeInfo(tower) {
 function executeUnitEraUpgrade(targetId = null) {
   let tower = null;
   if (targetId != null) {
-    tower = GAME_STATE.towers.find((t) => t.id === targetId) || null;
+    tower = GAME_STATE.towerIndex.get(targetId) || null;
   } else {
     const selection = Array.from(GAME_STATE.selections);
-    tower = GAME_STATE.towers.find((t) => t.id === selection[0]) || null;
+    tower = GAME_STATE.towerIndex.get(selection[0]) || null;
   }
   if (!tower) {
     setWaveStatus('선택된 유닛 없음');
@@ -722,14 +759,14 @@ function enhanceTower(tower) {
 function executeUpgrade(targetId = null) {
   let tower = null;
   if (targetId != null) {
-    tower = GAME_STATE.towers.find((t) => t.id === targetId);
+    tower = GAME_STATE.towerIndex.get(targetId);
   } else {
     const selection = Array.from(GAME_STATE.selections);
     if (selection.length === 0) {
       setWaveStatus('선택된 유닛 없음');
       return false;
     }
-    tower = GAME_STATE.towers.find((t) => t.id === selection[0]);
+    tower = GAME_STATE.towerIndex.get(selection[0]);
   }
   if (!tower) {
     setWaveStatus('유효하지 않은 유닛');
@@ -747,10 +784,31 @@ function buildDockyard() {
   GAME_STATE.gold -= cost;
   GAME_STATE.dockyards += 1;
   setWaveStatus(`조선소 증설 완료 (총 ${GAME_STATE.dockyards}개) - ${cost}G`);
-  playSound('dockyard', { volume: 0.5 });
+  playSound('dockyard', { volume: 0.6, throttleMs: 120 });
   notifyCommandLayoutChange(true);
   notifyHudUpdate();
   return true;
+}
+
+const UNIT_POOL_CACHE = new Map();
+
+function getEraPool(era) {
+  let cache = UNIT_POOL_CACHE.get(era);
+  if (!cache) {
+    cache = new Map();
+    const list = UNIT_LIBRARY[era] || [];
+    for (const unit of list) {
+      const rarity = unit.rarity;
+      if (!cache.has(rarity)) cache.set(rarity, []);
+      cache.get(rarity).push(unit);
+    }
+    UNIT_POOL_CACHE.set(era, cache);
+  }
+  return cache;
+}
+
+function resetUnitPoolCache() {
+  UNIT_POOL_CACHE.clear();
 }
 
 const RARITY_SELL_VALUE = {
@@ -799,6 +857,9 @@ function executeSell(targetIds = null) {
   }
   if (soldIds.size > 0) {
     GAME_STATE.towers = remaining;
+    for (const id of soldIds) {
+      GAME_STATE.towerIndex.delete(id);
+    }
     GAME_STATE.gold += goldGain;
     for (const id of soldIds) {
       GAME_STATE.selections.delete(id);
@@ -835,7 +896,7 @@ function orderSelectedTowers(targetWorld) {
   const spacing = 36;
   const circleStep = Math.max(6, ids.length);
   ids.forEach((id, index) => {
-    const tower = GAME_STATE.towers.find((t) => t.id === id);
+    const tower = GAME_STATE.towerIndex.get(id);
     if (!tower) return;
     let offsetX = 0;
     let offsetY = 0;
@@ -848,6 +909,7 @@ function orderSelectedTowers(targetWorld) {
     }
     setTowerTarget(tower, targetWorld.x + offsetX, targetWorld.y + offsetY);
   });
+  playSound('ui_click', { volume: 0.55, throttleMs: 70 });
 }
 
 function getDockyardUsage() {
@@ -883,6 +945,7 @@ export {
   computeTowerDamage,
   orderSelectedTowers,
   clamp,
+  resetUnitPoolCache,
   clampToInnerRing,
   lcgRandom,
   nextId,

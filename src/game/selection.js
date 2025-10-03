@@ -83,7 +83,7 @@ function updateTowerSelection(ids, options = {}) {
 }
 
 function findTowerById(id) {
-  return GAME_STATE.towers.find((tower) => tower.id === id) || null;
+  return GAME_STATE.towerIndex.get(id) || null;
 }
 
 function updateSelectionInfo() {

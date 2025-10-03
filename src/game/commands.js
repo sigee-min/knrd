@@ -38,6 +38,7 @@ import {
   selectAllTowers,
 } from './selection.js';
 import { setWaveStatus } from './status.js';
+import { playSound } from './audio.js';
 
 let currentCommandLayoutSignature = '';
 
@@ -91,11 +92,11 @@ registerSelectionCallbacks({
 function getCommandLayout() {
   if (!elements.commandGrid) return [];
   if (GAME_STATE.scene !== 'game') {
-    return ['roll', 'era', 'speed'];
+    return ['roll', 'speed'];
   }
   const selectionCount = GAME_STATE.selections.size;
   if (selectionCount === 0) {
-    return ['roll', 'dockyard', 'era', 'speed', 'boss', 'shop'];
+    return ['roll', 'dockyard', 'speed', 'boss', 'shop'];
   }
   return ['upgrade', 'fusion', 'era', 'guide', 'sell'];
 }
@@ -104,7 +105,7 @@ function refreshCommandStates() {
   const selectionCount = GAME_STATE.selections.size;
   const selection = selectionCount > 0 ? Array.from(GAME_STATE.selections) : [];
   const towers = selection
-    .map((id) => GAME_STATE.towers.find((t) => t.id === id))
+    .map((id) => GAME_STATE.towerIndex.get(id))
     .filter((tower) => !!tower);
   const usedCapacity = getUsedShipyardCapacity(GAME_STATE.towers);
   const totalCapacity = getTotalShipyardCapacity(GAME_STATE.dockyards);
@@ -570,11 +571,11 @@ function handleCommand(command, options = {}) {
         }
         const targetIds = shift ? targets : [targets[0]];
         const validTargets = targetIds.filter((id) => {
-          const tower = GAME_STATE.towers.find((t) => t.id === id);
+          const tower = GAME_STATE.towerIndex.get(id);
           return getUnitEraUpgradeInfo(tower).available;
         });
         if (validTargets.length === 0) {
-          const firstTower = GAME_STATE.towers.find((t) => t.id === targetIds[0]);
+          const firstTower = GAME_STATE.towerIndex.get(targetIds[0]);
           const reason = getUnitEraUpgradeInfo(firstTower).reason || '시대 업 불가';
           setWaveStatus(reason);
           break;
@@ -609,12 +610,7 @@ function handleCommand(command, options = {}) {
       selectAllTowers();
       break;
     case 'options':
-      GAME_STATE.interestEnabled = !GAME_STATE.interestEnabled;
-      if (COMMAND_TO_ELEMENT.options) {
-        COMMAND_TO_ELEMENT.options.classList.toggle('active', !GAME_STATE.interestEnabled);
-      }
-      setWaveStatus(GAME_STATE.interestEnabled ? '이자 활성화' : '이자 비활성화');
-      ensureHudUpdate();
+      setWaveStatus('사용 가능한 옵션이 없습니다');
       break;
     case 'pause':
       GAME_STATE.paused = !GAME_STATE.paused;
@@ -692,6 +688,7 @@ function onCommandClick(event) {
   if (!command) return;
   const bossKey = button.dataset.bossKey || null;
   const rarity = button.dataset.rarity || null;
+  playSound('ui_click', { volume: 0.6, throttleMs: 60 });
   handleCommand(command, { shift: event.shiftKey, bossKey, rarity });
 }
 
@@ -734,11 +731,13 @@ function onCommandKeyDown(event) {
   if (el) {
     if (!el.disabled) {
       el.classList.add('active');
+      playSound('ui_click', { volume: 0.5, throttleMs: 60 });
       handleCommand(command, { shift: event.shiftKey });
       return true;
     }
     return false;
   }
+  playSound('ui_click', { volume: 0.5, throttleMs: 60 });
   handleCommand(command, { shift: event.shiftKey });
   return true;
 }

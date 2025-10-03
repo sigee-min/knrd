@@ -3,8 +3,6 @@
 const DEFAULT_VIDEO_URL = 'https://www.youtube.com/watch?v=lzNKijtrqm4&list=RDlzNKijtrqm4&start_radio=1';
 
 let player = null;
-let eventPlayer = null;
-let eventContainer = null;
 let apiReadyPromise = null;
 let rotationTimer = null;
 let rotationIntervalSec = 0; // disabled by default
@@ -16,6 +14,100 @@ let currentIndex = 0;
 let doShuffle = false;
 let doLoop = true;
 let bgmVolume = 15; // 0..100
+
+let autoplayIntent = false;
+let userAutoplayBound = false;
+let autoplayRetryTimer = null;
+
+const YT_ORIGIN_RE = /^https:\/\/www\.youtube(?:-nocookie)?\.com\//i;
+const PLAYER_READY_INTERVAL_MS = 80;
+const PLAYER_READY_ATTEMPTS = 20;
+
+function getPlayerIframe() {
+  if (!player || typeof player.getIframe !== 'function') return null;
+  try {
+    return player.getIframe();
+  } catch (_) {
+    return null;
+  }
+}
+
+function isPlayerIframeReady() {
+  const iframe = getPlayerIframe();
+  if (!iframe) return false;
+  const src = iframe.src || '';
+  return YT_ORIGIN_RE.test(src);
+}
+
+function runWithPlayerReady(callback, attempts = PLAYER_READY_ATTEMPTS) {
+  if (typeof callback !== 'function' || !player) return;
+  if (isPlayerIframeReady()) {
+    try { callback(); } catch (_) {}
+    return;
+  }
+  if (attempts <= 0) return;
+  setTimeout(() => runWithPlayerReady(callback, attempts - 1), PLAYER_READY_INTERVAL_MS);
+}
+
+function isPlaying() {
+  try {
+    return player?.getPlayerState?.() === window.YT?.PlayerState?.PLAYING;
+  } catch (_) {
+    return false;
+  }
+}
+
+function scheduleAutoplayRetry(delay = 900) {
+  if (!autoplayIntent) return;
+  if (typeof window !== 'undefined' && !window.isSecureContext) {
+    autoplayIntent = false;
+    if (autoplayRetryTimer) {
+      clearTimeout(autoplayRetryTimer);
+      autoplayRetryTimer = null;
+    }
+    return;
+  }
+  if (autoplayRetryTimer) {
+    clearTimeout(autoplayRetryTimer);
+    autoplayRetryTimer = null;
+  }
+  autoplayRetryTimer = setTimeout(() => {
+    runWithPlayerReady(() => {
+      if (isPlaying()) return;
+      if (!isPlayerIframeReady()) {
+        scheduleAutoplayRetry(delay + 300);
+        return;
+      }
+      if (player?.getIframe) {
+        try {
+          const iframeSrc = player.getIframe().src || '';
+          if (!iframeSrc.startsWith('http')) {
+            scheduleAutoplayRetry(delay + 300);
+            return;
+          }
+        } catch (_) {
+          scheduleAutoplayRetry(delay + 300);
+          return;
+        }
+      }
+      try { player.playVideo(); } catch (_) {}
+    });
+  }, Math.max(120, delay));
+}
+
+function bindUserAutoplayNudge() {
+  if (userAutoplayBound) return;
+  userAutoplayBound = true;
+  const handler = () => {
+    runWithPlayerReady(() => {
+      try { player.unMute(); } catch (_) {}
+      try { player.playVideo(); } catch (_) {}
+    });
+  };
+  const opts = { once: true, capture: true };
+  window.addEventListener('pointerdown', handler, opts);
+  window.addEventListener('keydown', handler, opts);
+}
 
 function parseYouTubeUrl(url) {
   try {
@@ -71,10 +163,15 @@ function setRotationInterval(seconds) {
   }
   if (rotationIntervalSec > 0) {
     rotationTimer = setInterval(() => {
-      if (!player) return;
-      const state = player.getPlayerState?.();
+      if (!player || !isPlayerIframeReady()) return;
+      let state;
+      try {
+        state = player.getPlayerState?.();
+      } catch (_) {
+        state = undefined;
+      }
       // Only rotate while playing
-      if (state === window.YT.PlayerState.PLAYING) {
+      if (state === window.YT?.PlayerState?.PLAYING) {
         goNext();
       }
     }, rotationIntervalSec * 1000);
@@ -95,7 +192,6 @@ async function initYouTubeMiniPlayer({
   loop = true,
 } = {}) {
   titleTarget = document.getElementById(titleElementId) || null;
-  eventContainer = document.getElementById('yt-event-player') || null;
   const { videoId, playlistId } = parseYouTubeUrl(url);
   // Program-driven playlist setup
   programList = Array.isArray(playlist) ? playlist.slice() : [];
@@ -107,6 +203,10 @@ async function initYouTubeMiniPlayer({
   doShuffle = !!shuffle;
   doLoop = !!loop;
   currentIndex = 0;
+  autoplayIntent = !!autoplay;
+  if (autoplayIntent) {
+    bindUserAutoplayNudge();
+  }
   const YT = await waitForYouTubeApi();
   return new Promise((resolve) => {
     player = new YT.Player(containerId, {
@@ -126,98 +226,139 @@ async function initYouTubeMiniPlayer({
       },
       events: {
         onReady: () => {
-          try {
-            bgmVolume = volume;
+          bgmVolume = volume;
+          runWithPlayerReady(() => {
             try { player.setVolume(bgmVolume); } catch (_) {}
-            // Force unmuted playback on ready (may be blocked by browser policy)
-            player.unMute();
-            if (autoplay) { try { player.playVideo(); } catch (_) {} }
-          } catch (_) {}
-          updateTitle();
+            try { player.unMute(); } catch (_) {}
+            updateTitle();
+            if (autoplayIntent) {
+              scheduleAutoplayRetry(300);
+            }
+          });
           setRotationInterval(rotationEverySec);
           resolve(player);
         },
         onStateChange: (ev) => {
           updateTitle();
+          if (ev && ev.data === window.YT.PlayerState.PLAYING) {
+            if (autoplayRetryTimer) {
+              clearTimeout(autoplayRetryTimer);
+              autoplayRetryTimer = null;
+            }
+          }
           if (ev && ev.data === window.YT.PlayerState.ENDED) {
             goNext();
+          }
+          if (autoplayIntent && ev && ev.data === window.YT.PlayerState.PAUSED) {
+            scheduleAutoplayRetry(1400);
           }
         },
       },
     });
 
-    // Lazy-create event overlay player when container exists
-    if (eventContainer && !eventPlayer) {
-      try {
-        eventPlayer = new YT.Player(eventContainer, {
-          width,
-          height,
-          playerVars: {
-            autoplay: 0,
-            controls: 0,
-            disablekb: 1,
-            rel: 0,
-            modestbranding: 1,
-            playsinline: 1,
-            origin: window.location.origin,
-          },
-          events: {
-            onReady: () => {
-              try { eventPlayer.setVolume(bgmVolume); } catch (_) {}
-            },
-            onStateChange: (ev) => {
-              if (ev && ev.data === window.YT.PlayerState.ENDED) {
-                hideEventOverlay({ resumeMain: true });
-              }
-            },
-          },
-        });
-      } catch (_) {}
-    }
+    // Event overlay player removed
   });
 }
 
 function togglePlay() {
   if (!player) return;
-  const state = player.getPlayerState?.();
-  if (state === window.YT.PlayerState.PLAYING) {
-    try { player.pauseVideo(); } catch (_) {}
-  } else {
-    try { player.playVideo(); } catch (_) {}
-  }
+  runWithPlayerReady(() => {
+    const state = player.getPlayerState?.();
+    if (state === window.YT?.PlayerState?.PLAYING) {
+      try { player.pauseVideo(); } catch (_) {}
+      autoplayIntent = false;
+      if (autoplayRetryTimer) {
+        clearTimeout(autoplayRetryTimer);
+        autoplayRetryTimer = null;
+      }
+    } else {
+      try { player.playVideo(); } catch (_) {}
+      autoplayIntent = true;
+      bindUserAutoplayNudge();
+      scheduleAutoplayRetry(400);
+    }
+  });
 }
 
 function goNext() {
   if (!player) return;
-  if (programList.length > 0) {
-    let nextIdx = currentIndex;
-    if (doShuffle && programList.length > 1) {
-      do {
-        nextIdx = Math.floor(Math.random() * programList.length);
-      } while (nextIdx === currentIndex);
-    } else {
-      nextIdx = currentIndex + 1;
-      if (nextIdx >= programList.length) {
-        if (!doLoop) return; // stop at end
-        nextIdx = 0;
+  runWithPlayerReady(() => {
+    autoplayIntent = true;
+    bindUserAutoplayNudge();
+    if (programList.length > 0) {
+      let nextIdx = currentIndex;
+      if (doShuffle && programList.length > 1) {
+        do {
+          nextIdx = Math.floor(Math.random() * programList.length);
+        } while (nextIdx === currentIndex);
+      } else {
+        nextIdx = currentIndex + 1;
+        if (nextIdx >= programList.length) {
+          if (!doLoop) return; // stop at end
+          nextIdx = 0;
+        }
       }
+      currentIndex = nextIdx;
+      const id = programList[currentIndex];
+      try {
+        player.loadVideoById(id);
+        player.setVolume(bgmVolume);
+        player.playVideo();
+      } catch (_) {}
+      scheduleAutoplayRetry(500);
+      return;
     }
-    currentIndex = nextIdx;
-    const id = programList[currentIndex];
-    try { player.loadVideoById(id); player.setVolume(bgmVolume); player.playVideo(); } catch (_) {}
-    return;
-  }
-  try { player.nextVideo(); } catch (_) {}
+    try { player.nextVideo(); } catch (_) {}
+    scheduleAutoplayRetry(700);
+  });
 }
 
 function nextVideo() { goNext(); }
 
 function unmuteAndPlay() {
   if (!player) return;
+  runWithPlayerReady(() => {
+    autoplayIntent = true;
+    bindUserAutoplayNudge();
+    try {
+      player.unMute();
+      player.playVideo();
+    } catch (_) {}
+    scheduleAutoplayRetry(360);
+  });
+}
+
+function isBgmPlaying() {
+  if (!player || !isPlayerIframeReady()) return false;
   try {
-    player.unMute();
-    player.playVideo();
-  } catch (_) {}
+    const state = player.getPlayerState?.();
+    return state === window.YT?.PlayerState?.PLAYING;
+  } catch (_) {
+    return false;
+  }
+}
+
+function playBgm() {
+  if (!player) return;
+  runWithPlayerReady(() => {
+    autoplayIntent = true;
+    bindUserAutoplayNudge();
+    try { player.unMute(); } catch (_) {}
+    try { player.playVideo(); } catch (_) {}
+    scheduleAutoplayRetry(320);
+  });
+}
+
+function pauseBgm() {
+  if (!player) return;
+  runWithPlayerReady(() => {
+    try { player.pauseVideo(); } catch (_) {}
+    autoplayIntent = false;
+    if (autoplayRetryTimer) {
+      clearTimeout(autoplayRetryTimer);
+      autoplayRetryTimer = null;
+    }
+  });
 }
 
 /**
@@ -230,84 +371,46 @@ function playTemporaryClip(urlOrId, durationSec = 5) {
     ? (parseYouTubeUrl(urlOrId).videoId || '')
     : String(urlOrId || '');
   if (!id) return;
-  try {
-    // Snapshot current context
-    const playlist = player.getPlaylist?.();
-    const index = player.getPlaylistIndex?.();
-    const t = player.getCurrentTime?.() || 0;
-    lastPlaylistSnapshot = Array.isArray(playlist) && playlist.length > 0 ? { playlist, index, t } : null;
-    lastVideoSnapshot = !lastPlaylistSnapshot ? { id: player.getVideoData?.().video_id, t } : null;
-    player.loadVideoById(id);
-    player.unMute();
-  } catch (_) {}
-  const ms = Math.max(1000, Math.floor(durationSec * 1000));
-  setTimeout(() => {
+  runWithPlayerReady(() => {
+    autoplayIntent = true;
     try {
-      if (lastPlaylistSnapshot) {
-        const { playlist, index, t } = lastPlaylistSnapshot;
-        player.cuePlaylist(playlist, index, t);
-        player.playVideo();
-      } else if (lastVideoSnapshot && lastVideoSnapshot.id) {
-        player.cueVideoById(lastVideoSnapshot.id, lastVideoSnapshot.t);
-        player.playVideo();
-      }
+      const playlist = player.getPlaylist?.();
+      const index = player.getPlaylistIndex?.();
+      const t = player.getCurrentTime?.() || 0;
+      lastPlaylistSnapshot = Array.isArray(playlist) && playlist.length > 0 ? { playlist, index, t } : null;
+      lastVideoSnapshot = !lastPlaylistSnapshot ? { id: player.getVideoData?.().video_id, t } : null;
+      player.loadVideoById(id);
+      player.unMute();
     } catch (_) {}
-    lastPlaylistSnapshot = null;
-    lastVideoSnapshot = null;
-  }, ms);
-}
-
-function showEventOverlay(videoId, { startSec = 0, endSec = null } = {}) {
-  if (!eventContainer || !eventPlayer) return false;
-  try {
-    // Pause main
-    try { player.pauseVideo(); } catch (_) {}
-    // Show overlay
-    eventContainer.style.display = 'block';
-    eventPlayer.unMute();
-    try { eventPlayer.setVolume(bgmVolume); } catch (_) {}
-    if (endSec != null && endSec > 0) {
-      eventPlayer.loadVideoById({ videoId, startSeconds: Math.max(0, startSec), endSeconds: endSec });
-    } else if (startSec > 0) {
-      eventPlayer.loadVideoById({ videoId, startSeconds: Math.max(0, startSec) });
-    } else {
-      eventPlayer.loadVideoById(videoId);
-    }
-    eventPlayer.playVideo();
-    return true;
-  } catch (_) {
-    return false;
-  }
+    const ms = Math.max(1000, Math.floor(durationSec * 1000));
+    setTimeout(() => {
+      runWithPlayerReady(() => {
+        try {
+          if (lastPlaylistSnapshot) {
+            const { playlist, index, t } = lastPlaylistSnapshot;
+            player.cuePlaylist(playlist, index, t);
+            player.playVideo();
+          } else if (lastVideoSnapshot && lastVideoSnapshot.id) {
+            player.cueVideoById(lastVideoSnapshot.id, lastVideoSnapshot.t);
+            player.playVideo();
+          }
+        } catch (_) {}
+        lastPlaylistSnapshot = null;
+        lastVideoSnapshot = null;
+        scheduleAutoplayRetry(360);
+      });
+    }, ms);
+    scheduleAutoplayRetry(400);
+  });
 }
 
 function setBgmVolume(percent) {
   const p = Math.max(0, Math.min(100, Number(percent) || 0));
   bgmVolume = p;
-  try { player && player.setVolume(bgmVolume); } catch (_) {}
-  try { eventPlayer && eventPlayer.setVolume(bgmVolume); } catch (_) {}
-}
-
-function hideEventOverlay({ resumeMain = true } = {}) {
-  if (!eventContainer || !eventPlayer) return;
-  try {
-    eventPlayer.stopVideo();
-  } catch (_) {}
-  eventContainer.style.display = 'none';
-  if (resumeMain) {
-    try { player.playVideo(); } catch (_) {}
-  }
-}
-
-/**
- * Plays an event video on an overlay player, then hides it and resumes main.
- */
-function playEventVideo(urlOrId, opts = {}) {
-  const parsed = (typeof urlOrId === 'string' && urlOrId.includes('http')) ? parseYouTubeUrl(urlOrId) : { videoId: String(urlOrId || '') };
-  const id = parsed.videoId || '';
-  if (!id) return false;
-  const startSec = Number.isFinite(opts.startSec) ? opts.startSec : (parsed.startSeconds || 0);
-  const endSec = Number.isFinite(opts.endSec) ? opts.endSec : null;
-  return showEventOverlay(id, { startSec, endSec });
+  if (!player) return;
+  runWithPlayerReady(() => {
+    try { player.setVolume(bgmVolume); } catch (_) {}
+  });
 }
 
 export {
@@ -316,9 +419,10 @@ export {
   nextVideo,
   setRotationInterval,
   unmuteAndPlay,
+  isBgmPlaying,
+  playBgm,
+  pauseBgm,
   playTemporaryClip,
   goNext,
   setBgmVolume,
-  playEventVideo,
-  hideEventOverlay,
 };

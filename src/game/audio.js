@@ -12,11 +12,15 @@ const SOUND_FILES = {
   upgrade: 'assets/svg/audios/배강화및배시대업그레이드.wav',
   fusion: 'assets/svg/audios/배강화및배시대업그레이드.wav',
   era_up: 'assets/svg/audios/배강화및배시대업그레이드.wav',
-  dockyard: 'assets/svg/audios/UI인터렉션.wav',
+  dockyard: 'assets/svg/audios/배생산.wav',
   sell: 'assets/svg/audios/배판매.wav',
   // Combat impacts
   hit: 'assets/svg/audios/배격침.wav',
   explosion: 'assets/svg/audios/대포맟험포발사.wav',
+  // Ally fire
+  fire_arrow: 'assets/svg/audios/활및바리스타발사.wav',
+  fire_gun: 'assets/svg/audios/소총발사.wav',
+  fire_cannon: 'assets/svg/audios/대포맟험포발사.wav',
   // Session events (fallback to UI click to avoid 404 spam)
   boss_spawn: 'assets/svg/audios/UI인터렉션.wav',
   wave_start: 'assets/svg/audios/UI인터렉션.wav',

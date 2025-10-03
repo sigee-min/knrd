@@ -14,7 +14,7 @@ function getShipSize(rarity) {
 }
 
 function getDockyardBuildCost(dockyards) {
-  return 2 + Math.max(0, dockyards - 1) * 4;
+  return 2 + Math.max(0, dockyards - 1) * 8;
 }
 
 function getTotalShipyardCapacity(dockyards) {

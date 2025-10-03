@@ -1,5 +1,4 @@
 const SPRITE_CACHE = new Map();
-const ROTATED_CACHE = new Map();
 
 // Fallback by rarity to existing generic boat icons
 const RARITY_FALLBACK = {
@@ -115,50 +114,18 @@ const SHIP_SPRITES = {
   stealth_ddx: { asset: 'assets/svg/ships/ship_stealth_ddx.svg', size: 50 },
 };
 
-function rotateImage180(image) {
-  try {
-    const w = image.naturalWidth || image.width || 0;
-    const h = image.naturalHeight || image.height || 0;
-    if (!w || !h) return null;
-    const canvas = document.createElement('canvas');
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext('2d');
-    ctx.translate(w / 2, h / 2);
-    ctx.rotate(Math.PI);
-    ctx.drawImage(image, -w / 2, -h / 2, w, h);
-    return canvas;
-  } catch (_) {
-    return null;
-  }
-}
+// Note: previously we rotated ship art by 180° at load time.
+// Current assets are oriented correctly, so we no longer pre-rotate.
 
 function getTowerSprite(tower) {
   const entry = SHIP_SPRITES[tower.unitId] || null;
   const asset = entry?.asset || RARITY_FALLBACK[tower.rarity] || RARITY_FALLBACK.common;
-  // Return rotated asset for all ships
-  let img = ROTATED_CACHE.get(asset);
-  if (!img) {
-    let base = SPRITE_CACHE.get(asset);
-    if (!base && typeof Image !== 'undefined') {
-      base = new Image();
-      base.src = asset;
-      SPRITE_CACHE.set(asset, base);
-    }
-    if (base && base.complete && base.naturalWidth > 0) {
-      const rotated = rotateImage180(base);
-      if (rotated) {
-        ROTATED_CACHE.set(asset, rotated);
-        img = rotated;
-      }
-    } else if (base) {
-      // Defer rotation until image loads
-      base.addEventListener('load', () => {
-        const rotated = rotateImage180(base);
-        if (rotated) ROTATED_CACHE.set(asset, rotated);
-      }, { once: true });
-      img = base; // temporary fallback: unrotated until cache populated
-    }
+  // Return base asset for ships (no pre-rotation)
+  let img = SPRITE_CACHE.get(asset);
+  if (!img && typeof Image !== 'undefined') {
+    img = new Image();
+    img.src = asset;
+    SPRITE_CACHE.set(asset, img);
   }
   const baseSize = entry?.size ?? 36;
   const fusionScale = 1 + (tower.fusionTier ?? 0) * 0.1;

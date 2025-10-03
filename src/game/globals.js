@@ -278,8 +278,8 @@ function createConfig(canvas, minimapCanvas) {
     },
     economy: {
       baseRollCost: 10,
-      rollCostRamp: 5,
-      rollCostStep: 0,
+      rollCostRamp: 10,
+      rollCostStep: 5,
       upgradeBaseCost: 3,
       upgradeStep: 2,
       tierCosts: [5, 5, 5, 5, 5],
