@@ -1,6 +1,6 @@
 # KNRD · Korea Navy Random Defence
 
-한국 해군을 모티프로 한 싱글 플레이 디펜스 게임 프로토타입입니다. 브라우저에서 canvas 기반으로 함대를 지휘하며 각 시대별로 함선을 업그레이드하고 몰려오는 적을 방어합니다.
+한국 해군을 모티프로 한 싱글 플레이 디펜스 게임입니다. 브라우저에서 canvas 기반으로 함대를 지휘하며 각 시대별로 함선을 업그레이드하고 몰려오는 적을 방어합니다.
 
 <img width="960" height="540" alt="Image" src="https://github.com/user-attachments/assets/26a6b7bd-d0cc-41ae-82b2-b095b1afbb6a" />
 
@@ -43,13 +43,6 @@
    ```
    또는 선호하는 정적 서버 툴을 사용해 `/index.html`을 열어주세요.
 
-## GitHub Pages 배포
-`main` 브랜치에 변경 사항을 push하면 GitHub Actions가 자동으로 빌드하고 `github-pages` 환경으로 배포합니다.
-
-1. GitHub 저장소 설정에서 **Pages** 탭을 열고, **Source**를 "GitHub Actions"로 설정합니다.
-2. 이후 push 또는 수동으로 **Run workflow**를 실행하면 `dist/` 번들과 정적 자산(`index.html`, `styles.css`, `assets/`)이 자동으로 업로드됩니다.
-3. 배포 URL은 Actions 로그의 `Deploy to GitHub Pages` 단계에서 확인할 수 있습니다.
-
 ## 블로그 · 외부 페이지에 임베드
 게임을 별도의 페이지에 호스팅한 뒤, 블로그 글 등에 간단한 스크립트 한 줄로 삽입할 수 있습니다.
 
@@ -83,24 +76,3 @@
           allowfullscreen></iframe>
 </div>
 ```
-
-## 프로젝트 구조
-```
-knrd/
-├─ index.html           # 게임 진입점
-├─ src/
-│  ├─ main.js           # esbuild 번들 엔트리
-│  ├─ game/             # 게임 루프 및 전투 로직
-│  ├─ systems/          # 업그레이드, 명령 처리 등의 시스템 모듈
-│  ├─ ui/               # UI 구성 요소 및 렌더링 로직
-│  ├─ data/             # 적/함선 데이터 정의
-│  └─ utils/            # 공용 유틸리티
-├─ assets/              # 아이콘, 스프라이트 등 정적 리소스
-├─ styles.css           # 전역 스타일시트
-└─ dist/                # 빌드 결과물 출력 위치
-```
-
-## 추가 안내
-- 미구현 메뉴(멀티플레이 등)는 UI에 표시되지만 아직 동작하지 않습니다.
-- 전체화면 및 카메라 이동, 단축키 등은 `index.html`과 `src/game` 하위 파일에서 정의된 명령 체계를 따릅니다.
-- 버그 제보나 개선 의견은 이슈 트래커를 통해 남겨주세요.
