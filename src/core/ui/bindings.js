@@ -1,7 +1,7 @@
 import { elements } from '../../ui/elements.js';
 import { playSound } from '../../game/audio.js';
 
-function wireOverlayButtons({ setScene, closeSettings, setDifficulty, updateDifficultyUI, hideGameOverOverlay, setWaveStatus }) {
+function wireOverlayButtons({ setScene, closeSettings, setDifficulty, updateDifficultyUI, hideGameOverOverlay, setWaveStatus, continueInfiniteMode }) {
   elements.playButton?.addEventListener('click', () => {
     playSound('ui_click', { volume: 0.6, throttleMs: 80 });
     elements.difficultyOverlay?.classList.remove('hidden');
@@ -53,6 +53,11 @@ function wireOverlayButtons({ setScene, closeSettings, setDifficulty, updateDiff
     playSound('ui_click', { volume: 0.6, throttleMs: 80 });
     hideGameOverOverlay();
     setScene('lobby');
+  });
+  elements.gameOverContinue?.addEventListener('click', () => {
+    playSound('ui_click', { volume: 0.6, throttleMs: 80 });
+    hideGameOverOverlay();
+    continueInfiniteMode?.();
   });
 }
 

@@ -19,19 +19,36 @@ const ENEMY_SPRITES = {
   midget_sub: { asset: 'assets/svg/enemies/enemy_midget_sub.svg', size: 20 },
 };
 
+function primeEnemySpriteAsset(asset) {
+  if (!asset || typeof Image === 'undefined') return null;
+  let img = ENEMY_SPRITE_CACHE.get(asset);
+  if (!img) {
+    img = new Image();
+    img.src = asset;
+    ENEMY_SPRITE_CACHE.set(asset, img);
+  }
+  return img;
+}
+
+function getAllEnemySpriteAssets() {
+  const assets = new Set();
+  Object.values(ENEMY_SPRITES).forEach((entry) => {
+    if (entry?.asset) assets.add(entry.asset);
+  });
+  return Array.from(assets);
+}
+
 function getEnemySprite(enemy) {
   const key = enemy.archetype;
   const entry = ENEMY_SPRITES[key] || null;
   if (!entry) return { image: null, size: enemy.size || 12 };
   let img = ENEMY_SPRITE_CACHE.get(entry.asset);
-  if (!img && typeof Image !== 'undefined') {
-    img = new Image();
-    img.src = entry.asset;
-    ENEMY_SPRITE_CACHE.set(entry.asset, img);
+  if (!img) {
+    img = primeEnemySpriteAsset(entry.asset);
   }
   const baseSize = entry?.size ?? enemy.size ?? 16;
   const VISUAL_SCALE = 1.7;
   return { image: img, size: Math.round(baseSize * VISUAL_SCALE), asset: entry?.asset };
 }
 
-export { getEnemySprite };
+export { getEnemySprite, getAllEnemySpriteAssets, primeEnemySpriteAsset };

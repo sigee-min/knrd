@@ -102,21 +102,38 @@ const PROJECTILE_STYLE_MAP = {
 
 const spriteCache = new Map();
 
+function primeProjectileSpriteAsset(asset) {
+  if (!asset || typeof Image === 'undefined') return null;
+  let img = spriteCache.get(asset);
+  if (!img) {
+    img = new Image();
+    img.src = asset;
+    spriteCache.set(asset, img);
+  }
+  return img;
+}
+
+function getAllProjectileSpriteAssets() {
+  const assets = new Set();
+  Object.values(PROJECTILE_STYLE_MAP).forEach((entry) => {
+    if (entry?.asset) assets.add(entry.asset);
+  });
+  return Array.from(assets);
+}
+
 function getProjectileStyle(weaponType) {
   const key = weaponType && PROJECTILE_STYLE_MAP[weaponType] ? weaponType : 'default';
   const style = PROJECTILE_STYLE_MAP[key];
   style.weaponType = key;
   if (!style.image) {
-    if (spriteCache.has(style.asset)) {
-      style.image = spriteCache.get(style.asset);
-    } else if (typeof Image !== 'undefined') {
-      const img = new Image();
-      img.src = style.asset;
-      spriteCache.set(style.asset, img);
+    const img = primeProjectileSpriteAsset(style.asset);
+    if (img) {
       style.image = img;
+    } else if (spriteCache.has(style.asset)) {
+      style.image = spriteCache.get(style.asset);
     }
   }
   return style;
 }
 
-export { getProjectileStyle };
+export { getProjectileStyle, getAllProjectileSpriteAssets, primeProjectileSpriteAsset };

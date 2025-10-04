@@ -9,7 +9,7 @@ import {
   CAMERA,
 } from '../../game/globals.js';
 import { getRollCost, getDockyardUsage, ERA_ORDER } from '../../game/combat.js';
-import { refreshCommandStates } from '../../game/commands.js';
+import { refreshCommandStates, canSkipCurrentWave } from '../../game/commands.js';
 import { isGameOverOverlayVisible } from '../../game/overlay.js';
 
 const HUD_CACHE = {
@@ -45,9 +45,29 @@ const WAVE_INFO_STATE = {
   timerLine: '',
 };
 
+function updateSkipButtonState() {
+  const btn = elements.waveSkipButton;
+  if (!btn) return;
+  const inGame = GAME_STATE.scene === 'game';
+  btn.classList.toggle('hidden', !inGame);
+  if (!inGame) {
+    btn.disabled = true;
+    btn.classList.remove('ready');
+    btn.title = '게임 중 아님';
+    return;
+  }
+  const { ok, reason } = canSkipCurrentWave();
+  btn.disabled = !ok;
+  btn.classList.toggle('ready', ok);
+  btn.title = ok
+    ? '스폰 완료: 다음 라운드를 즉시 시작합니다 (N)'
+    : `스킵 불가: ${reason || '조건 미충족'}`;
+}
+
 function updateWaveInfo() {
   const waveInfoEl = elements.waveInfo;
-  if (!waveInfoEl) return;
+  const contentEl = elements.waveInfoContent;
+  if (!waveInfoEl || !contentEl) return;
 
   const scene = GAME_STATE.scene;
 
@@ -75,7 +95,7 @@ function updateWaveInfo() {
       </div>
     `;
     if (markup !== WAVE_INFO_STATE.markup) {
-      waveInfoEl.innerHTML = markup;
+      contentEl.innerHTML = markup;
       WAVE_INFO_STATE.markup = markup;
     }
     WAVE_INFO_STATE.hidden = true;
@@ -84,8 +104,11 @@ function updateWaveInfo() {
     WAVE_INFO_STATE.urgentClass = null;
     WAVE_INFO_STATE.timerSpan = null;
     WAVE_INFO_STATE.timerLine = '';
+    updateSkipButtonState();
     return;
   }
+
+  updateSkipButtonState();
 
   if (WAVE_INFO_STATE.hidden) {
     waveInfoEl.classList.remove('hidden');
@@ -97,26 +120,34 @@ function updateWaveInfo() {
       waveInfoEl.classList.add('hidden');
       WAVE_INFO_STATE.hidden = true;
     }
+    updateSkipButtonState();
     return;
   }
 
-  const waveNumber = Math.min(GAME_STATE.round, MAX_WAVES);
+  const infiniteMode = !!GAME_STATE.infiniteMode;
+  const rawRound = Math.max(0, GAME_STATE.round);
+  const waveNumber = infiniteMode ? rawRound : Math.min(rawRound, MAX_WAVES);
   const isPrepWave = GAME_STATE.round === 0;
-  const isFinalWave = !isPrepWave && waveNumber === MAX_WAVES;
-  const gameCleared = !GAME_STATE.running && !GAME_STATE.waveActive && isFinalWave;
+  const isFinalWave = !infiniteMode && !isPrepWave && waveNumber === MAX_WAVES;
+  const awaitingInfinite = !!GAME_STATE.awaitingInfiniteChoice;
+  const gameCleared = awaitingInfinite || (!GAME_STATE.running && !GAME_STATE.waveActive && isFinalWave);
 
   let markup;
   let timerLine = null;
 
   if (gameCleared) {
     const { used: usedCapacity, total: totalCapacity } = getDockyardUsage();
+    const headerLabel = awaitingInfinite ? `웨이브 ${MAX_WAVES}/${MAX_WAVES}` : `웨이브 ${waveNumber}/${MAX_WAVES}`;
+    const completionLine = awaitingInfinite
+      ? '모든 웨이브 방어에 성공했습니다. 무한 모드 진행 여부를 선택하세요.'
+      : '모든 웨이브 방어에 성공했습니다.';
     markup = `
       <div class="title-row">
-        <span>웨이브 ${waveNumber}/${MAX_WAVES}</span>
+        <span>${headerLabel}</span>
         <span>완료</span>
       </div>
       <div class="wave-metrics">
-        <span>모든 웨이브 방어에 성공했습니다.</span>
+        <span>${completionLine}</span>
         <span>총 조선소 ${GAME_STATE.dockyards}개</span>
         <span>함대 용량 ${usedCapacity}/${totalCapacity}</span>
         <span>전투 시간 ${Math.floor(GAME_STATE.time)}초</span>
@@ -129,9 +160,11 @@ function updateWaveInfo() {
     const difficultyPreset = DIFFICULTY_PRESETS[GAME_STATE.difficulty] || DIFFICULTY_PRESETS.normal;
     const difficultyLabel = difficultyPreset.label;
     const bossWave = GAME_STATE.isBossWave;
+    const capLabel = infiniteMode ? '∞' : MAX_WAVES;
+    const modeTag = !isPrepWave && infiniteMode ? ' · <strong class="em">무한 모드</strong>' : '';
     const waveTypeLeft = isPrepWave
       ? '<strong class="em">준비 라운드</strong> · 함대를 준비하세요'
-      : `웨이브 <strong class="em">${waveNumber}</strong>/<strong class="muted">${MAX_WAVES}</strong> · <strong class="em">${difficultyLabel}</strong>${bossWave ? ' · <span class="boss">보스</span>' : ''}`;
+      : `웨이브 <strong class="em">${waveNumber}</strong>/<strong class="muted">${capLabel}</strong> · <strong class="em">${difficultyLabel}</strong>${bossWave ? ' · <span class="boss">보스</span>' : ''}${modeTag}`;
     let progress = 0;
     let statusLine = '';
     const timerRemain = Math.max(0, Math.floor(GAME_STATE.waveTimer));
@@ -184,14 +217,14 @@ function updateWaveInfo() {
   }
 
   if (markup !== WAVE_INFO_STATE.markup) {
-    waveInfoEl.innerHTML = markup;
+    contentEl.innerHTML = markup;
     WAVE_INFO_STATE.markup = markup;
-    WAVE_INFO_STATE.timerSpan = timerLine ? waveInfoEl.querySelector('.title-row span:last-child') : null;
+    WAVE_INFO_STATE.timerSpan = timerLine ? contentEl.querySelector('.title-row span:last-child') : null;
     WAVE_INFO_STATE.timerLine = timerLine ?? '';
   }
 
   if (timerLine) {
-    const timerSpan = WAVE_INFO_STATE.timerSpan || waveInfoEl.querySelector('.title-row span:last-child');
+    const timerSpan = WAVE_INFO_STATE.timerSpan || contentEl.querySelector('.title-row span:last-child');
     if (timerSpan) {
       WAVE_INFO_STATE.timerSpan = timerSpan;
       if (timerLine !== WAVE_INFO_STATE.timerLine) {
@@ -215,6 +248,7 @@ function updateWaveInfo() {
     waveInfoEl.classList.toggle('is-urgent', urgentClass);
     WAVE_INFO_STATE.urgentClass = urgentClass;
   }
+  updateSkipButtonState();
 }
 
 function updateCameraOverlay() {

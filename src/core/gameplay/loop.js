@@ -757,14 +757,21 @@ export function handleEnemyDeath(enemy) {
     }
   }
   if (enemy.type === 'boss') {
-    // Compute boss reward based on level
     const level = enemy.isWaveBoss ? (enemy.waveLevel ?? GAME_STATE.round) : (enemy.summonLevel ?? GAME_STATE.round);
     const extra = computeBossRewardByLevel(level);
-    GAME_STATE.essence = (GAME_STATE.essence ?? 0) + (extra.essence ?? 0);
-    GAME_STATE.gold += (extra.goldBonus ?? 0);
+    const isWaveBoss = !!enemy.isWaveBoss;
+    const infiniteMode = !!GAME_STATE.infiniteMode;
+    const essenceGain = (!infiniteMode || !isWaveBoss) ? (extra.essence ?? 0) : 0;
+    const goldBonus = extra.goldBonus ?? 0;
+    if (essenceGain > 0) {
+      GAME_STATE.essence = (GAME_STATE.essence ?? 0) + essenceGain;
+    }
+    if (goldBonus > 0) {
+      GAME_STATE.gold += goldBonus;
+    }
     let statusMessage = '소환 보스 처치! 추가 보상을 획득했습니다.';
-    // Wave boss grants era upgrade and records unlock key
-    if (enemy.isWaveBoss) {
+    if (isWaveBoss) {
+      statusMessage = infiniteMode ? '웨이브 보스 처치! (무한 모드)' : '웨이브 보스 처치! 보상 획득';
       const waveBossKey = enemy.bossKey || (
         enemy.era === '초기' ? 'boss_ancient_galley' :
         enemy.era === '조선' ? 'boss_atakebune' :
@@ -773,18 +780,22 @@ export function handleEnemyDeath(enemy) {
       );
       if (waveBossKey) {
         GAME_STATE.lastWaveBossKey = waveBossKey;
-        const bossName = enemy.displayName || enemy.name || `${enemy.era || ''} 보스`.trim();
-        ensureBossSummonUnlocked(waveBossKey, bossName || '웨이브 보스', enemy.icon || 'assets/svg/icons/icon_boss.svg', level);
+        if (!infiniteMode) {
+          const bossName = enemy.displayName || enemy.name || `${enemy.era || ''} 보스`.trim();
+          ensureBossSummonUnlocked(waveBossKey, bossName || '웨이브 보스', enemy.icon || 'assets/svg/icons/icon_boss.svg', level);
+        }
       }
-      const prevEraIndex = clamp(GAME_STATE.eraIndex ?? 0, 0, ERA_ORDER.length - 1);
-      if (prevEraIndex < ERA_ORDER.length - 1) {
-        GAME_STATE.eraIndex = prevEraIndex + 1;
-        resetUnitPoolCache();
-        updateHUD();
-        const nextEraName = ERA_ORDER[GAME_STATE.eraIndex];
-        statusMessage = `${nextEraName} 시대 개막! 웨이브 보스 처치`;
-      } else {
-        statusMessage = '웨이브 보스 처치! 보상 획득';
+      if (!infiniteMode) {
+        const prevEraIndex = clamp(GAME_STATE.eraIndex ?? 0, 0, ERA_ORDER.length - 1);
+        if (prevEraIndex < ERA_ORDER.length - 1) {
+          GAME_STATE.eraIndex = prevEraIndex + 1;
+          resetUnitPoolCache();
+          updateHUD();
+          const nextEraName = ERA_ORDER[GAME_STATE.eraIndex];
+          statusMessage = `${nextEraName} 시대 개막! 웨이브 보스 처치`;
+        } else {
+          statusMessage = '웨이브 보스 처치! 보상 획득';
+        }
       }
     }
     GAME_STATE.bossMustDie = false;
@@ -859,7 +870,8 @@ export function endWave() {
   GAME_STATE.waveActive = false;
   GAME_STATE.bossMustDie = false;
   GAME_STATE.bossGraceTimer = 0;
-  if (nextRound > MAX_WAVES) {
+  const reachedCampaignEnd = !GAME_STATE.infiniteMode && nextRound > MAX_WAVES;
+  if (reachedCampaignEnd) {
     GAME_STATE.running = false;
     GAME_STATE.waveTimer = 0;
     GAME_STATE.pendingCommands = [];
@@ -868,15 +880,20 @@ export function endWave() {
     GAME_STATE.spawnAccumulator = 0;
     GAME_STATE.spawnedThisWave = 0;
     GAME_STATE.bossCountdown = CONFIG.wave.bossInterval;
-    GAME_STATE.sceneReturn = 'lobby';
+    GAME_STATE.scene = 'game';
+    GAME_STATE.sceneReturn = 'game';
+    GAME_STATE.awaitingInfiniteChoice = true;
+    GAME_STATE.pendingInfiniteRound = nextRound;
     renderCommandPanel(true);
     updateHUD();
-    setWaveStatus('모든 웨이브 방어 성공!', { persistent: true });
+    setWaveStatus('모든 웨이브 방어 성공! 무한 모드로 계속할까요?', { persistent: true });
     const stats = buildGameOverStats(MAX_WAVES);
-    showGameOverOverlay('게임 클리어', {
+    showGameOverOverlay('', {
       title: '방어 성공',
-      message: '모든 웨이브 방어에 성공했습니다!',
+      message: '모든 웨이브를 방어했습니다. 무한 모드로 계속 진행할까요?',
       stats,
+      showContinue: true,
+      mode: 'endlessPrompt',
     });
     playSound('victory', { volume: 0.9 });
     return;
@@ -899,13 +916,15 @@ export function startWave(initial = false) {
   GAME_STATE.waveActive = true;
   // Ensure base boss summon unlock and unlock previous wave boss every 10 rounds (round 1, 11, 21 ...)
   if (!Array.isArray(GAME_STATE.bossSummons)) GAME_STATE.bossSummons = [];
-  // Base unlock at round 1 when first entering combat
-  if (GAME_STATE.round === 1 && GAME_STATE.bossSummons.length === 0) {
-    ensureBossSummonUnlocked('boss_ancient_galley', '고대 보스', 'assets/svg/icons/icon_boss.svg', 1);
-  }
-  if (GAME_STATE.round > 1 && (GAME_STATE.round - 1) % 10 === 0 && GAME_STATE.lastWaveBossKey) {
-    const lastBossLevel = GAME_STATE.round - 1;
-    ensureBossSummonUnlocked(GAME_STATE.lastWaveBossKey, '정예 보스', 'assets/svg/icons/icon_boss.svg', lastBossLevel);
+  if (!GAME_STATE.infiniteMode) {
+    // Base unlock at round 1 when first entering combat
+    if (GAME_STATE.round === 1 && GAME_STATE.bossSummons.length === 0) {
+      ensureBossSummonUnlocked('boss_ancient_galley', '고대 보스', 'assets/svg/icons/icon_boss.svg', 1);
+    }
+    if (GAME_STATE.round > 1 && (GAME_STATE.round - 1) % 10 === 0 && GAME_STATE.lastWaveBossKey) {
+      const lastBossLevel = GAME_STATE.round - 1;
+      ensureBossSummonUnlocked(GAME_STATE.lastWaveBossKey, '정예 보스', 'assets/svg/icons/icon_boss.svg', lastBossLevel);
+    }
   }
   let statusMessage;
   let statusOptions = {};

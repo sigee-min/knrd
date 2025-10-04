@@ -1,5 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 64">
-  <!-- Tower ship top-down -->
-  <polygon points="12,32 18,28 36,26 48,28 56,32 48,36 36,38 18,36" fill="#8d5f33" stroke="#3c2a18" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="30" y="22" width="6" height="16" rx="1" fill="#cdb691" stroke="#6b5a3a" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 196 84">
+  <defs>
+    <linearGradient id="tower-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b47a3c"/>
+      <stop offset="1" stop-color="#72421b"/>
+    </linearGradient>
+    <linearGradient id="tower-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e5c897"/>
+      <stop offset="1" stop-color="#c49c68"/>
+    </linearGradient>
+    <linearGradient id="tower-walls" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6f7a87"/>
+      <stop offset="1" stop-color="#424c58"/>
+    </linearGradient>
+  </defs>
+  <path d="M22 42c0-10.4 17-27.8 44-35.8l32-9.2h0l32 9.2c27 8 44 25.4 44 35.8s-17 27.8-44 35.8l-32 9.2h0l-32-9.2C39 69.8 22 52.4 22 42z" fill="url(#tower-hull)" stroke="#3d2413" stroke-width="3"/>
+  <path d="M46 42c0-7.4 12-16.4 38-21l14-2.4 14 2.4c26 4.6 38 13.6 38 21s-12 16.4-38 21l-14 2.4-14-2.4c-26-4.6-38-13.6-38-21z" fill="url(#tower-deck)" stroke="#8b5a2b" stroke-width="1.6"/>
+  <g stroke="#8b5a2b" stroke-width="1.2" opacity="0.5">
+    <line x1="64" y1="18" x2="64" y2="66"/>
+    <line x1="82" y1="16" x2="82" y2="68"/>
+    <line x1="100" y1="16" x2="100" y2="68"/>
+    <line x1="118" y1="16" x2="118" y2="68"/>
+    <line x1="136" y1="18" x2="136" y2="66"/>
+  </g>
+  <!-- tower base -->
+  <g transform="translate(100 28)">
+    <rect x="-24" y="-10" width="48" height="44" rx="12" fill="url(#tower-walls)" stroke="#2a333c" stroke-width="2.4"/>
+    <rect x="-20" y="-14" width="40" height="12" rx="6" fill="#939fae" stroke="#2a333c" stroke-width="2"/>
+    <rect x="-16" y="18" width="32" height="12" rx="6" fill="#313a45" stroke="#0f151b" stroke-width="2"/>
+    <g fill="#d8a862" stroke="#6a3d19" stroke-width="2.2">
+    <path d="M58 26l-18 -12 4 -6 26 12z"/>
+    <path d="M74 24l-18 -12 4 -6 26 12z"/>
+    <path d="M126 24l18 -12-4 -6-26 12z"/>
+    <path d="M142 26l18 -12-4 -6-26 12z"/>
+    <path d="M58 58l-18 12 4 6 26-12z"/>
+    <path d="M74 60l-18 12 4 6 26-12z"/>
+    <path d="M126 60l18 12-4 6-26-12z"/>
+    <path d="M142 58l18 12-4 6-26-12z"/>
+  </g>
+
+  </g>
+  <!-- crenellations -->
+  <g fill="#3a4652" stroke="#161c22" stroke-width="1">
+    <rect x="72" y="12" width="10" height="6" rx="2"/>
+    <rect x="94" y="10" width="12" height="6" rx="2"/>
+    <rect x="116" y="12" width="10" height="6" rx="2"/>
+  </g>
+  <!-- oars -->
+  <g fill="#d8a862" stroke="#6a3d19" stroke-width="2.2">
+    <path d="M58 58l-18 12 4 6 26-12z"/>
+    <path d="M74 60l-18 12 4 6 26-12z"/>
+    <path d="M126 60l18 12-4 6-26-12z"/>
+    <path d="M142 58l18 12-4 6-26-12z"/>
+  </g>
+  <!-- side banners -->
+  <g>
+    <rect x="56" y="24" width="4" height="24" rx="1.5" fill="#733d1a"/>
+    <path d="M60 28l14 6-14 6z" fill="#be2f38" stroke="#4e1f1c" stroke-width="1.2"/>
+    <rect x="136" y="24" width="4" height="24" rx="1.5" fill="#733d1a"/>
+    <path d="M136 28l-14 6 14 6z" fill="#be2f38" stroke="#4e1f1c" stroke-width="1.2"/>
+  </g>
 </svg>

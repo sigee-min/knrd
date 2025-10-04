@@ -50,12 +50,11 @@ const commandCallbacks = {
   onGuideToggle: null,
 };
 
-const SHOP_RARITY_ORDER = ['unique', 'legendary', 'mythic', 'primordial'];
+const SHOP_RARITY_ORDER = ['unique', 'legendary', 'mythic'];
 const SHOP_LABELS = {
   unique: '유니크 구입',
   legendary: '전설 구입',
   mythic: '신화 구입',
-  primordial: '태초 구입',
 };
 
 /**
@@ -264,7 +263,7 @@ function refreshCommandStates() {
     const infoLegendary = getPurchaseInfo('legendary');
     const anyAvailable = SHOP_RARITY_ORDER.some((rarity) => getPurchaseInfo(rarity)?.available);
     shopButton.classList.toggle('ready', anyAvailable);
-    const hintLines = ['유니크/전설/신화/태초 함선을 즉시 구입'];
+    const hintLines = ['유니크/전설/신화 함선을 즉시 구입'];
     if (minEssence > 0) {
       hintLines.push(`최소 필요 정수 ${minEssence}개`);
     }
@@ -429,16 +428,15 @@ function canSkipCurrentWave() {
   if (GAME_STATE.scene !== 'game') return { ok: false, reason: '게임 중 아님' };
   if (!GAME_STATE.waveActive) return { ok: false, reason: '라운드 진행 중 아님' };
   if (GAME_STATE.round === 0) return { ok: false, reason: '준비 라운드' };
-  if (Array.isArray(GAME_STATE.enemies) && GAME_STATE.enemies.length > 0) {
-    return { ok: false, reason: '적이 남아있습니다' };
-  }
   if (GAME_STATE.isBossWave) {
     if (!GAME_STATE.bossSpawned) return { ok: false, reason: '보스 대기 중' };
     if (GAME_STATE.bossMustDie) return { ok: false, reason: '보스 생존 중' };
     return { ok: true };
   }
   const target = GAME_STATE.spawnTarget ?? 0;
-  if ((GAME_STATE.spawnedThisWave ?? 0) < target) {
+  const spawned = GAME_STATE.spawnedThisWave ?? 0;
+  const spawnComplete = target <= 0 || spawned >= target;
+  if (!spawnComplete) {
     return { ok: false, reason: '스폰 진행 중' };
   }
   return { ok: true };
@@ -461,6 +459,16 @@ function handleCommand(command, options = {}) {
       if (!ok) {
         setWaveStatus(`스킵 불가: ${reason}`);
         break;
+      }
+      if (Array.isArray(GAME_STATE.enemies) && GAME_STATE.enemies.length > 0) {
+        GAME_STATE.enemies = [];
+      }
+      GAME_STATE.projectiles = [];
+      GAME_STATE.hitBlips = [];
+      GAME_STATE.floaters = [];
+      const target = GAME_STATE.spawnTarget ?? 0;
+      if (target > 0) {
+        GAME_STATE.spawnedThisWave = target;
       }
       // Force wave timer to zero; update loop will transition to next wave.
       GAME_STATE.waveTimer = 0;
@@ -761,4 +769,5 @@ export {
   onCommandClick,
   onCommandKeyDown,
   onCommandKeyUp,
+  canSkipCurrentWave,
 };

@@ -1,12 +1,61 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 64">
-  <!-- Armored gunboat (Goryeo) top-down -->
-  <polygon points="10,32 16,27 34,26 48,28 56,32 48,36 34,38 16,37" fill="#6f4420" stroke="#342413" stroke-width="2" stroke-linejoin="round"/>
-  <!-- Casemate/armor roof -->
-  <rect x="23" y="26" width="14" height="12" rx="1" fill="#8b6031" stroke="#342413" stroke-width="1"/>
-  <!-- Bow gun -->
-  <circle cx="52" cy="32" r="3" fill="#6d6d6d" stroke="#2c2c2c" stroke-width="1"/>
-  <line x1="55" y1="32" x2="60" y2="32" stroke="#2c2c2c" stroke-width="2"/>
-  <!-- Shields along flanks -->
-  <rect x="18" y="28" width="2" height="10" fill="#9b6a3a"/>
-  <rect x="20.5" y="28" width="2" height="10" fill="#9b6a3a"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 196 88">
+  <defs>
+    <linearGradient id="goryeo-armored-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b98241"/>
+      <stop offset="1" stop-color="#74441d"/>
+    </linearGradient>
+    <linearGradient id="goryeo-armored-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e9c996"/>
+      <stop offset="1" stop-color="#c1975f"/>
+    </linearGradient>
+    <linearGradient id="goryeo-armored-plating" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6e7984"/>
+      <stop offset="1" stop-color="#404b56"/>
+    </linearGradient>
+    <linearGradient id="goryeo-armored-bronze" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d7aa50"/>
+      <stop offset="1" stop-color="#8f5c1e"/>
+    </linearGradient>
+  </defs>
+  <path d="M22 44c0-11 17.4-29.2 45-37.8l32-9.2 32 9.2c27.6 8.6 45 26.8 45 37.8s-17.4 29.2-45 37.8l-32 9.2-32-9.2C39.4 73.2 22 55 22 44z" fill="url(#goryeo-armored-hull)" stroke="#3d2211" stroke-width="3"/>
+  <path d="M48 44c0-7.8 12.2-17.6 39-22.8l10-1.8 10 1.8c26.8 5.2 39 15 39 22.8s-12.2 17.6-39 22.8l-10 1.8-10-1.8c-26.8-5.2-39-15-39-22.8z" fill="url(#goryeo-armored-deck)" stroke="#945d2a" stroke-width="1.6"/>
+  <g stroke="#945d2a" stroke-width="1.2" opacity="0.55">
+    <line x1="64" y1="22" x2="64" y2="66"/>
+    <line x1="82" y1="20" x2="82" y2="68"/>
+    <line x1="100" y1="20" x2="100" y2="68"/>
+    <line x1="118" y1="20" x2="118" y2="68"/>
+    <line x1="136" y1="22" x2="136" y2="66"/>
+  </g>
+  <!-- armor plating -->
+  <g>
+    <rect x="72" y="18" width="56" height="44" rx="16" fill="url(#goryeo-armored-plating)" stroke="#1f272f" stroke-width="2.4"/>
+    <g fill="#ccd5de" stroke="#1b242c" stroke-width="1.5">
+      <rect x="80" y="26" width="12" height="16" rx="4"/>
+      <rect x="104" y="26" width="12" height="16" rx="4"/>
+    </g>
+    <rect x="84" y="46" width="32" height="12" rx="5" fill="#303a45" stroke="#10161c" stroke-width="1.6"/>
+  </g>
+  <!-- bow cannon -->
+  <g>
+    <circle cx="152" cy="44" r="12" fill="url(#goryeo-armored-bronze)" stroke="#5c3918" stroke-width="2"/>
+    <path d="M164 44h24" stroke="#5c3918" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <!-- side plating -->
+  <g fill="#6a4625" stroke="#3b2514" stroke-width="1.6" opacity="0.7">
+    <rect x="48" y="32" width="8" height="22" rx="4"/>
+    <rect x="58" y="30" width="8" height="24" rx="4"/>
+    <rect x="130" y="30" width="8" height="24" rx="4" transform="scale(-1 1) translate(-268 0)"/>
+    <rect x="140" y="32" width="8" height="22" rx="4" transform="scale(-1 1) translate(-288 0)"/>
+  </g>
+  <!-- oars -->
+  <g fill="#d1a265" stroke="#6a3d19" stroke-width="2.2">
+    <path d="M56 24l-20 -12 4 -6 28 10z"/>
+    <path d="M74 22l-20 -12 4 -6 28 10z"/>
+    <path d="M120 22l20 -12-4 -6-28 10z"/>
+    <path d="M138 24l20 -12-4 -6-28 10z"/>
+    <path d="M56 54l-20 12 4 6 28-10z"/>
+    <path d="M74 56l-20 12 4 6 28-10z"/>
+    <path d="M120 56l20 12-4 6-28-10z"/>
+    <path d="M138 54l20 12-4 6-28-10z"/>
+  </g>
 </svg>

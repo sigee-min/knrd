@@ -1,24 +1,63 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Wooden hull with pointed bow (top-down) -->
-  <polygon points="12,31 16,27 34,26 48,28 54,32 48,36 34,38 16,37 12,33" fill="#7e5126" stroke="#3b2917" stroke-width="2" stroke-linejoin="round"/>
-
-  <!-- Central deck platform / tower base -->
-  <rect x="26" y="26" width="10" height="12" rx="1" fill="#c4a97a" stroke="#3b2917" stroke-width="1"/>
-
-  <!-- Repeating crossbow rack (hwacha-like) -->
-  <polygon points="36,24 48,22 48,26 36,28" fill="#9f7b4e" stroke="#3b2917" stroke-width="1"/>
-  <!-- Bolt array -->
-  <g stroke="#5f3f1d" stroke-width="1">
-    <line x1="38" y1="25" x2="46" y2="23.5"/>
-    <line x1="38" y1="26" x2="46" y2="24.5"/>
-    <line x1="38" y1="27" x2="46" y2="25.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188 76">
+  <defs>
+    <linearGradient id="repeat-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b67b3c"/>
+      <stop offset="1" stop-color="#714419"/>
+    </linearGradient>
+    <linearGradient id="repeat-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e6c896"/>
+      <stop offset="1" stop-color="#c39a63"/>
+    </linearGradient>
+    <linearGradient id="hwacha-frame" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#dcb584"/>
+      <stop offset="1" stop-color="#a97d49"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 38c0-9.6 15.6-26 40-33.6l36-10.4 36 10.4c24.4 7.6 40 24 40 33.6s-15.6 26-40 33.6l-36 10.4-36-10.4C35.6 64 20 47.6 20 38z" fill="url(#repeat-hull)" stroke="#3c2111" stroke-width="3"/>
+  <path d="M44 38c0-7 11.4-15.8 38-20.2l14-2.4 14 2.4c26.6 4.4 38 13.2 38 20.2s-11.4 15.8-38 20.2l-14 2.4-14-2.4c-26.6-4.4-38-13.2-38-20.2z" fill="url(#repeat-deck)" stroke="#8d5b2c" stroke-width="1.6"/>
+  <g stroke="#8d5b2c" stroke-width="1.2" opacity="0.55">
+    <line x1="62" y1="18" x2="62" y2="58"/>
+    <line x1="80" y1="16" x2="80" y2="60"/>
+    <line x1="98" y1="16" x2="98" y2="60"/>
+    <line x1="116" y1="16" x2="116" y2="60"/>
+    <line x1="134" y1="18" x2="134" y2="58"/>
+  </g>
+  <!-- hwacha deckhouse -->
+  <g transform="translate(100 26)">
+    <rect x="-24" y="-8" width="48" height="32" rx="12" fill="url(#hwacha-frame)" stroke="#6d441d" stroke-width="2"/>
+    <rect x="-18" y="-14" width="36" height="10" rx="4" fill="#b58b56" stroke="#6d441d" stroke-width="2"/>
+    <path d="M-24 -4l-28 -8 4 10 24 0z" fill="#9d6a32" stroke="#3c2312" stroke-width="2"/>
+    <path d="M24 -4l28 -8-4 10-24 0z" fill="#9d6a32" stroke="#3c2312" stroke-width="2"/>
+    <g stroke="#3c2312" stroke-width="2">
+      <line x1="-12" y1="6" x2="12" y2="6"/>
+      <line x1="-12" y1="12" x2="12" y2="12"/>
+    </g>
+    <g stroke="#5d3420" stroke-width="1.6">
+      <line x1="-16" y1="-6" x2="-24" y2="-8"/>
+      <line x1="0" y1="-6" x2="-8" y2="-8"/>
+      <line x1="16" y1="-6" x2="24" y2="-8"/>
+      <line x1="-16" y1="20" x2="-24" y2="24"/>
+      <line x1="0" y1="20" x2="-8" y2="24"/>
+      <line x1="16" y1="20" x2="24" y2="24"/>
+    </g>
+  </g>
+  <!-- shields -->
+  <g fill="#d4a461" stroke="#6a3d19" stroke-width="2.2">
+    <path d="M56 26l-18 -12 4 -6 26 12z"/>
+    <path d="M72 24l-18 -12 4 -6 26 12z"/>
+    <path d="M128 24l18 -12-4 -6-26 12z"/>
+    <path d="M144 26l18 -12-4 -6-26 12z"/>
+    <path d="M56 50l-18 12 4 6 26-12z"/>
+    <path d="M72 52l-18 12 4 6 26-12z"/>
+    <path d="M128 52l18 12-4 6-26-12z"/>
+    <path d="M144 50l18 12-4 6-26-12z"/>
   </g>
 
-  <!-- Oars along sides -->
-  <g stroke="#5f3f1d" stroke-width="2">
-    <line x1="20" y1="29" x2="15" y2="26"/>
-    <line x1="24" y1="29" x2="19" y2="26.5"/>
-    <line x1="20" y1="35" x2="15" y2="38"/>
-    <line x1="24" y1="35" x2="19" y2="37.5"/>
+  <!-- oars -->
+  <g fill="#d4a461" stroke="#6a3d19" stroke-width="2.2">
+    <path d="M56 50l-18 12 4 6 26-12z"/>
+    <path d="M72 52l-18 12 4 6 26-12z"/>
+    <path d="M128 52l18 12-4 6-26-12z"/>
+    <path d="M144 50l18 12-4 6-26-12z"/>
   </g>
 </svg>

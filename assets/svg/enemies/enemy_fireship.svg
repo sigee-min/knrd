@@ -1,4 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-  <polygon points="6,24 14,18 34,18 42,24 34,30 14,30" fill="#c97a3b" stroke="#6a3a1a" stroke-width="2"/>
-  <circle cx="40" cy="24" r="3" fill="#e25822"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 56">
+  <defs>
+    <linearGradient id="enemy-fire-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b06a2c"/>
+      <stop offset="1" stop-color="#6a3a18"/>
+    </linearGradient>
+    <linearGradient id="enemy-fire-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e3c18f"/>
+      <stop offset="1" stop-color="#bd915a"/>
+    </linearGradient>
+    <radialGradient id="enemy-flame" cx="0.7" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#ffe9a6"/>
+      <stop offset="0.4" stop-color="#ffb347"/>
+      <stop offset="1" stop-color="#d54d1c"/>
+    </radialGradient>
+  </defs>
+  <path d="M18 28c0-8 13.4-21 34-27l28-7 28 7c20.6 6 34 19 34 27s-13.4 21-34 27l-28 7-28-7c-20.6-6-34-19-34-27z" fill="url(#enemy-fire-hull)" stroke="#3f200e" stroke-width="3"/>
+  <path d="M36 28c0-5.4 8.6-12.2 24-15.6l20-4.4 20 4.4c15.4 3.4 24 10.2 24 15.6s-8.6 12.2-24 15.6l-20 4.4-20-4.4c-15.4-3.4-24-10.2-24-15.6z" fill="url(#enemy-fire-deck)" stroke="#7b481f" stroke-width="1.4"/>
+  <g stroke="#7b481f" stroke-width="1.1" opacity="0.55">
+    <line x1="52" y1="16" x2="52" y2="40"/>
+    <line x1="68" y1="14" x2="68" y2="42"/>
+    <line x1="84" y1="14" x2="84" y2="42"/>
+    <line x1="100" y1="14" x2="100" y2="42"/>
+    <line x1="116" y1="16" x2="116" y2="40"/>
+  </g>
+  <!-- fire jars -->
+  <g>
+    <circle cx="134" cy="28" r="9" fill="url(#enemy-flame)"/>
+    <circle cx="118" cy="22" r="5" fill="url(#enemy-flame)" opacity="0.8"/>
+    <circle cx="118" cy="34" r="5" fill="url(#enemy-flame)" opacity="0.8"/>
+  </g>
+  <circle cx="134" cy="28" r="3" fill="#4f1f11"/>
 </svg>

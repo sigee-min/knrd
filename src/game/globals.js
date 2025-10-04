@@ -125,7 +125,7 @@ const COMMAND_LIBRARY = {
     hotkey: 'N',
     label: '라운드 스킵',
     icon: 'assets/svg/icons/icon_timer.svg',
-    hint: '라운드 내 모든 적 처치 시 다음 라운드로 즉시 진행',
+    hint: '해당 라운드 소환이 모두 끝나면 즉시 다음 라운드 진행',
   },
   sell: {
     id: 'sell',
@@ -243,6 +243,9 @@ const GAME_STATE = {
   difficulty: 'normal',
   difficultyMultiplier: DIFFICULTY_PRESETS.normal.hpMultiplier,
   bgmUserPaused: false,
+  infiniteMode: false,
+  awaitingInfiniteChoice: false,
+  pendingInfiniteRound: null,
 };
 
 function createConfig(canvas, minimapCanvas) {
@@ -291,8 +294,7 @@ function createConfig(canvas, minimapCanvas) {
     },
     rng: {
       rarity: [
-        { tier: 'primordial', chance: 0.0001 },
-        { tier: 'mythic', chance: 0.001 },
+        { tier: 'mythic', chance: 0.0011 },
         { tier: 'legendary', chance: 0.01 },
         { tier: 'unique', chance: 0.10 },
         { tier: 'rare', chance: 0.40 },
@@ -379,6 +381,9 @@ function createInitialGameState(config) {
     difficulty: 'normal',
     difficultyMultiplier: DIFFICULTY_PRESETS.normal.hpMultiplier,
     bgmUserPaused: false,
+    infiniteMode: false,
+    awaitingInfiniteChoice: false,
+    pendingInfiniteRound: null,
   };
 }
 

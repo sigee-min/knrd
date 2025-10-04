@@ -1,7 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Goryeo cannon ship top-down -->
-  <polygon points="12,31 16,27 34,26 48,28 54,32 48,36 34,38 16,37 12,33" fill="#7f4e24" stroke="#382614" stroke-width="2" stroke-linejoin="round"/>
-  <circle cx="26" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
-  <circle cx="34" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
-  <circle cx="42" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 84">
+  <defs>
+    <linearGradient id="goryeo-cannon2-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b87d3f"/>
+      <stop offset="1" stop-color="#73431c"/>
+    </linearGradient>
+    <linearGradient id="goryeo-cannon2-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e7c896"/>
+      <stop offset="1" stop-color="#c09661"/>
+    </linearGradient>
+    <linearGradient id="goryeo-cannon2-casemate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5f6b77"/>
+      <stop offset="1" stop-color="#3a4654"/>
+    </linearGradient>
+    <linearGradient id="goryeo-cannon2-bronze" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d9a94d"/>
+      <stop offset="1" stop-color="#946120"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 42c0-10.8 17-28.8 44-37.2l32-9.8 32 9.8c27 8.4 44 26.4 44 37.2s-17 28.8-44 37.2l-32 9.8-32-9.8C37 70.8 20 52.8 20 42z" fill="url(#goryeo-cannon2-hull)" stroke="#3c2211" stroke-width="3"/>
+  <path d="M46 42c0-7.6 12-16.8 38-21.8l12-2.2 12 2.2c26 5 38 14.2 38 21.8s-12 16.8-38 21.8l-12 2.2-12-2.2c-26-5-38-14.2-38-21.8z" fill="url(#goryeo-cannon2-deck)" stroke="#8d5a2b" stroke-width="1.6"/>
+  <g stroke="#8d5a2b" stroke-width="1.2" opacity="0.55">
+    <line x1="62" y1="20" x2="62" y2="64"/>
+    <line x1="80" y1="18" x2="80" y2="66"/>
+    <line x1="98" y1="18" x2="98" y2="66"/>
+    <line x1="116" y1="18" x2="116" y2="66"/>
+    <line x1="134" y1="20" x2="134" y2="64"/>
+  </g>
+  <!-- double casemate -->
+  <g transform="translate(96 28)">
+    <rect x="-26" y="-10" width="52" height="44" rx="14" fill="url(#goryeo-cannon2-casemate)" stroke="#1f2730" stroke-width="2.4"/>
+    <rect x="-20" y="-16" width="40" height="12" rx="6" fill="#7a8794" stroke="#1f2730" stroke-width="2"/>
+    <rect x="-16" y="18" width="32" height="12" rx="6" fill="#2f3944" stroke="#10151a" stroke-width="2"/>
+    <g fill="#dce5f0" stroke="#1b242c" stroke-width="1.4">
+      <rect x="-12" y="-6" width="8" height="14" rx="3"/>
+      <rect x="4" y="-6" width="8" height="14" rx="3"/>
+    </g>
+  </g>
+  <!-- artillery -->
+  <g>
+    <circle cx="142" cy="42" r="11" fill="url(#goryeo-cannon2-bronze)" stroke="#5c3918" stroke-width="2"/>
+    <circle cx="128" cy="32" r="8" fill="url(#goryeo-cannon2-bronze)" stroke="#5c3918" stroke-width="1.6"/>
+    <path d="M152 42h22" stroke="#5c3918" stroke-width="4" stroke-linecap="round"/>
+    <path d="M135 32l16-3" stroke="#5c3918" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <!-- shields -->
+  <g fill="#be4136" stroke="#431514" stroke-width="1.4">
+    <circle cx="60" cy="42" r="5.2"/>
+    <circle cx="132" cy="42" r="5.2"/>
+  </g>
+  <!-- oars -->
+  <g fill="#d1a164" stroke="#6a3d19" stroke-width="2.2">
+    <path d="M56 24l-18 -12 4 -6 26 12z"/>
+    <path d="M74 22l-18 -12 4 -6 26 12z"/>
+    <path d="M120 22l18 -12-4 -6-26 12z"/>
+    <path d="M138 24l18 -12-4 -6-26 12z"/>
+    <path d="M56 54l-18 12 4 6 26-12z"/>
+    <path d="M74 56l-18 12 4 6 26-12z"/>
+    <path d="M120 56l18 12-4 6-26-12z"/>
+    <path d="M138 54l18 12-4 6-26-12z"/>
+  </g>
 </svg>

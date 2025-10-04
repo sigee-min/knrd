@@ -1,19 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
-  <!-- Ballista raft top-down: log raft + ballista -->
-  <rect x="12" y="26" width="36" height="8" rx="2" fill="#a0723a" stroke="#4b321a" stroke-width="2"/>
-  <!-- Logs -->
-  <g stroke="#4b321a" stroke-width="1">
-    <line x1="16" y1="26" x2="16" y2="34"/>
-    <line x1="20" y1="26" x2="20" y2="34"/>
-    <line x1="24" y1="26" x2="24" y2="34"/>
-    <line x1="28" y1="26" x2="28" y2="34"/>
-    <line x1="32" y1="26" x2="32" y2="34"/>
-    <line x1="36" y1="26" x2="36" y2="34"/>
-    <line x1="40" y1="26" x2="40" y2="34"/>
-    <line x1="44" y1="26" x2="44" y2="34"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 80">
+  <defs>
+    <linearGradient id="ballista-log" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c58a4c"/>
+      <stop offset="1" stop-color="#845225"/>
+    </linearGradient>
+    <linearGradient id="ballista-frame" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d7be8f"/>
+      <stop offset="1" stop-color="#b08d5e"/>
+    </linearGradient>
+  </defs>
+  <!-- raft base -->
+  <rect x="16" y="18" width="144" height="44" rx="14" fill="url(#ballista-log)" stroke="#3f2917" stroke-width="4"/>
+  <g stroke="#5d3b1f" stroke-width="2.4" opacity="0.55">
+    <line x1="32" y1="20" x2="32" y2="60"/>
+    <line x1="48" y1="20" x2="48" y2="60"/>
+    <line x1="64" y1="20" x2="64" y2="60"/>
+    <line x1="80" y1="20" x2="80" y2="60"/>
+    <line x1="96" y1="20" x2="96" y2="60"/>
+    <line x1="112" y1="20" x2="112" y2="60"/>
+    <line x1="128" y1="20" x2="128" y2="60"/>
+    <line x1="144" y1="20" x2="144" y2="60"/>
   </g>
-  <!-- Ballista -->
-  <rect x="26" y="22" width="8" height="6" rx="1" fill="#c4a97a" stroke="#4b321a" stroke-width="1"/>
-  <polygon points="34,21 48,18 48,22 34,24" fill="#9f7b4e" stroke="#4b321a" stroke-width="1"/>
-  <line x1="36" y1="22" x2="46" y2="20.5" stroke="#5f3f1d" stroke-width="1.2"/>
+  <!-- reinforcement lashings -->
+  <g fill="#342215" opacity="0.85">
+    <rect x="22" y="18" width="10" height="44" rx="4"/>
+    <rect x="144" y="18" width="10" height="44" rx="4"/>
+    <rect x="82" y="16" width="12" height="48" rx="4" opacity="0.75"/>
+  </g>
+  <!-- ballista body -->
+  <g transform="translate(88 22)">
+    <rect x="-22" y="-6" width="44" height="32" rx="8" fill="url(#ballista-frame)" stroke="#6b4a1f" stroke-width="2"/>
+    <rect x="-18" y="-10" width="36" height="10" rx="4" fill="#b08d5e" stroke="#6b4a1f" stroke-width="2"/>
+    <rect x="-10" y="16" width="20" height="12" rx="4" fill="#7c5730" stroke="#3c2413" stroke-width="1.6"/>
+    <path d="M-18 -5l-30 -8 4 10 26 2z" fill="#9a6932" stroke="#3d2413" stroke-width="2"/>
+    <path d="M18 -5l30 -8-4 10-26 2z" fill="#9a6932" stroke="#3d2413" stroke-width="2"/>
+    <path d="M-6 6h12" stroke="#3d2413" stroke-width="3"/>
+    <path d="M-4 20h8" stroke="#26150c" stroke-width="2" opacity="0.7"/>
+  </g>
+  <!-- bolt quiver -->
+  <g transform="translate(132 24)">
+    <rect x="-8" y="-4" width="28" height="20" rx="6" fill="#68492a" stroke="#2f1d10" stroke-width="2"/>
+    <path d="M-4 -2l20 16" stroke="#23150c" stroke-width="2"/>
+    <path d="M4 -2l12 10" stroke="#23150c" stroke-width="2"/>
+  </g>
 </svg>

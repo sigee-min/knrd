@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 72">
+  <defs>
+    <linearGradient id="turtle-hull" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#4f3a23"/>
+      <stop offset="1" stop-color="#2b1c10"/>
+    </linearGradient>
+    <linearGradient id="turtle-shell" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#2d3f4d"/>
+      <stop offset="1" stop-color="#1a2833"/>
+    </linearGradient>
+  </defs>
+  <path d="M18 36c0-11 18-28 44-35l28-7 28 7c26 7 44 24 44 35s-18 28-44 35l-28 7-28-7c-26-7-44-24-44-35z" fill="url(#turtle-hull)" stroke="#160d08" stroke-width="2"/>
+  <path d="M44 36c0-8 12.6-19.2 46-24l2-0.2 2 0.2c33.4 4.8 46 16 46 24s-12.6 19.2-46 24l-2 0.2-2-0.2c-33.4-4.8-46-16-46-24z" fill="url(#turtle-shell)"/>
+  <path d="M68 18l22-4 22 4v36l-22 4-22-4z" fill="#1e2c38" stroke="#0f171f" stroke-width="2"/>
+  <path d="M68 24h44M68 32h44M68 40h44M80 18v40M92 16v44M104 18v40" stroke="#314657" stroke-width="2" opacity="0.75"/>
+  <circle cx="54" cy="28" r="4" fill="#d5e2ef"/>
+  <circle cx="126" cy="28" r="4" fill="#d5e2ef"/>
+  <circle cx="54" cy="44" r="4" fill="#d5e2ef"/>
+  <circle cx="126" cy="44" r="4" fill="#d5e2ef"/>
+  <path d="M36 24l-10-18h14z" fill="#8a5a32"/>
+  <path d="M144 24l10-18h-14z" fill="#8a5a32"/>
+</svg>

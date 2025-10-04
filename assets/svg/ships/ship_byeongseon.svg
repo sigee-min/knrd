@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 56">
+  <defs>
+    <linearGradient id="byeong-hull" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#394a5c"/>
+      <stop offset="1" stop-color="#1a2531"/>
+    </linearGradient>
+    <linearGradient id="byeong-deck" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#62758b"/>
+      <stop offset="1" stop-color="#485a70"/>
+    </linearGradient>
+  </defs>
+  <path d="M14 28c0-8 12.4-22 32-28L70 0l24 0c19.6 6 32 20 32 28s-12.4 22-32 28l-24 0-24 0c-19.6-6-32-20-32-28z" fill="url(#byeong-hull)" stroke="#0f1720" stroke-width="2"/>
+  <path d="M36 28c0-5.8 8.8-13.6 34-16l2-0.1 2 0.1c25.2 2.4 34 10.2 34 16s-8.8 13.6-34 16l-2 0.1-2-0.1c-25.2-2.4-34-10.2-34-16z" fill="url(#byeong-deck)"/>
+  <rect x="60" y="12" width="20" height="32" rx="6" fill="#273647"/>
+  <circle cx="50" cy="22" r="3" fill="#d0deed"/>
+  <circle cx="90" cy="22" r="3" fill="#d0deed"/>
+  <circle cx="50" cy="34" r="3" fill="#d0deed"/>
+  <circle cx="90" cy="34" r="3" fill="#d0deed"/>
+</svg>

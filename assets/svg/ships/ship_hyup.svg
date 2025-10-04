@@ -1,5 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
-  <!-- Hyup ship top-down -->
-  <polygon points="10,30 16,26 34,25 46,27 50,30 46,33 34,35 16,34" fill="#85572b" stroke="#3b2817" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="28" y="22" width="4" height="16" rx="1" fill="#cdb691" stroke="#6b5a3a" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 72">
+  <defs>
+    <linearGradient id="hyup-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ad7339"/>
+      <stop offset="1" stop-color="#6a3c1a"/>
+    </linearGradient>
+    <linearGradient id="hyup-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e0bb87"/>
+      <stop offset="1" stop-color="#bb915c"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 36c0-9.6 15.2-25.8 40-33.2l32-9.2 32 9.2c24.8 7.4 40 23.6 40 33.2s-15.2 25.8-40 33.2l-32 9.2-32-9.2C35.2 61.8 20 45.6 20 36z" fill="url(#hyup-hull)" stroke="#3a2212" stroke-width="3"/>
+  <path d="M42 36c0-7 11-15.6 36-19.6l12-2 12 2c25 4 36 12.6 36 19.6s-11 15.6-36 19.6l-12 2-12-2c-25-4-36-12.6-36-19.6z" fill="url(#hyup-deck)" stroke="#865326" stroke-width="1.5"/>
+  <g stroke="#865326" stroke-width="1.1" opacity="0.55">
+    <line x1="56" y1="18" x2="56" y2="58"/>
+    <line x1="72" y1="16" x2="72" y2="60"/>
+    <line x1="88" y1="16" x2="88" y2="60"/>
+    <line x1="104" y1="16" x2="104" y2="60"/>
+    <line x1="120" y1="18" x2="120" y2="58"/>
+  </g>
+  <!-- pavilion -->
+  <rect x="62" y="24" width="52" height="24" rx="10" fill="#cba87a" stroke="#6c4a27" stroke-width="1.6"/>
+  <g fill="#e7dec5" stroke="#6c5a3a" stroke-width="1">
+    <rect x="70" y="28" width="12" height="14" rx="4"/>
+    <rect x="96" y="28" width="12" height="14" rx="4"/>
+  </g>
+  <!-- command railings -->
+  <rect x="82" y="16" width="12" height="32" rx="5" fill="#273441" stroke="#101820" stroke-width="1.5"/>
+  <circle cx="88" cy="24" r="3.4" fill="#dce5ef"/>
+  <!-- oars -->
+  <g fill="#d0a061" stroke="#6a3d19" stroke-width="2.1">
+    <path d="M52 20l-18 -12 4 -6 26 12z"/>
+    <path d="M68 18l-18 -12 4 -6 26 12z"/>
+    <path d="M120 18l18 -12-4 -6-26 12z"/>
+    <path d="M136 20l18 -12-4 -6-26 12z"/>
+    <path d="M52 50l-18 12 4 6 26-12z"/>
+    <path d="M68 52l-18 12 4 6 26-12z"/>
+    <path d="M120 52l18 12-4 6-26-12z"/>
+    <path d="M136 50l18 12-4 6-26-12z"/>
+  </g>
+  <!-- banners -->
+  <rect x="86" y="8" width="4" height="16" rx="1.5" fill="#6f4524"/>
+  <path d="M90 10l-18 6 18 6z" fill="#be2f38" stroke="#5a2020" stroke-width="1.2"/>
 </svg>

@@ -45,7 +45,10 @@
             
           </div>
           <div id="wave-info" class="wave-card">
-            <p class="placeholder">웨이브 정보를 불러오는 중...</p>
+            <div id="wave-info-content">
+              <p class="placeholder">웨이브 정보를 불러오는 중...</p>
+            </div>
+            <button id="btn-wave-skip" class="wave-skip-btn" type="button" disabled>다음 라운드 (N)</button>
           </div>
         </div>
         <div class="hud-bottom">
@@ -242,7 +245,8 @@
           <p id="gameover-message">적 병력 포화!</p>
           <div id="gameover-stats" class="gameover-stats"></div>
           <div class="scene-actions gameover-actions">
-            <button id="btn-gameover-retry" class="scene-btn primary">다시 도전</button>
+            <button id="btn-gameover-continue" class="scene-btn primary hidden">무한 모드 계속</button>
+            <button id="btn-gameover-retry" class="scene-btn">다시 도전</button>
             <button id="btn-gameover-lobby" class="scene-btn">로비로</button>
           </div>
         </div>

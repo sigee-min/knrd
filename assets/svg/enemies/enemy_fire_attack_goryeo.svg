@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 60">
+  <defs>
+    <linearGradient id="enemy-goryeo-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a96e33"/>
+      <stop offset="1" stop-color="#5f3215"/>
+    </linearGradient>
+    <linearGradient id="enemy-goryeo-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d9b17c"/>
+      <stop offset="1" stop-color="#b08553"/>
+    </linearGradient>
+    <radialGradient id="enemy-goryeo-fire" cx="0.7" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#ffe8a6"/>
+      <stop offset="0.4" stop-color="#ffb347"/>
+      <stop offset="1" stop-color="#d74a1b"/>
+    </radialGradient>
+  </defs>
+  <path d="M18 30c0-7.8 12.8-20.4 32-27l30-8 30 8c19.2 6.6 32 19.2 32 27s-12.8 20.4-32 27l-30 8-30-8C30.8 50.4 18 37.8 18 30z" fill="url(#enemy-goryeo-hull)" stroke="#351d0f" stroke-width="3"/>
+  <path d="M36 30c0-5.2 8.4-11.8 24-15.4l22-4.6 22 4.6c15.6 3.6 24 10.2 24 15.4s-8.4 11.8-24 15.4l-22 4.6-22-4.6c-15.6-3.6-24-10.2-24-15.4z" fill="url(#enemy-goryeo-deck)" stroke="#72441d" stroke-width="1.4"/>
+  <g stroke="#72441d" stroke-width="1.1" opacity="0.55">
+    <line x1="52" y1="16" x2="52" y2="40"/>
+    <line x1="68" y1="14" x2="68" y2="42"/>
+    <line x1="84" y1="14" x2="84" y2="42"/>
+    <line x1="100" y1="14" x2="100" y2="42"/>
+    <line x1="116" y1="16" x2="116" y2="40"/>
+  </g>
+  <!-- fire jars -->
+  <g>
+    <circle cx="132" cy="30" r="10" fill="url(#enemy-goryeo-fire)"/>
+    <circle cx="118" cy="22" r="6" fill="url(#enemy-goryeo-fire)" opacity="0.85"/>
+    <circle cx="118" cy="38" r="6" fill="url(#enemy-goryeo-fire)" opacity="0.85"/>
+  </g>
+  <circle cx="132" cy="30" r="3.4" fill="#41150b"/>
+  <!-- oars -->
+  <g fill="#d2a061" stroke="#5f3617" stroke-width="2">
+    <path d="M52 18l-16 -12 4 -6 24 10z"/>
+    <path d="M68 16l-16 -12 4 -6 24 10z"/>
+    <path d="M96 16l16 -12-4 -6-24 10z"/>
+    <path d="M112 18l16 -12-4 -6-24 10z"/>
+    <path d="M52 40l-16 12 4 6 24-10z"/>
+    <path d="M68 42l-16 12 4 6 24-10z"/>
+    <path d="M96 42l16 12-4 6-24-10z"/>
+    <path d="M112 40l16 12-4 6-24-10z"/>
+  </g>
+  <!-- prow ornament -->
+  <path d="M140 29c7.4 1.8 12.4 4.8 15 9.2-4.8 4.2-9.6 4.8-16 3z" fill="#bfa740" stroke="#594e1c" stroke-width="1.6"/>
+</svg>

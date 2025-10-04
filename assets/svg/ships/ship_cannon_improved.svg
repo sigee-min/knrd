@@ -1,10 +1,64 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 64">
-  <!-- Improved cannon ship top-down -->
-  <polygon points="10,32 16,26 34,24 48,26 58,32 48,38 34,40 16,38" fill="#7f4e24" stroke="#382614" stroke-width="2" stroke-linejoin="round"/>
-  <!-- Triple mounts -->
-  <circle cx="26" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
-  <circle cx="36" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
-  <circle cx="46" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
-  <!-- Bow casemate -->
-  <rect x="52" y="29" width="6" height="6" rx="1" fill="#975728" stroke="#382614" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 86">
+  <defs>
+    <linearGradient id="cannon-imp-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#be8244"/>
+      <stop offset="1" stop-color="#7a471d"/>
+    </linearGradient>
+    <linearGradient id="cannon-imp-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#efd39f"/>
+      <stop offset="1" stop-color="#cda26c"/>
+    </linearGradient>
+    <linearGradient id="cannon-imp-casemate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6c7784"/>
+      <stop offset="1" stop-color="#394553"/>
+    </linearGradient>
+    <linearGradient id="cannon-imp-bronze" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ddb151"/>
+      <stop offset="1" stop-color="#946020"/>
+    </linearGradient>
+  </defs>
+  <path d="M18 43c0-10.8 17-28.8 44-37.4l34-9.6 34 9.6c27 8.6 44 26.6 44 37.4s-17 28.8-44 37.4l-34 9.6-34-9.6C35 71.8 18 53.8 18 43z" fill="url(#cannon-imp-hull)" stroke="#3d2211" stroke-width="3"/>
+  <path d="M44 43c0-7.6 12-16.8 38-21.6l14-2.4 14 2.4c26 4.8 38 14 38 21.6s-12 16.8-38 21.6l-14 2.4-14-2.4c-26-4.8-38-14-38-21.6z" fill="url(#cannon-imp-deck)" stroke="#925829" stroke-width="1.6"/>
+  <g stroke="#925829" stroke-width="1.2" opacity="0.55">
+    <line x1="60" y1="20" x2="60" y2="66"/>
+    <line x1="78" y1="18" x2="78" y2="68"/>
+    <line x1="96" y1="18" x2="96" y2="68"/>
+    <line x1="114" y1="18" x2="114" y2="68"/>
+    <line x1="132" y1="20" x2="132" y2="66"/>
+  </g>
+  <!-- armor casemate -->
+  <g transform="translate(96 28)">
+    <rect x="-24" y="-10" width="48" height="40" rx="14" fill="url(#cannon-imp-casemate)" stroke="#1e262f" stroke-width="2.4"/>
+    <rect x="-18" y="-16" width="36" height="12" rx="6" fill="#828f9c" stroke="#1e262f" stroke-width="2"/>
+    <rect x="-14" y="16" width="28" height="12" rx="6" fill="#2d3742" stroke="#0f1419" stroke-width="2"/>
+    <g fill="#dce5ef" stroke="#1a222b" stroke-width="1.4">
+      <rect x="-10" y="-4" width="8" height="14" rx="3"/>
+      <rect x="2" y="-4" width="8" height="14" rx="3"/>
+    </g>
+  </g>
+  <!-- heavy guns -->
+  <g>
+    <circle cx="148" cy="43" r="11" fill="url(#cannon-imp-bronze)" stroke="#5c3918" stroke-width="2"/>
+    <circle cx="134" cy="32" r="8" fill="url(#cannon-imp-bronze)" stroke="#5c3918" stroke-width="1.6"/>
+    <circle cx="134" cy="54" r="8" fill="url(#cannon-imp-bronze)" stroke="#5c3918" stroke-width="1.6"/>
+    <path d="M158 43h24" stroke="#5c3918" stroke-width="4" stroke-linecap="round"/>
+    <path d="M142 32l16-3" stroke="#5c3918" stroke-width="3" stroke-linecap="round"/>
+    <path d="M142 54l16 3" stroke="#5c3918" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <!-- shields -->
+  <g fill="#be3f35" stroke="#431414" stroke-width="1.4">
+    <circle cx="58" cy="43" r="5"/>
+    <circle cx="126" cy="43" r="5"/>
+  </g>
+  <!-- oars -->
+  <g fill="#d3a164" stroke="#6a3d19" stroke-width="2.2">
+    <path d="M54 24l-18 -12 4 -6 26 12z"/>
+    <path d="M72 22l-18 -12 4 -6 26 12z"/>
+    <path d="M118 22l18 -12-4 -6-26 12z"/>
+    <path d="M136 24l18 -12-4 -6-26 12z"/>
+    <path d="M54 54l-18 12 4 6 26-12z"/>
+    <path d="M72 56l-18 12 4 6 26-12z"/>
+    <path d="M118 56l18 12-4 6-26-12z"/>
+    <path d="M136 54l18 12-4 6-26-12z"/>
+  </g>
 </svg>

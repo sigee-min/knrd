@@ -1,3 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 48">
-  <polygon points="6,24 16,18 36,18 46,24 36,30 16,30" fill="#5d7d3d" stroke="#2e3f1f" stroke-width="2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 62">
+  <defs>
+    <linearGradient id="sekibune-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#60783a"/>
+      <stop offset="1" stop-color="#36491f"/>
+    </linearGradient>
+    <linearGradient id="sekibune-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c9b482"/>
+      <stop offset="1" stop-color="#9f8254"/>
+    </linearGradient>
+  </defs>
+  <path d="M18 31c0-7.8 13.2-20.4 34-26.8l36-10.2 36 10.2c20.8 6.4 34 19 34 26.8s-13.2 20.4-34 26.8l-36 10.2-36-10.2C31.2 51.4 18 38.8 18 31z" fill="url(#sekibune-hull)" stroke="#1f2713" stroke-width="3"/>
+  <path d="M36 31c0-5.2 8.4-11.8 24-15.4l24-5.2 24 5.2c15.6 3.6 24 10.2 24 15.4s-8.4 11.8-24 15.4l-24 5.2-24-5.2c-15.6-3.6-24-10.2-24-15.4z" fill="url(#sekibune-deck)" stroke="#5f4624" stroke-width="1.3"/>
+  <g stroke="#5f4624" stroke-width="1.1" opacity="0.5">
+    <line x1="52" y1="18" x2="52" y2="44"/>
+    <line x1="70" y1="16" x2="70" y2="46"/>
+    <line x1="88" y1="16" x2="88" y2="46"/>
+    <line x1="106" y1="16" x2="106" y2="46"/>
+    <line x1="124" y1="18" x2="124" y2="44"/>
+  </g>
+  <!-- tower block -->
+  <rect x="76" y="14" width="24" height="34" rx="8" fill="#34404c" stroke="#151c23" stroke-width="1.6"/>
+  <g fill="#c8a060" stroke="#5b391a" stroke-width="2.1">
+    <path d="M50 18l-16 -12 4 -6 22 10z"/>
+    <path d="M66 16l-16 -12 4 -6 22 10z"/>
+    <path d="M110 16l16 -12-4 -6-22 10z"/>
+    <path d="M126 18l16 -12-4 -6-22 10z"/>
+    <path d="M50 44l-16 12 4 6 22-10z"/>
+    <path d="M66 46l-16 12 4 6 22-10z"/>
+    <path d="M110 46l16 12-4 6-22-10z"/>
+    <path d="M126 44l16 12-4 6-22-10z"/>
+  </g>
+
+  <!-- oars -->
+  <g fill="#c8a060" stroke="#5b391a" stroke-width="2.1">
+    <path d="M50 44l-16 12 4 6 22-10z"/>
+    <path d="M66 46l-16 12 4 6 22-10z"/>
+    <path d="M110 46l16 12-4 6-22-10z"/>
+    <path d="M126 44l16 12-4 6-22-10z"/>
+  </g>
+  <!-- crest -->
+  <path d="M142 31c8 1.8 13.2 4.8 16 9.6-5 4.2-10 5-16.6 3.2z" fill="#b5a73f" stroke="#4b411e" stroke-width="1.6"/>
 </svg>

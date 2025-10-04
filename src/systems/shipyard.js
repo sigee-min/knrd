@@ -6,7 +6,7 @@ const SHIP_SIZE_BY_RARITY = {
   unique: 4,
   legendary: 6,
   mythic: 8,
-  primordial: 8,
+  primordial: 10,
 };
 
 function getShipSize(rarity) {

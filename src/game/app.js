@@ -6,7 +6,9 @@ import {
   onCommandClick,
   onCommandKeyDown,
   onCommandKeyUp,
+  handleCommand,
 } from './commands.js';
+import { preloadCoreAssets } from './assetLoader.js';
 import { updateSelectionInfo } from './selection.js';
 import { clamp } from './combat.js';
 import { setWaveStatus } from './status.js';
@@ -38,6 +40,7 @@ import {
   handleSpawning,
   endWave,
   summonBossByKey,
+  startWave,
 } from '../core/gameplay/loop.js';
 import { isFullscreen, enterFullscreen, exitFullscreen, toggleFullscreen } from '../core/fullscreen.js';
 import {
@@ -164,6 +167,14 @@ function setupEventListeners() {
     elements.commandGrid.addEventListener('contextmenu', (event) => event.preventDefault());
   }
 
+  const skipButton = elements.waveSkipButton;
+  if (skipButton) {
+    skipButton.addEventListener('click', () => {
+      if (skipButton.disabled) return;
+      handleCommand('skip');
+    });
+  }
+
   if (elements.commandPanelTitle) {
     elements.commandPanelTitle.addEventListener('click', () => {
       playSound('ui_click', { volume: 0.6, throttleMs: 80 });
@@ -198,6 +209,7 @@ function setupEventListeners() {
     updateDifficultyUI,
     hideGameOverOverlay,
     setWaveStatus,
+    continueInfiniteMode,
   });
   wireSettingInputs({ updateSettingLabels, applySettingsFromUI });
   updateDifficultyUI();
@@ -223,6 +235,23 @@ function handleCameraKey(code, isDown) {
   handleCameraKeyInternal(code, isDown);
   updateCameraOverlay();
   return true;
+}
+
+function continueInfiniteMode() {
+  if (!GAME_STATE.awaitingInfiniteChoice) return;
+  const nextRound = GAME_STATE.pendingInfiniteRound ?? (GAME_STATE.round + 1);
+  GAME_STATE.infiniteMode = true;
+  GAME_STATE.awaitingInfiniteChoice = false;
+  GAME_STATE.pendingInfiniteRound = null;
+  GAME_STATE.scene = 'game';
+  GAME_STATE.sceneReturn = 'game';
+  GAME_STATE.running = true;
+  GAME_STATE.waveActive = false;
+  GAME_STATE.round = Math.max(1, nextRound);
+  startWave();
+  renderCommandPanel();
+  updateHUD();
+  setWaveStatus('무한 모드 돌입! 끝까지 버텨보세요.', { duration: 3200 });
 }
 
 function updateCameraKeyboard(delta) {
@@ -302,7 +331,7 @@ function resizeCanvas() {
 
 
 
-function initializeGame() {
+async function initializeGame() {
   canvas = document.getElementById('game-canvas');
   if (!canvas) throw new Error('Game canvas not found');
   ctx = canvas.getContext('2d');
@@ -320,6 +349,15 @@ function initializeGame() {
   configureWorldGeometry();
   applyCameraSettings();
   setupEventListeners();
+
+  setWaveStatus('필수 에셋 로딩 중...');
+  try {
+    await preloadCoreAssets();
+    setWaveStatus('에셋 로딩 완료', { duration: 1200 });
+  } catch (error) {
+    console.error('Asset preload failed', error);
+    setWaveStatus('에셋 로딩 실패 · 계속 진행합니다', { duration: 2000 });
+  }
 
   void initYouTubeMiniPlayer({
     containerId: 'yt-player',

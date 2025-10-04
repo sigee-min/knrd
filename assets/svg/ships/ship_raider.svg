@@ -1,6 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
-  <!-- Raider top-down -->
-  <polygon points="8,30 18,24 36,23 48,26 52,30 48,34 36,37 18,36" fill="#6e4030" stroke="#2f1f17" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="24" y="24" width="10" height="12" rx="1" fill="#9b6850" stroke="#2f1f17" stroke-width="1"/>
-  <line x1="46" y1="30" x2="51" y2="30" stroke="#2f1f17" stroke-width="2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 70">
+  <defs>
+    <linearGradient id="raider-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#45617e"/>
+      <stop offset="1" stop-color="#1f2f40"/>
+    </linearGradient>
+    <linearGradient id="raider-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d7b27a"/>
+      <stop offset="1" stop-color="#ae8651"/>
+    </linearGradient>
+  </defs>
+  <path d="M18 35c0-8.8 14.4-23.4 36-30l32-9 32 9c21.6 6.6 36 21.2 36 30s-14.4 23.4-36 30l-32 9-32-9c-21.6-6.6-36-21.2-36-30z" fill="url(#raider-hull)" stroke="#162030" stroke-width="3"/>
+  <path d="M38 35c0-6 9.6-13.6 30-17.4l18-3 18 3c20.4 3.8 30 11.4 30 17.4s-9.6 13.6-30 17.4l-18 3-18-3c-20.4-3.8-30-11.4-30-17.4z" fill="url(#raider-deck)" stroke="#7a4f23" stroke-width="1.4"/>
+  <!-- light deckhouse -->
+  <rect x="66" y="22" width="44" height="24" rx="9" fill="#c9ad7c" stroke="#6d4823" stroke-width="1.6"/>
+  <g fill="#ebe1ca" stroke="#6c5941" stroke-width="1">
+    <rect x="72" y="26" width="12" height="12" rx="3"/>
+    <rect x="96" y="26" width="12" height="12" rx="3"/>
+  </g>
+  <!-- swivel gun -->
+  <g transform="translate(120 34)">
+    <circle r="6" fill="#dce2ea" stroke="#2d3741" stroke-width="1.4"/>
+    <path d="M0 0h16" stroke="#2d3741" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <!-- oars -->
+  <g fill="#d2a061" stroke="#6a3d19" stroke-width="2">
+    <path d="M52 20l-16 -12 4 -6 24 10z"/>
+    <path d="M68 18l-16 -12 4 -6 24 10z"/>
+    <path d="M108 18l16 -12-4 -6-24 10z"/>
+    <path d="M124 20l16 -12-4 -6-24 10z"/>
+    <path d="M52 46l-16 12 4 6 24-10z"/>
+    <path d="M68 48l-16 12 4 6 24-10z"/>
+    <path d="M108 48l16 12-4 6-24-10z"/>
+    <path d="M124 46l16 12-4 6-24-10z"/>
+  </g>
+  <!-- stern banner -->
+  <rect x="88" y="8" width="4" height="16" rx="1.5" fill="#6f4524"/>
+  <path d="M92 10l-18 6 18 6z" fill="#1f4f9a" stroke="#1a3160" stroke-width="1.2"/>
 </svg>

@@ -1,10 +1,53 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Early cannon ship top-down -->
-  <polygon points="12,31 16,27 34,26 48,28 54,32 48,36 34,38 16,37 12,33" fill="#80512a" stroke="#3a2817" stroke-width="2" stroke-linejoin="round"/>
-  <!-- Gun mounts -->
-  <circle cx="26" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
-  <circle cx="34" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
-  <circle cx="42" cy="32" r="2.5" fill="#666" stroke="#2c2c2c" stroke-width="1"/>
-  <!-- Bow chaser -->
-  <line x1="50" y1="32" x2="56" y2="32" stroke="#2c2c2c" stroke-width="2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188 80">
+  <defs>
+    <linearGradient id="goryeo-early-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b2783d"/>
+      <stop offset="1" stop-color="#6e431c"/>
+    </linearGradient>
+    <linearGradient id="goryeo-early-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e1c18f"/>
+      <stop offset="1" stop-color="#b68e59"/>
+    </linearGradient>
+    <linearGradient id="cannon-bronze" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d7a64a"/>
+      <stop offset="1" stop-color="#8d5c1e"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 40c0-10.4 16-27.8 42-35.8l32-9.2 32 9.2c26 8 42 25.4 42 35.8s-16 27.8-42 35.8l-32 9.2-32-9.2c-26-8-42-25.4-42-35.8z" fill="url(#goryeo-early-hull)" stroke="#3b2211" stroke-width="3"/>
+  <path d="M44 40c0-7.2 11.4-16 38-20.8l12-2 12 2c26.6 4.8 38 13.6 38 20.8s-11.4 16-38 20.8l-12 2-12-2c-26.6-4.8-38-13.6-38-20.8z" fill="url(#goryeo-early-deck)" stroke="#8a5829" stroke-width="1.6"/>
+  <g stroke="#8a5829" stroke-width="1.2" opacity="0.5">
+    <line x1="58" y1="20" x2="58" y2="60"/>
+    <line x1="74" y1="18" x2="74" y2="62"/>
+    <line x1="90" y1="18" x2="90" y2="62"/>
+    <line x1="106" y1="18" x2="106" y2="62"/>
+    <line x1="122" y1="20" x2="122" y2="60"/>
+  </g>
+  <!-- casemate with cannon -->
+  <g transform="translate(94 26)">
+    <rect x="-22" y="-6" width="44" height="30" rx="10" fill="#404d58" stroke="#1b232c" stroke-width="2.2"/>
+    <rect x="-18" y="-12" width="36" height="10" rx="4" fill="#57626f" stroke="#1b232c" stroke-width="1.8"/>
+    <rect x="-14" y="16" width="28" height="10" rx="4" fill="#2b343f" stroke="#090c10" stroke-width="1.8"/>
+    <circle cx="-8" cy="2" r="4" fill="#ccd7e2"/>
+    <circle cx="8" cy="2" r="4" fill="#ccd7e2"/>
+  </g>
+  <g>
+    <circle cx="140" cy="40" r="10" fill="url(#cannon-bronze)" stroke="#5c3918" stroke-width="2"/>
+    <path d="M150 40h22" stroke="#5c3918" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <!-- shields -->
+  <g fill="#ba4035" stroke="#421514" stroke-width="1.4">
+    <circle cx="60" cy="40" r="5"/>
+    <circle cx="128" cy="40" r="5"/>
+  </g>
+  <!-- oars -->
+  <g fill="#cf9f60" stroke="#6a3d19" stroke-width="2.2">
+    <path d="M54 24l-18 -12 4 -6 26 12z"/>
+    <path d=\"M70 22l-18 -12 4 -6 26 12z\"/>
+    <path d="M118 22l18 -12-4 -6-26 12z"/>
+    <path d="M134 24l18 -12-4 -6-26 12z"/>
+    <path d="M54 52l-18 12 4 6 26-12z"/>
+    <path d="M70 54l-18 12 4 6 26-12z"/>
+    <path d="M118 54l18 12-4 6-26-12z"/>
+    <path d="M134 52l18 12-4 6-26-12z"/>
+  </g>
 </svg>

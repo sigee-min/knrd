@@ -1,6 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Goryeo fireship top-down -->
-  <polygon points="12,31 16,27 34,26 48,28 54,32 48,36 34,38 16,37 12,33" fill="#8a5a2b" stroke="#3e2a16" stroke-width="2" stroke-linejoin="round"/>
-  <!-- Fire marker at bow -->
-  <circle cx="50" cy="32" r="3" fill="#e25822"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188 78">
+  <defs>
+    <linearGradient id="goryeo-fire-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b27234"/>
+      <stop offset="1" stop-color="#6a3a18"/>
+    </linearGradient>
+    <linearGradient id="goryeo-fire-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e5bd88"/>
+      <stop offset="1" stop-color="#bf9359"/>
+    </linearGradient>
+    <radialGradient id="goryeo-fire-jar" cx="0.7" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#ffe8a3"/>
+      <stop offset="0.4" stop-color="#ffb347"/>
+      <stop offset="1" stop-color="#d94c1c"/>
+    </radialGradient>
+  </defs>
+  <path d="M20 38c0-9.4 15.2-25 40-32.2l34-10.2 34 10.2c24.8 7.2 40 22.8 40 32.2s-15.2 25-40 32.2l-34 10.2-34-10.2C35.2 63 20 47.4 20 38z" fill="url(#goryeo-fire-hull)" stroke="#3c2010" stroke-width="3"/>
+  <path d="M44 38c0-7 11.4-15.4 36-19.4l14-2.4 14 2.4c24.6 4 36 12.4 36 19.4s-11.4 15.4-36 19.4l-14 2.4-14-2.4c-24.6-4-36-12.4-36-19.4z" fill="url(#goryeo-fire-deck)" stroke="#875224" stroke-width="1.6"/>
+  <g stroke="#875224" stroke-width="1.2" opacity="0.5">
+    <line x1="60" y1="18" x2="60" y2="58"/>
+    <line x1="78" y1="16" x2="78" y2="60"/>
+    <line x1="96" y1="16" x2="96" y2="60"/>
+    <line x1="114" y1="16" x2="114" y2="60"/>
+    <line x1="132" y1="18" x2="132" y2="58"/>
+  </g>
+  <!-- incendiary racks -->
+  <g>
+    <circle cx="144" cy="38" r="12" fill="url(#goryeo-fire-jar)"/>
+    <circle cx="128" cy="28" r="6" fill="url(#goryeo-fire-jar)" opacity="0.8"/>
+    <circle cx="128" cy="48" r="6" fill="url(#goryeo-fire-jar)" opacity="0.8"/>
+    <circle cx="112" cy="32" r="5" fill="url(#goryeo-fire-jar)" opacity="0.65"/>
+    <circle cx="112" cy="44" r="5" fill="url(#goryeo-fire-jar)" opacity="0.65"/>
+  </g>
+  <circle cx="144" cy="38" r="3.4" fill="#41150b"/>
+  <!-- command platform -->
+  <rect x="84" y="18" width="20" height="40" rx="7" fill="#253240" stroke="#101821" stroke-width="1.6"/>
+  <circle cx="94" cy="26" r="3.6" fill="#dce5ee"/>
+  <!-- oars -->
+  <g fill="#d1a262" stroke="#6a3d1a" stroke-width="2.2">
+    <path d="M58 22l-18 -12 4 -6 26 12z"/>
+    <path d="M74 20l-18 -12 4 -6 26 12z"/>
+    <path d="M122 20l18 -12-4 -6-26 12z"/>
+    <path d="M138 22l18 -12-4 -6-26 12z"/>
+    <path d="M58 52l-18 12 4 6 26-12z"/>
+    <path d="M74 54l-18 12 4 6 26-12z"/>
+    <path d="M122 54l18 12-4 6-26-12z"/>
+    <path d="M138 52l18 12-4 6-26-12z"/>
+  </g>
+  <!-- side shields -->
+  <g fill="#be3f35" stroke="#431413" stroke-width="1.4">
+    <circle cx="58" cy="38" r="4.8"/>
+    <circle cx="130" cy="38" r="4.8"/>
+  </g>
 </svg>

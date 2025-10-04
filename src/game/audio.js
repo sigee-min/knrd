@@ -231,10 +231,24 @@ async function playSound(key, opts = {}) {
   }
 }
 
+async function preloadAudioAssets(keys) {
+  const list = Array.isArray(keys) && keys.length > 0 ? keys : Object.keys(SOUND_FILES);
+  const results = [];
+  for (const key of list) {
+    try {
+      const asset = await loadBuffer(key);
+      results.push({ key, status: asset ? 'loaded' : 'missing' });
+    } catch (error) {
+      results.push({ key, status: 'error', error });
+    }
+  }
+  return results;
+}
+
 function setSfxVolumePercent(percent) {
   const p = Math.max(0, Math.min(100, Number(percent) || 0));
   sfxVolumeScalar = p / 100;
   if (masterGain) masterGain.gain.value = CATEGORY_GAIN.master * sfxVolumeScalar;
 }
 
-export { initAudio, playSound, setSfxVolumePercent };
+export { initAudio, playSound, setSfxVolumePercent, preloadAudioAssets };

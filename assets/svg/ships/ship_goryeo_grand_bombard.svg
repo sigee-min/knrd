@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 90">
+  <defs>
+    <linearGradient id="grand-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bb7d41"/>
+      <stop offset="1" stop-color="#73441c"/>
+    </linearGradient>
+    <linearGradient id="grand-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#eccb99"/>
+      <stop offset="1" stop-color="#c69a63"/>
+    </linearGradient>
+    <linearGradient id="grand-tower" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#677381"/>
+      <stop offset="1" stop-color="#3a4654"/>
+    </linearGradient>
+    <linearGradient id="grand-bronze" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ddb050"/>
+      <stop offset="1" stop-color="#915d1c"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 45c0-11.4 17.6-30.2 46-39l34-10 34 10c28.4 8.8 46 27.6 46 39s-17.6 30.2-46 39l-34 10-34-10C37.6 75.2 20 56.4 20 45z" fill="url(#grand-hull)" stroke="#3d2312" stroke-width="3"/>
+  <path d="M46 45c0-8 12.4-18 40-23.4l12-2.2 12 2.2c27.6 5.4 40 15.4 40 23.4s-12.4 18-40 23.4l-12 2.2-12-2.2c-27.6-5.4-40-15.4-40-23.4z" fill="url(#grand-deck)" stroke="#8f5a2a" stroke-width="1.6"/>
+  <g stroke="#8f5a2a" stroke-width="1.2" opacity="0.55">
+    <line x1="64" y1="22" x2="64" y2="68"/>
+    <line x1="84" y1="20" x2="84" y2="70"/>
+    <line x1="104" y1="20" x2="104" y2="70"/>
+    <line x1="124" y1="20" x2="124" y2="70"/>
+    <line x1="144" y1="22" x2="144" y2="68"/>
+  </g>
+  <!-- central bombard tower -->
+  <g transform="translate(104 30)">
+    <rect x="-26" y="-12" width="52" height="48" rx="16" fill="url(#grand-tower)" stroke="#1c242c" stroke-width="2.6"/>
+    <rect x="-20" y="-18" width="40" height="12" rx="6" fill="#8895a2" stroke="#1c242c" stroke-width="2"/>
+    <rect x="-16" y="22" width="32" height="12" rx="6" fill="#313b46" stroke="#10161c" stroke-width="2"/>
+    <g fill="#dbe4ef" stroke="#1a222b" stroke-width="1.6">
+      <rect x="-12" y="-4" width="8" height="14" rx="3"/>
+      <rect x="4" y="-4" width="8" height="14" rx="3"/>
+    </g>
+  </g>
+  <!-- bombards -->
+  <g>
+    <circle cx="152" cy="45" r="12" fill="url(#grand-bronze)" stroke="#5c3918" stroke-width="2"/>
+    <circle cx="134" cy="32" r="9" fill="url(#grand-bronze)" stroke="#5c3918" stroke-width="1.8"/>
+    <circle cx="134" cy="58" r="9" fill="url(#grand-bronze)" stroke="#5c3918" stroke-width="1.8"/>
+    <path d="M164 45h24" stroke="#5c3918" stroke-width="4.2" stroke-linecap="round"/>
+    <path d="M142 32l16-3" stroke="#5c3918" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M142 58l16 3" stroke="#5c3918" stroke-width="3.2" stroke-linecap="round"/>
+  </g>
+  <!-- side shields -->
+  <g fill="#bf4236" stroke="#441514" stroke-width="1.4">
+    <circle cx="64" cy="45" r="5.4"/>
+    <circle cx="140" cy="45" r="5.4"/>
+  </g>
+  <!-- oars -->
+  <g fill="#d3a667" stroke="#6a3d19" stroke-width="2.3">
+    <path d="M58 24l-20 -12 4 -6 28 10z"/>
+    <path d="M76 22l-20 -12 4 -6 28 10z"/>
+    <path d="M124 22l20 -12-4 -6-28 10z"/>
+    <path d="M142 24l20 -12-4 -6-28 10z"/>
+    <path d="M58 56l-20 12 4 6 28-10z"/>
+    <path d="M76 58l-20 12 4 6 28-10z"/>
+    <path d="M124 58l20 12-4 6-28-10z"/>
+    <path d="M142 56l20 12-4 6-28-10z"/>
+  </g>
+</svg>

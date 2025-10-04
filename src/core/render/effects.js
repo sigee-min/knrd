@@ -2,12 +2,12 @@ import { GAME_STATE } from '../../game/globals.js';
 import { getProjectileStyle } from '../../game/projectileStyles.js';
 
 const RARITY_COLOR = {
-  common: '#8aa0b8',
-  rare: '#5aa1e3',
-  unique: '#9b59b6',
-  legendary: '#f39c12',
-  mythic: '#e74c3c',
-  primordial: '#2ecc71',
+  common: '#6f8fd6',
+  rare: '#2f83ff',
+  unique: '#b548ff',
+  legendary: '#ff8f1f',
+  mythic: '#ff5036',
+  primordial: '#21f7ba',
 };
 
 const RARITY_FLOOR_STYLES = {
@@ -16,7 +16,7 @@ const RARITY_FLOOR_STYLES = {
   unique: { color: '#b548ff', alpha: 0.54, radius: 22, sparkle: 8, sparkleSize: 1.16, sparkleAlpha: 1.42, pulse: 0.03 },
   legendary: { color: '#ff8f1f', alpha: 0.6, radius: 24, sparkle: 10, sparkleSize: 1.22, sparkleAlpha: 1.48, pulse: 0.036 },
   mythic: { color: '#ff5036', alpha: 0.66, radius: 26, sparkle: 12, sparkleSize: 1.28, sparkleAlpha: 1.54, pulse: 0.042 },
-  primordial: { color: '#28d88c', alpha: 0.7, radius: 28, sparkle: 13, sparkleSize: 1.32, sparkleAlpha: 1.6, pulse: 0.048 },
+  primordial: { color: '#21f7ba', alpha: 0.74, radius: 30, sparkle: 14, sparkleSize: 1.36, sparkleAlpha: 1.62, pulse: 0.05 },
 };
 
 const WEAPON_DAMAGE_COLORS = {

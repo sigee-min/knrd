@@ -7,18 +7,35 @@ const BOSS_SPRITES = {
   boss_missile_leader: { asset: 'assets/svg/bosses/boss_modern.svg', size: 72 },
 };
 
+function primeBossSpriteAsset(asset) {
+  if (!asset || typeof Image === 'undefined') return null;
+  let img = BOSS_SPRITE_CACHE.get(asset);
+  if (!img) {
+    img = new Image();
+    img.src = asset;
+    BOSS_SPRITE_CACHE.set(asset, img);
+  }
+  return img;
+}
+
+function getAllBossSpriteAssets() {
+  const assets = new Set();
+  Object.values(BOSS_SPRITES).forEach((entry) => {
+    if (entry?.asset) assets.add(entry.asset);
+  });
+  return Array.from(assets);
+}
+
 function getBossSprite(enemy) {
   const key = enemy.bossKey || 'boss_ancient_galley';
   const entry = BOSS_SPRITES[key] || null;
   if (!entry) return { image: null, size: enemy.size || 48 };
   let img = BOSS_SPRITE_CACHE.get(entry.asset);
-  if (!img && typeof Image !== 'undefined') {
-    img = new Image();
-    img.src = entry.asset;
-    BOSS_SPRITE_CACHE.set(entry.asset, img);
+  if (!img) {
+    img = primeBossSpriteAsset(entry.asset);
   }
   return { image: img, size: entry.size };
 }
 
-export { getBossSprite };
+export { getBossSprite, getAllBossSpriteAssets, primeBossSpriteAsset };
 

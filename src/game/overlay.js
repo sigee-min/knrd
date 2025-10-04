@@ -2,9 +2,14 @@ import { elements } from '../ui/elements.js';
 import { GAME_STATE } from './globals.js';
 import { getUsedShipyardCapacity, getTotalShipyardCapacity } from '../systems/shipyard.js';
 
-function showGameOverOverlay(reason, summary) {
+function showGameOverOverlay(reason, summary = {}) {
   if (!elements.gameOverOverlay) return;
   elements.gameOverOverlay.classList.remove('hidden');
+  elements.gameOverOverlay.dataset.mode = summary?.mode || '';
+  const showContinue = !!summary?.showContinue;
+  const hideRetry = !!summary?.hideRetry;
+  const hideLobby = !!summary?.hideLobby;
+  const stats = Array.isArray(summary?.stats) ? summary.stats : [];
   if (elements.gameOverTitle) {
     elements.gameOverTitle.textContent = summary?.title ?? '방어 실패';
   }
@@ -12,19 +17,26 @@ function showGameOverOverlay(reason, summary) {
     elements.gameOverMessage.textContent = reason || summary?.message || '방어 실패';
   }
   if (elements.gameOverStats) {
-    elements.gameOverStats.innerHTML = (summary?.stats || [])
+    elements.gameOverStats.innerHTML = stats
       .map((stat) => `<div class="stat-row"><span>${stat.label}</span><strong>${stat.value}</strong></div>`)
       .join('');
   }
+  elements.gameOverContinue?.classList.toggle('hidden', !showContinue);
+  elements.gameOverRetry?.classList.toggle('hidden', hideRetry);
+  elements.gameOverLobby?.classList.toggle('hidden', hideLobby);
 }
 
 function hideGameOverOverlay() {
   if (elements.gameOverOverlay) {
     elements.gameOverOverlay.classList.add('hidden');
+    delete elements.gameOverOverlay.dataset.mode;
   }
   if (elements.gameOverStats) {
     elements.gameOverStats.innerHTML = '';
   }
+  elements.gameOverContinue?.classList.add('hidden');
+  elements.gameOverRetry?.classList.remove('hidden');
+  elements.gameOverLobby?.classList.remove('hidden');
 }
 
 function isGameOverOverlayVisible() {

@@ -1,18 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Ballista ship top-down -->
-  <polygon points="12,31 16,27 34,26 48,28 54,32 48,36 34,38 16,37 12,33" fill="#7e5126" stroke="#3b2917" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="27" y="26" width="10" height="12" rx="1" fill="#c4a97a" stroke="#3b2917" stroke-width="1"/>
-  <!-- Ballista bed and limbs -->
-  <polygon points="37,24 50,22 50,26 37,28" fill="#9f7b4e" stroke="#3b2917" stroke-width="1"/>
-  <g stroke="#5f3f1d" stroke-width="1.2">
-    <line x1="39" y1="25" x2="49" y2="23.5"/>
-    <line x1="39" y1="26.2" x2="49" y2="24.7"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 184 76">
+  <defs>
+    <linearGradient id="ballista-hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ae7336"/>
+      <stop offset="1" stop-color="#6b3f1c"/>
+    </linearGradient>
+    <linearGradient id="ballista-deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e1bf8e"/>
+      <stop offset="1" stop-color="#b58a56"/>
+    </linearGradient>
+    <linearGradient id="ballista-frame" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d5b07c"/>
+      <stop offset="1" stop-color="#a17a49"/>
+    </linearGradient>
+  </defs>
+  <!-- hull -->
+  <path d="M18 38c0-9.6 15.2-25.8 40-33.2l34-9.8 34 9.8c24.8 7.4 40 23.6 40 33.2s-15.2 25.8-40 33.2l-34 9.8-34-9.8C33.2 63.8 18 47.6 18 38z" fill="url(#ballista-hull)" stroke="#3a2212" stroke-width="3"/>
+  <!-- deck -->
+  <path d="M42 38c0-7 11-15.6 36-19.6l14-2.4 14 2.4c25 4 36 12.6 36 19.6S131 53.6 106 57.6l-14 2.4-14-2.4C53 53.6 42 45 42 38z" fill="url(#ballista-deck)" stroke="#885629" stroke-width="1.6"/>
+  <g stroke="#885629" stroke-width="1.2" opacity="0.55">
+    <line x1="60" y1="18" x2="60" y2="58"/>
+    <line x1="78" y1="16" x2="78" y2="60"/>
+    <line x1="96" y1="16" x2="96" y2="60"/>
+    <line x1="114" y1="16" x2="114" y2="60"/>
+    <line x1="132" y1="18" x2="132" y2="58"/>
   </g>
-  <!-- Oars -->
-  <g stroke="#5f3f1d" stroke-width="2">
-    <line x1="20" y1="29" x2="15" y2="26"/>
-    <line x1="24" y1="29" x2="19" y2="26.5"/>
-    <line x1="20" y1="35" x2="15" y2="38"/>
-    <line x1="24" y1="35" x2="19" y2="37.5"/>
+  <!-- ballista carriage -->
+  <g transform="translate(96 24)">
+    <rect x="-20" y="-6" width="40" height="32" rx="10" fill="url(#ballista-frame)" stroke="#6d471f" stroke-width="2"/>
+    <rect x="-14" y="-12" width="28" height="10" rx="4" fill="#b58a56" stroke="#6d471f" stroke-width="2"/>
+    <rect x="-10" y="18" width="20" height="10" rx="4" fill="#8b6a43" stroke="#3a2412" stroke-width="1.4"/>
+    <path d="M-14 -6l-30 -8 4 10 26 2z" fill="#915f2e" stroke="#3a2412" stroke-width="2"/>
+    <path d="M14 -6l30 -8-4 10-26 2z" fill="#915f2e" stroke="#3a2412" stroke-width="2"/>
+    <path d="M-8 6h16" stroke="#3a2412" stroke-width="3"/>
+    <path d="M-6 20h12" stroke="#22140b" stroke-width="2" opacity="0.7"/>
+  </g>
+  <!-- crew shields -->
+  <g fill="#d0a062" stroke="#683d1a" stroke-width="2.2">
+    <path d="M54 26l-20 -14 4 -6 28 12z"/>
+    <path d="M70 24l-20 -14 4 -6 28 12z"/>
+    <path d="M122 24l20 -14-4 -6-28 12z"/>
+    <path d="M138 26l20 -14-4 -6-28 12z"/>
+    <path d="M54 50l-20 14 4 6 28-12z"/>
+    <path d="M70 52l-20 14 4 6 28-12z"/>
+    <path d="M122 52l20 14-4 6-28-12z"/>
+    <path d="M138 50l20 14-4 6-28-12z"/>
+  </g>
+
+  <!-- side oars -->
+  <g fill="#d0a062" stroke="#683d1a" stroke-width="2.2">
+    <path d="M54 50l-20 14 4 6 28-12z"/>
+    <path d="M70 52l-20 14 4 6 28-12z"/>
+    <path d="M122 52l20 14-4 6-28-12z"/>
+    <path d="M138 50l20 14-4 6-28-12z"/>
   </g>
 </svg>
