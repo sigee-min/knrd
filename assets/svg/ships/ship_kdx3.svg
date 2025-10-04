@@ -1,8 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- KDX-III Aegis top-down -->
-  <path d="M6 32 L14 26 L30 24 L46 26 L58 32 L46 38 L30 40 L14 38 Z" fill="#425a76" stroke="#1f2b3b" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="22" y="25" width="12" height="14" rx="1" fill="#7fa0c0" stroke="#1f2b3b" stroke-width="1"/>
-  <rect x="38" y="27" width="10" height="10" rx="1" fill="#98b6d2" stroke="#1f2b3b" stroke-width="1"/>
-  <circle cx="56" cy="32" r="3" fill="#b8c8d6" stroke="#1f2b3b" stroke-width="1"/>
-  <circle cx="12" cy="32" r="5" fill="none" stroke="#c9d7e4" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 52">
+  <defs>
+    <linearGradient id="kdx3Hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#617488"/>
+      <stop offset="1" stop-color="#293543"/>
+    </linearGradient>
+    <linearGradient id="kdx3Deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d4c4a4"/>
+      <stop offset="1" stop-color="#b19d77"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 26c0-7.6 13.8-19.6 34-25L100-10l46 11c20.2 5.4 34 17.4 34 25s-13.8 19.6-34 25L100 66 54 51C33.8 45.6 20 33.6 20 26z" fill="url(#kdx3Hull)" stroke="#1b222a" stroke-width="3"/>
+  <path d="M44 26c0-4.6 9-9.6 28-12.4l24-2.2 24 2.2c19 2.8 28 7.8 28 12.4s-9 9.6-28 12.4l-24 2.2-24-2.2c-19-2.8-28-7.8-28-12.4z" fill="url(#kdx3Deck)"/>
+  <g transform="translate(100 26)">
+    <rect x="-28" y="-8" width="56" height="14" rx="5" fill="#3c4956" stroke="#11181f" stroke-width="1.4"/>
+    <rect x="-14" y="-14" width="28" height="10" rx="3" fill="#253039" stroke="#0d1114" stroke-width="1.1"/>
+  </g>
 </svg>

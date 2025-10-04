@@ -1,82 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 208 96">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 70">
   <defs>
-    <linearGradient id="turtle-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#56351f"/>
-      <stop offset="1" stop-color="#2b190f"/>
+    <linearGradient id="turtleHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c3a22"/>
+      <stop offset="1" stop-color="#2f1a0e"/>
     </linearGradient>
-    <linearGradient id="turtle-shell" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#3f5660"/>
-      <stop offset="1" stop-color="#1f313a"/>
+    <linearGradient id="turtleShell" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#435661"/>
+      <stop offset="1" stop-color="#22323a"/>
     </linearGradient>
-    <linearGradient id="turtle-spike" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#d5dee7"/>
-      <stop offset="1" stop-color="#a9b6bf"/>
+    <linearGradient id="turtleSpine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#54636f"/>
+      <stop offset="1" stop-color="#2b3944"/>
     </linearGradient>
   </defs>
-  <path d="M20 48c0-12.4 18.8-33.4 49.2-43.8L104 0l34.8 4.2C169.2 14.6 188 35.6 188 48s-18.8 33.4-49.2 43.8L104 96l-34.8-4.2C38.8 81.4 20 60.4 20 48z" fill="url(#turtle-hull)" stroke="#150c07" stroke-width="3"/>
-  <path d="M44 48c0-9.6 14.6-22.8 44.8-29.6L104 16l15.2 2.4C149.4 25.2 164 38.4 164 48s-14.6 22.8-44.8 29.6L104 80l-15.2-2.4C58.6 70.8 44 57.6 44 48z" fill="url(#turtle-shell)" stroke="#132029" stroke-width="2.4"/>
-  <!-- shell scale seams -->
-  <g stroke="#0e191f" stroke-width="1.5" opacity="0.75">
-    <path d="M52 34h104" stroke-dasharray="11 6"/>
-    <path d="M60 24l88 48" stroke-dasharray="10 6"/>
-    <path d="M148 24l-88 48" stroke-dasharray="10 6"/>
-    <path d="M80 18l48 60" stroke-dasharray="9 5"/>
-    <path d="M128 18l-48 60" stroke-dasharray="9 5"/>
+  <path d="M18 35c0-9.8 16.2-26.4 42-34.8L110-10l50 11.2c25.8 8.4 42 25 42 34.8s-16.2 26.4-42 34.8l-50 11.2-50-11.2C34.2 61.4 18 44.8 18 35z" fill="url(#turtleHull)" stroke="#1a0f08" stroke-width="3"/>
+  <path d="M42 35c0-7.4 10.6-16.6 36-21.6l18-3 18 3c25.4 5 36 14.2 36 21.6s-10.6 16.6-36 21.6l-18 3-18-3c-25.4-5-36-14.2-36-21.6z" fill="url(#turtleShell)"/>
+  <g stroke="#11191f" stroke-width="1.6" opacity="0.75">
+    <line x1="58" y1="24" x2="152" y2="46"/>
+    <line x1="58" y1="46" x2="152" y2="24"/>
+    <line x1="78" y1="18" x2="78" y2="52"/>
+    <line x1="102" y1="16" x2="102" y2="54"/>
+    <line x1="126" y1="18" x2="126" y2="52"/>
   </g>
-  <!-- iron spikes -->
-  <g fill="url(#turtle-spike)" stroke="#0a1116" stroke-width="1.2">
-    <circle cx="60" cy="30" r="2.4"/>
-    <circle cx="76" cy="24" r="2.4"/>
-    <circle cx="92" cy="20" r="2.4"/>
-    <circle cx="108" cy="20" r="2.4"/>
-    <circle cx="124" cy="24" r="2.4"/>
-    <circle cx="140" cy="30" r="2.4"/>
-    <circle cx="60" cy="66" r="2.4"/>
-    <circle cx="76" cy="72" r="2.4"/>
-    <circle cx="92" cy="76" r="2.4"/>
-    <circle cx="108" cy="76" r="2.4"/>
-    <circle cx="124" cy="72" r="2.4"/>
-    <circle cx="140" cy="66" r="2.4"/>
+  <g fill="#cfd8e2" stroke="#1f2931" stroke-width="1.4">
+    <circle cx="70" cy="28" r="3.6"/>
+    <circle cx="86" cy="24" r="3.6"/>
+    <circle cx="102" cy="22" r="3.6"/>
+    <circle cx="118" cy="24" r="3.6"/>
+    <circle cx="134" cy="28" r="3.6"/>
+    <circle cx="70" cy="42" r="3.6"/>
+    <circle cx="86" cy="46" r="3.6"/>
+    <circle cx="102" cy="48" r="3.6"/>
+    <circle cx="118" cy="46" r="3.6"/>
+    <circle cx="134" cy="42" r="3.6"/>
   </g>
-  <!-- dragon head -->
-  <path d="M170 46c11.6 3 18.8 8.2 21.8 15.4-7.4 5.8-15 7-24.6 4.8l2.8-20.2z" fill="#c18a39" stroke="#5a3b16" stroke-width="2"/>
-  <path d="M182 52c4 2.6 4.4 6.8 2 10.2-4 1.8-8.2 1.2-12.2-1.6z" fill="#ffb347" stroke="#6b3114" stroke-width="1.4"/>
-  <circle cx="176" cy="50" r="3.6" fill="#1d130a"/>
-  <!-- cannon ports -->
-  <g fill="#d0d7e0" stroke="#1e272f" stroke-width="1.6">
-    <circle cx="68" cy="34" r="3.6"/>
-    <circle cx="84" cy="28" r="3.6"/>
-    <circle cx="100" cy="26" r="3.6"/>
-    <circle cx="116" cy="28" r="3.6"/>
-    <circle cx="132" cy="34" r="3.6"/>
-    <circle cx="68" cy="62" r="3.6"/>
-    <circle cx="84" cy="68" r="3.6"/>
-    <circle cx="100" cy="70" r="3.6"/>
-    <circle cx="116" cy="68" r="3.6"/>
-    <circle cx="132" cy="62" r="3.6"/>
-  </g>
-  <g stroke="#1e272f" stroke-width="3" stroke-linecap="round">
-    <line x1="68" y1="34" x2="52" y2="30"/>
-    <line x1="84" y1="28" x2="68" y2="24"/>
-    <line x1="116" y1="28" x2="132" y2="24"/>
-    <line x1="132" y1="34" x2="148" y2="30"/>
-    <line x1="68" y1="62" x2="52" y2="66"/>
-    <line x1="84" y1="68" x2="68" y2="72"/>
-    <line x1="116" y1="68" x2="132" y2="72"/>
-    <line x1="132" y1="62" x2="148" y2="66"/>
-  </g>
-  <!-- oars -->
-  <g fill="#d2a061" stroke="#6a3d19" stroke-width="2.2">
-    <path d="M54 26l-18 -12 4 -6 26 12z"/>
-    <path d="M70 24l-18 -12 4 -6 26 12z"/>
-    <path d="M122 24l18 -12-4 -6-26 12z"/>
-    <path d="M138 26l18 -12-4 -6-26 12z"/>
-    <path d="M54 58l-18 12 4 6 26-12z"/>
-    <path d="M70 60l-18 12 4 6 26-12z"/>
-    <path d="M122 60l18 12-4 6-26-12z"/>
-    <path d="M138 58l18 12-4 6-26-12z"/>
-  </g>
-  <!-- command cabin -->
-  <rect x="94" y="18" width="12" height="40" rx="5" fill="#273441" stroke="#101821" stroke-width="1.6"/>
-  <circle cx="100" cy="26" r="3.6" fill="#dfe7f0"/>
+  <path d="M168 35c11 2.6 18 7.6 21 14.6-6.8 5.6-14 6.6-22.6 3.8z" fill="#c48c39" stroke="#4f2f16" stroke-width="2"/>
+  <circle cx="180" cy="37" r="3.2" fill="#20130a"/>
 </svg>

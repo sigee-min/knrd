@@ -1,7 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Pohang-class corvette top-down -->
-  <path d="M6 32 L16 24 L34 23 L48 26 L58 32 L48 38 L34 41 L16 40 Z" fill="#4d6f8e" stroke="#233244" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="20" y="25" width="12" height="14" rx="1" fill="#86a7c2" stroke="#233244" stroke-width="1"/>
-  <rect x="36" y="27" width="10" height="10" rx="1" fill="#a0bad1" stroke="#233244" stroke-width="1"/>
-  <circle cx="56" cy="32" r="2.5" fill="#b8c8d6" stroke="#233244" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 52">
+  <defs>
+    <linearGradient id="pohangHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5d7184"/>
+      <stop offset="1" stop-color="#26323d"/>
+    </linearGradient>
+    <linearGradient id="pohangDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d0c0a0"/>
+      <stop offset="1" stop-color="#af9c77"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 26c0-7.4 14-19.2 34-24.6L100-10l46 11.4c20 5.4 34 17.2 34 24.6s-14 19.2-34 24.6L100 66.6 54 50.6C34 45.2 20 33.4 20 26z" fill="url(#pohangHull)" stroke="#192128" stroke-width="3"/>
+  <path d="M46 26c0-4.4 9.8-9.6 30-12.4l24-2.2 24 2.2c20.2 2.8 30 8 30 12.4s-9.8 9.6-30 12.4l-24 2.2-24-2.2c-20.2-2.8-30-8-30-12.4z" fill="url(#pohangDeck)"/>
+  <g transform="translate(100 26)">
+    <rect x="-30" y="-8" width="60" height="14" rx="5" fill="#3a4652" stroke="#12191f" stroke-width="1.4"/>
+    <rect x="-12" y="-14" width="24" height="9" rx="3" fill="#27323a" stroke="#0d1216" stroke-width="1.1"/>
+  </g>
 </svg>

@@ -1,14 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Submarine top-down: teardrop hull, bow right -->
-  <path d="M10 32 C18 25 36 23.5 50 26 L56 32 L50 38 C36 40.5 18 39 10 32 Z" fill="#3b4854" stroke="#182028" stroke-width="2" stroke-linejoin="round"/>
-
-  <!-- Sail/fin -->
-  <rect x="28" y="25" width="10" height="14" rx="1" fill="#5a6774" stroke="#182028" stroke-width="1"/>
-
-  <!-- Bow planes (stylized) -->
-  <line x1="44" y1="28" x2="48" y2="26" stroke="#24313b" stroke-width="2"/>
-  <line x1="44" y1="36" x2="48" y2="38" stroke="#24313b" stroke-width="2"/>
-
-  <!-- Prop guard at stern -->
-  <circle cx="12.5" cy="32" r="2.5" fill="#28343d" stroke="#182028" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40">
+  <defs>
+    <linearGradient id="subHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3e4c59"/>
+      <stop offset="1" stop-color="#1c242c"/>
+    </linearGradient>
+  </defs>
+  <path d="M26 20c0-5.2 16-13.8 42-18L100-10l32 4c26 4.2 42 12.8 42 18s-16 13.8-42 18l-32 4-32-4c-26-4.2-42-12.8-42-18z" fill="url(#subHull)" stroke="#10171d" stroke-width="3"/>
+  <rect x="88" y="4" width="24" height="8" rx="3" fill="#27313a" stroke="#0d1115" stroke-width="1.2"/>
 </svg>

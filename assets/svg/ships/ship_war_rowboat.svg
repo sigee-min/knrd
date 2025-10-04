@@ -1,44 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168 64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 56">
   <defs>
-    <linearGradient id="rowboat-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#af7a42"/>
-      <stop offset="1" stop-color="#6d451f"/>
+    <linearGradient id="warRowHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9d6c39"/>
+      <stop offset="1" stop-color="#5b3318"/>
     </linearGradient>
-    <linearGradient id="rowboat-deck" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#d2b080"/>
-      <stop offset="1" stop-color="#b78b58"/>
+    <linearGradient id="warRowDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d3af7c"/>
+      <stop offset="1" stop-color="#b18353"/>
     </linearGradient>
   </defs>
-  <!-- narrow assault hull -->
-  <path d="M20 32c0-8.4 13.6-21.6 34-28l30-8h0l30 8c20.4 6.4 34 19.6 34 28s-13.6 21.6-34 28l-30 8h0l-30-8c-20.4-6.4-34-19.6-34-28z" fill="url(#rowboat-hull)" stroke="#3b2313" stroke-width="3"/>
-  <!-- deck -->
-  <path d="M38 32c0-5.6 8.8-12.6 26-16l20-3 20 3c17.2 3.4 26 10.4 26 16s-8.8 12.6-26 16l-20 3-20-3c-17.2-3.4-26-10.4-26-16z" fill="url(#rowboat-deck)" stroke="#7f552c" stroke-width="1.4"/>
-  <!-- benches -->
-  <g stroke="#7f552c" stroke-width="1.2" opacity="0.6">
-    <line x1="52" y1="20" x2="52" y2="44"/>
-    <line x1="68" y1="18" x2="68" y2="46"/>
-    <line x1="84" y1="18" x2="84" y2="46"/>
-    <line x1="100" y1="18" x2="100" y2="46"/>
-    <line x1="116" y1="20" x2="116" y2="44"/>
+  <path d="M20 28c0-8.2 13.6-21.4 34-27.4l36-10.6 36 10.6c20.4 6 34 19.2 34 27.4s-13.6 21.4-34 27.4l-36 10.6-36-10.6C33.6 49.4 20 36.2 20 28z" fill="url(#warRowHull)" stroke="#2e1a0f" stroke-width="3"/>
+  <path d="M40 28c0-5.6 9.2-12.2 28-15.6l22-3.4 22 3.4c18.8 3.4 28 10 28 15.6s-9.2 12.2-28 15.6l-22 3.4-22-3.4c-18.8-3.4-28-10-28-15.6z" fill="url(#warRowDeck)"/>
+  <g fill="#c04432" stroke="#401816" stroke-width="1.4">
+    <circle cx="56" cy="28" r="4.4"/>
+    <circle cx="90" cy="28" r="4.4"/>
+    <circle cx="124" cy="28" r="4.4"/>
   </g>
-  <!-- command platform -->
-  <rect x="78" y="14" width="12" height="36" rx="4" fill="#2f3d4c" stroke="#121820" stroke-width="1.6"/>
-  <circle cx="84" cy="22" r="3" fill="#d1dde8"/>
-  <!-- oars -->
-  <g fill="#d4a762" stroke="#6d441e" stroke-width="2.2">
-    <path d="M44 20l-18 -14 4 -6 26 12z"/>
-    <path d="M60 18l-18 -14 4 -6 26 12z"/>
-    <path d="M104 18l18 -14-4 -6-26 12z"/>
-    <path d="M120 20l18 -14-4 -6-26 12z"/>
-    <path d="M44 46l-18 14 4 4 26-12z"/>
-    <path d="M60 48l-18 14 4 4 26-12z"/>
-    <path d="M104 48l18 14-4 4-26-12z"/>
-    <path d="M120 46l18 14-4 4-26-12z"/>
-  </g>
-
-  <!-- bow shields -->
-  <g fill="#b2473b" stroke="#431616" stroke-width="1.4">
-    <circle cx="46" cy="30" r="4.4"/>
-    <circle cx="122" cy="30" r="4.4"/>
-  </g>
+  <rect x="82" y="12" width="16" height="32" rx="4" fill="#2f3d4c" stroke="#111820" stroke-width="1.4"/>
 </svg>

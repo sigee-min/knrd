@@ -1,22 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 60">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 204 56">
   <defs>
-    <linearGradient id="gwang-hull" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="#22364c"/>
-      <stop offset="1" stop-color="#101d2a"/>
+    <linearGradient id="gwangjeHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4d6478"/>
+      <stop offset="1" stop-color="#25313d"/>
     </linearGradient>
-    <linearGradient id="gwang-deck" x1="0" x2="1" y1="0" y2="0">
-      <stop offset="0" stop-color="#5f7590"/>
-      <stop offset="1" stop-color="#43566e"/>
+    <linearGradient id="gwangjeDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d0c09c"/>
+      <stop offset="1" stop-color="#af9c77"/>
     </linearGradient>
   </defs>
-  <path d="M18 30c0-8.8 14.6-24 38-30l34-8 34 8c23.4 6 38 21.2 38 30s-14.6 24-38 30l-34 8-34-8c-23.4-6-38-21.2-38-30z" fill="url(#gwang-hull)" stroke="#0a111a" stroke-width="2"/>
-  <path d="M44 30c0-6.4 10.2-14.8 40-18.4l2-0.2 2 0.2c29.8 3.6 40 12 40 18.4s-10.2 14.8-40 18.4l-2 0.2-2-0.2c-29.8-3.6-40-12-40-18.4z" fill="url(#gwang-deck)"/>
-  <rect x="74" y="10" width="32" height="40" rx="10" fill="#233546"/>
-  <rect x="60" y="18" width="10" height="24" rx="4" fill="#1a2835"/>
-  <rect x="110" y="18" width="10" height="24" rx="4" fill="#1a2835"/>
-  <circle cx="54" cy="26" r="4" fill="#d2deec"/>
-  <circle cx="54" cy="34" r="4" fill="#d2deec"/>
-  <circle cx="126" cy="26" r="4" fill="#d2deec"/>
-  <circle cx="126" cy="34" r="4" fill="#d2deec"/>
-  <path d="M90 8l-4-10h8z" fill="#748ba7"/>
+  <path d="M20 28c0-8.2 13.6-20.6 34-26.4L100-10l44 11.2c20.4 5.8 34 18.2 34 26.4s-13.6 20.6-34 26.4L100 64.4 54 53.6C33.6 47.8 20 36.2 20 28z" fill="url(#gwangjeHull)" stroke="#1a2129" stroke-width="3"/>
+  <path d="M44 28c0-4.8 9.6-10.4 30-13.4l22-2.4 22 2.4c20.4 3 30 8.6 30 13.4s-9.6 10.4-30 13.4l-22 2.4-22-2.4c-20.4-3-30-8.6-30-13.4z" fill="url(#gwangjeDeck)"/>
+  <g transform="translate(100 28)">
+    <rect x="-28" y="-8" width="56" height="16" rx="6" fill="#394752" stroke="#13191f" stroke-width="1.6"/>
+    <rect x="-12" y="-14" width="24" height="10" rx="3" fill="#25303a" stroke="#0e1418" stroke-width="1.2"/>
+  </g>
 </svg>

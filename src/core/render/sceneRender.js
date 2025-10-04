@@ -21,6 +21,15 @@ import {
 } from './effects.js';
 import { TOWER_HEADING_OFFSET, ENEMY_HEADING_OFFSET } from '../constants/gameplay.js';
 
+const SHIP_RENDER_SCALE = 0.7;
+const SHIP_DRAW_ASPECT = 1;
+const SHIP_MARKER_SPAN = 0.32;
+const SHIP_MARKER_WIDTH = 0.28;
+const ALLY_FRONT_COLOR = 'rgba(112, 220, 255, 0.22)';
+const ALLY_REAR_COLOR = 'rgba(14, 22, 34, 0.36)';
+const ENEMY_FRONT_COLOR = 'rgba(255, 140, 120, 0.26)';
+const ENEMY_REAR_COLOR = 'rgba(18, 12, 28, 0.38)';
+
 function renderGrid(ctx) {
   ctx.strokeStyle = '#1d2638';
   ctx.lineWidth = 1;
@@ -128,20 +137,60 @@ function renderTowers(ctx) {
     renderRarityFloor(ctx, tower, screenX, screenY, GAME_STATE.time ?? 0);
     renderFusionAura(ctx, tower, screenX, screenY, GAME_STATE.time ?? 0);
     const sprite = getTowerSprite(tower);
-    const size = sprite.size ?? 36;
+    const baseSize = sprite.size ?? 36;
+    const size = baseSize * SHIP_RENDER_SCALE;
     if (sprite.image && sprite.image.complete && sprite.image.naturalWidth > 0) {
       ctx.save();
       ctx.translate(screenX, screenY);
-      const drawAngle = typeof tower.heading === 'number'
-        ? tower.heading
-        : Math.atan2(CONFIG.orbit.centerY - tower.y, CONFIG.orbit.centerX - tower.x);
+      let drawAngle;
+      if (tower.moving) {
+        const targetDx = (tower.targetX ?? tower.x) - tower.x;
+        const targetDy = (tower.targetY ?? tower.y) - tower.y;
+        if (Math.abs(targetDx) > 0.0001 || Math.abs(targetDy) > 0.0001) {
+          const moveAngle = Math.atan2(targetDy, targetDx);
+          if (Number.isFinite(moveAngle)) drawAngle = moveAngle;
+        }
+      }
+      if (drawAngle == null && typeof tower.heading === 'number' && Number.isFinite(tower.heading)) {
+        drawAngle = tower.heading;
+      }
+      if (drawAngle == null) {
+        drawAngle = Math.atan2(CONFIG.orbit.centerY - tower.y, CONFIG.orbit.centerX - tower.x);
+      }
       ctx.rotate(drawAngle + TOWER_HEADING_OFFSET);
-      ctx.drawImage(sprite.image, -size / 2, -size / 2, size, size);
+      ctx.scale(1, SHIP_DRAW_ASPECT);
+      const shipAspect = sprite.image.naturalWidth > 0
+        ? sprite.image.naturalHeight / sprite.image.naturalWidth
+        : 1;
+      const drawWidth = size;
+      const drawHeight = size * shipAspect;
+      ctx.drawImage(sprite.image, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
+
+      const half = size / 2;
+      const span = size * SHIP_MARKER_SPAN;
+      const halfWidth = size * SHIP_MARKER_WIDTH * 0.5;
+
+      ctx.fillStyle = ALLY_FRONT_COLOR;
+      ctx.beginPath();
+      ctx.moveTo(half, 0);
+      ctx.lineTo(half - span, halfWidth);
+      ctx.lineTo(half - span, -halfWidth);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = ALLY_REAR_COLOR;
+      ctx.beginPath();
+      ctx.moveTo(-half, 0);
+      ctx.lineTo(-half + span * 0.8, halfWidth);
+      ctx.lineTo(-half + span * 0.8, -halfWidth);
+      ctx.closePath();
+      ctx.fill();
+
       ctx.restore();
     } else {
       ctx.fillStyle = RARITY_COLOR[tower.rarity] || '#ffffff';
       ctx.beginPath();
-      const fallbackR = Math.max(10, Math.round(size * 0.35));
+      const fallbackR = Math.max(10 * SHIP_RENDER_SCALE, Math.round(size * 0.35));
       ctx.arc(screenX, screenY, fallbackR, 0, Math.PI * 2);
       ctx.fill();
     }
@@ -149,7 +198,8 @@ function renderTowers(ctx) {
       ctx.strokeStyle = '#37a0f2';
       ctx.lineWidth = 2;
       ctx.beginPath();
-      const selR = Math.max(12, tower.selectionRadius ?? Math.round(size * 0.35));
+      const selectionBase = tower.selectionRadius != null ? tower.selectionRadius * SHIP_RENDER_SCALE : Math.round(size * 0.35);
+      const selR = Math.max(12 * SHIP_RENDER_SCALE, selectionBase);
       ctx.arc(screenX, screenY, selR, 0, Math.PI * 2);
       ctx.stroke();
     }
@@ -164,16 +214,43 @@ function renderEnemies(ctx) {
     if (screenY < -enemy.size || screenY > CAMERA.height + enemy.size) continue;
     const velocity = computeEnemyVelocity(enemy);
     const computedHeading = Math.atan2(velocity.vy, velocity.vx);
-    const heading = Number.isFinite(enemy.heading) ? enemy.heading
-      : Number.isFinite(computedHeading) ? computedHeading : 0;
+    const heading = Number.isFinite(computedHeading) ? computedHeading
+      : Number.isFinite(enemy.heading) ? enemy.heading : 0;
     if (enemy.type !== 'boss') {
       const sprite = getEnemySprite(enemy);
       if (sprite.image && sprite.image.complete && sprite.image.naturalWidth > 0) {
         ctx.save();
         ctx.translate(screenX, screenY);
         ctx.rotate(heading + ENEMY_HEADING_OFFSET);
+        ctx.scale(1, SHIP_DRAW_ASPECT);
         const sz = sprite.size || enemy.size * 1.7;
-        ctx.drawImage(sprite.image, -sz / 2, -sz / 2, sz, sz);
+        const shipAspect = sprite.image.naturalWidth > 0
+          ? sprite.image.naturalHeight / sprite.image.naturalWidth
+          : 1;
+        const drawWidth = sz;
+        const drawHeight = sz * shipAspect;
+        ctx.drawImage(sprite.image, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
+
+        const half = sz / 2;
+        const span = sz * SHIP_MARKER_SPAN;
+        const halfWidth = sz * SHIP_MARKER_WIDTH * 0.5;
+
+        ctx.fillStyle = ENEMY_FRONT_COLOR;
+        ctx.beginPath();
+        ctx.moveTo(half, 0);
+        ctx.lineTo(half - span, halfWidth);
+        ctx.lineTo(half - span, -halfWidth);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = ENEMY_REAR_COLOR;
+        ctx.beginPath();
+        ctx.moveTo(-half, 0);
+        ctx.lineTo(-half + span * 0.8, halfWidth);
+        ctx.lineTo(-half + span * 0.8, -halfWidth);
+        ctx.closePath();
+        ctx.fill();
+
         ctx.restore();
       } else {
         const visualRadius = enemy.size * 1.7;
@@ -204,8 +281,35 @@ function renderEnemies(ctx) {
         ctx.save();
         ctx.translate(screenX, screenY);
         ctx.rotate(heading + ENEMY_HEADING_OFFSET);
+        ctx.scale(1, SHIP_DRAW_ASPECT);
         const sz = sprite.size || enemy.size * 1.7;
-        ctx.drawImage(sprite.image, -sz / 2, -sz / 2, sz, sz);
+        const shipAspect = sprite.image.naturalWidth > 0
+          ? sprite.image.naturalHeight / sprite.image.naturalWidth
+          : 1;
+        const drawWidth = sz;
+        const drawHeight = sz * shipAspect;
+        ctx.drawImage(sprite.image, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
+
+        const half = sz / 2;
+        const span = sz * SHIP_MARKER_SPAN;
+        const halfWidth = sz * SHIP_MARKER_WIDTH * 0.5;
+
+        ctx.fillStyle = ENEMY_FRONT_COLOR;
+        ctx.beginPath();
+        ctx.moveTo(half, 0);
+        ctx.lineTo(half - span, halfWidth);
+        ctx.lineTo(half - span, -halfWidth);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = ENEMY_REAR_COLOR;
+        ctx.beginPath();
+        ctx.moveTo(-half, 0);
+        ctx.lineTo(-half + span * 0.8, halfWidth);
+        ctx.lineTo(-half + span * 0.8, -halfWidth);
+        ctx.closePath();
+        ctx.fill();
+
         ctx.restore();
       } else {
         ctx.fillStyle = '#d35400';

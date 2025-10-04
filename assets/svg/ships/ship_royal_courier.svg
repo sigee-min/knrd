@@ -1,44 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 184 76">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188 58">
   <defs>
-    <linearGradient id="courier-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#c59752"/>
-      <stop offset="1" stop-color="#7b4d22"/>
+    <linearGradient id="courierHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9863f"/>
+      <stop offset="1" stop-color="#70441d"/>
     </linearGradient>
-    <linearGradient id="courier-deck" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#f3d7a5"/>
-      <stop offset="1" stop-color="#d0a56d"/>
-    </linearGradient>
-    <linearGradient id="courier-canopy" x1="0" y1="0" x2="0.8" y2="1">
-      <stop offset="0" stop-color="#c13b3b"/>
-      <stop offset="1" stop-color="#7f1f1f"/>
+    <linearGradient id="courierDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f0d59f"/>
+      <stop offset="1" stop-color="#cda26c"/>
     </linearGradient>
   </defs>
-  <path d="M18 38c0-9.4 15.4-25.2 40-32.4l34-9.6 34 9.6c24.6 7.2 40 23 40 32.4s-15.4 25.2-40 32.4l-34 9.6-34-9.6c-24.6-7.2-40-23-40-32.4z" fill="url(#courier-hull)" stroke="#3d2413" stroke-width="3"/>
-  <path d="M42 38c0-7 11.2-15.6 36-19.4l14-2.2 14 2.2c24.8 3.8 36 12.4 36 19.4s-11.2 15.6-36 19.4l-14 2.2-14-2.2c-24.8-3.8-36-12.4-36-19.4z" fill="url(#courier-deck)" stroke="#936134" stroke-width="1.6"/>
-  <g stroke="#936134" stroke-width="1.2" opacity="0.55">
-    <line x1="60" y1="18" x2="60" y2="58"/>
-    <line x1="76" y1="16" x2="76" y2="60"/>
-    <line x1="92" y1="16" x2="92" y2="60"/>
-    <line x1="108" y1="16" x2="108" y2="60"/>
-    <line x1="124" y1="18" x2="124" y2="58"/>
-  </g>
-  <!-- courier pavilion -->
-  <g>
-    <rect x="64" y="22" width="56" height="28" rx="10" fill="url(#courier-canopy)" stroke="#441414" stroke-width="2"/>
-    <rect x="70" y="26" width="44" height="20" rx="8" fill="#f9f1cf" stroke="#7f5b33" stroke-width="1.4"/>
-    <g fill="#d49c2c" stroke="#6a4311" stroke-width="1">
-      <circle cx="80" cy="36" r="4"/>
-      <circle cx="104" cy="36" r="4"/>
+  <path d="M18 29c0-8.4 13.4-21.8 34-28.2l42-11.8 42 11.8c20.6 6.4 34 19.8 34 28.2s-13.4 21.8-34 28.2l-42 11.8-42-11.8C31.4 50.8 18 37.4 18 29z" fill="url(#courierHull)" stroke="#331d0e" stroke-width="3"/>
+  <path d="M42 29c0-5.8 9.6-12.8 30-16.8l18-3.2 18 3.2c20.4 4 30 11 30 16.8s-9.6 12.8-30 16.8l-18 3.2-18-3.2c-20.4-4-30-11-30-16.8z" fill="url(#courierDeck)"/>
+  <g transform="translate(96 28)">
+    <rect x="-34" y="-14" width="68" height="24" rx="10" fill="#b03c30" stroke="#4a1f16" stroke-width="1.8"/>
+    <rect x="-28" y="-20" width="56" height="14" rx="7" fill="#f4ebce" stroke="#8c7c5d" stroke-width="1.4"/>
+    <g fill="#d5a93f" stroke="#6b4514" stroke-width="1.2">
+      <circle cx="-12" cy="0" r="4.6"/>
+      <circle cx="12" cy="0" r="4.6"/>
     </g>
   </g>
-  <!-- royal emblem banners -->
-  <g>
-    <rect x="90" y="6" width="4" height="18" rx="1.5" fill="#6f4524"/>
-    <path d="M94 10l20 6-20 6z" fill="#d0ac3f" stroke="#6f4524" stroke-width="1.3"/>
-    <rect x="90" y="52" width="4" height="12" rx="1.5" fill="#6f4524"/>
-    <path d="M94 56l18 6-18 6z" fill="#be2f38" stroke="#6f4524" stroke-width="1.3"/>
-  </g>
-  <!-- prow phoenix carving -->
-  <path d="M148 36c8.6 2.4 13.8 6.4 16.2 12-5.2 4.6-10.8 5.2-17.8 3l1.6-15z" fill="#d4aa3f" stroke="#6a4311" stroke-width="2"/>
-  <circle cx="160" cy="42" r="3.2" fill="#3b2413"/>
+  <rect x="90" y="6" width="4" height="16" rx="1.4" fill="#6f4524"/>
+  <path d="M94 8l20 6-20 6z" fill="#d3b042" stroke="#6b4514" stroke-width="1.2"/>
+  <rect x="90" y="44" width="4" height="12" rx="1.4" fill="#6f4524"/>
+  <path d="M94 48l18 6-18 6z" fill="#b72f3d" stroke="#551620" stroke-width="1.2"/>
 </svg>

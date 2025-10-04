@@ -1,71 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 94">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 68">
   <defs>
-    <linearGradient id="panok-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#be8346"/>
-      <stop offset="1" stop-color="#76451c"/>
+    <linearGradient id="panokHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c18648"/>
+      <stop offset="1" stop-color="#73431f"/>
     </linearGradient>
-    <linearGradient id="panok-deck" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#f0d39f"/>
+    <linearGradient id="panokDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f1d7a5"/>
       <stop offset="1" stop-color="#cda26c"/>
     </linearGradient>
-    <linearGradient id="panok-cabin" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#d1b280"/>
-      <stop offset="1" stop-color="#a77c4f"/>
-    </linearGradient>
   </defs>
-  <path d="M20 47c0-11.4 17.6-30.2 46-39.4l36-10.2 36 10.2c28.4 9.2 46 28 46 39.4s-17.6 30.2-46 39.4l-36 10.2-36-10.2C37.6 77.2 20 58.4 20 47z" fill="url(#panok-hull)" stroke="#3b2312" stroke-width="3"/>
-  <path d="M46 47c0-8.2 12.4-18 40-23.4l12-2 12 2c27.6 5.4 40 15.2 40 23.4s-12.4 18-40 23.4l-12 2-12-2c-27.6-5.4-40-15.2-40-23.4z" fill="url(#panok-deck)" stroke="#935828" stroke-width="1.6"/>
-  <g stroke="#935828" stroke-width="1.2" opacity="0.5">
-    <line x1="66" y1="22" x2="66" y2="72"/>
-    <line x1="88" y1="20" x2="88" y2="74"/>
-    <line x1="110" y1="20" x2="110" y2="74"/>
-    <line x1="132" y1="20" x2="132" y2="74"/>
-    <line x1="154" y1="22" x2="154" y2="72"/>
+  <path d="M18 34c0-9.4 15.2-24.4 38-32l48-12.8 48 12.8c22.8 7.6 38 22.6 38 32s-15.2 24.4-38 32l-48 12.8-48-12.8C33.2 58.4 18 43.4 18 34z" fill="url(#panokHull)" stroke="#321c0f" stroke-width="3"/>
+  <path d="M44 34c0-6.2 10.2-13.8 34-17.6l22-3.4 22 3.4c23.8 3.8 34 11.4 34 17.6s-10.2 13.8-34 17.6l-22 3.4-22-3.4c-23.8-3.8-34-11.4-34-17.6z" fill="url(#panokDeck)"/>
+  <g transform="translate(110 34)">
+    <rect x="-36" y="-12" width="72" height="30" rx="12" fill="#d2af78" stroke="#6d471f" stroke-width="2"/>
+    <rect x="-24" y="-18" width="48" height="12" rx="6" fill="#916437" stroke="#3e2512" stroke-width="1.6"/>
+    <rect x="-22" y="16" width="44" height="12" rx="6" fill="#2f3842" stroke="#0f151a" stroke-width="1.6"/>
   </g>
-  <!-- twin pagoda cabins -->
-  <g>
-    <rect x="60" y="28" width="32" height="34" rx="10" fill="url(#panok-cabin)" stroke="#6f4a26" stroke-width="2"/>
-    <rect x="118" y="28" width="32" height="34" rx="10" fill="url(#panok-cabin)" stroke="#6f4a26" stroke-width="2"/>
-    <g fill="#f5ead5" stroke="#6c5941" stroke-width="1.2">
-      <rect x="68" y="32" width="12" height="16" rx="3"/>
-      <rect x="128" y="32" width="12" height="16" rx="3"/>
-    </g>
+  <g fill="#be3f35" stroke="#411414" stroke-width="1.3">
+    <circle cx="70" cy="34" r="4.8"/>
+    <circle cx="150" cy="34" r="4.8"/>
   </g>
-  <!-- upper deck railings -->
-  <rect x="94" y="22" width="12" height="38" rx="5" fill="#273441" stroke="#101821" stroke-width="1.6"/>
-  <circle cx="100" cy="30" r="3.6" fill="#dfe7f0"/>
-  <!-- side armor planks -->
-  <g fill="#814b21" opacity="0.8">
-    <rect x="52" y="32" width="8" height="24" rx="4"/>
-    <rect x="150" y="32" width="8" height="24" rx="4"/>
-    <rect x="58" y="36" width="8" height="28" rx="4"/>
-    <rect x="144" y="36" width="8" height="28" rx="4"/>
-  </g>
-  <!-- cannon ports -->
-  <g fill="#cfd6dd" stroke="#1e272f" stroke-width="1.4">
-    <circle cx="68" cy="36" r="3.4"/>
-    <circle cx="84" cy="32" r="3.4"/>
-    <circle cx="116" cy="32" r="3.4"/>
-    <circle cx="132" cy="36" r="3.4"/>
-    <circle cx="68" cy="58" r="3.4"/>
-    <circle cx="84" cy="62" r="3.4"/>
-    <circle cx="116" cy="62" r="3.4"/>
-    <circle cx="132" cy="58" r="3.4\"/>
-  </g>
-  <!-- dual masts -->
-  <rect x="82" y="10" width="4" height="20" rx="1.4" fill="#6f4524"/>
-  <rect x="116" y="8" width="4" height="22" rx="1.4" fill="#6f4524"/>
-  <path d="M86 12l20 6-20 6z" fill="#1f4f9a" stroke="#1a3160" stroke-width="1.2"/>
-  <path d="M120 10l-22 7 22 7z" fill="#be2f38" stroke="#5a2020" stroke-width="1.2"/>
-  <!-- oars -->
-  <g fill="#d2a164" stroke="#6a3d19" stroke-width="2.3">
-    <path d="M58 24l-20 -12 4 -6 28 10z"/>
-    <path d="M78 22l-20 -12 4 -6 28 10z"/>
-    <path d="M130 22l20 -12-4 -6-28 10z"/>
-    <path d="M150 24l20 -12-4 -6-28 10z"/>
-    <path d="M58 56l-20 12 4 6 28-10z"/>
-    <path d="M78 58l-20 12 4 6 28-10z"/>
-    <path d="M130 58l20 12-4 6-28-10z"/>
-    <path d="M150 56l20 12-4 6-28-10z"/>
-  </g>
+  <rect x="86" y="10" width="4" height="22" rx="1.6" fill="#6f4524"/>
+  <rect x="134" y="8" width="4" height="24" rx="1.6" fill="#6f4524"/>
+  <path d="M90 12l22 7-22 7z" fill="#114d9a" stroke="#17325a" stroke-width="1.4"/>
+  <path d="M138 10l-24 8 24 8z" fill="#be2f38" stroke="#5a2020" stroke-width="1.4"/>
 </svg>

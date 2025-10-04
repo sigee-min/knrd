@@ -1,47 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188 80">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 208 64">
   <defs>
-    <linearGradient id="panok-early-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#b87b3f"/>
-      <stop offset="1" stop-color="#74441d"/>
+    <linearGradient id="panokEarlyHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#be8042"/>
+      <stop offset="1" stop-color="#6f401e"/>
     </linearGradient>
-    <linearGradient id="panok-early-deck" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#e6c693"/>
-      <stop offset="1" stop-color="#c49962"/>
+    <linearGradient id="panokEarlyDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#efd39e"/>
+      <stop offset="1" stop-color="#cb9f69"/>
     </linearGradient>
   </defs>
-  <path d="M20 40c0-10.2 16-27 42-34.6l32-9.4 32 9.4c26 7.6 42 24.4 42 34.6s-16 27-42 34.6l-32 9.4-32-9.4C36 67 20 50.2 20 40z" fill="url(#panok-early-hull)" stroke="#3b2211" stroke-width="3"/>
-  <path d="M44 40c0-7 11.4-15.4 38-19.6l10-1.6 10 1.6c26.6 4.2 38 12.6 38 19.6s-11.4 15.4-38 19.6l-10 1.6-10-1.6c-26.6-4.2-38-12.6-38-19.6z" fill="url(#panok-early-deck)" stroke="#8b5628" stroke-width="1.5"/>
-  <g stroke="#8b5628" stroke-width="1.1" opacity="0.55">
-    <line x1="58" y1="18" x2="58" y2="62"/>
-    <line x1="74" y1="16" x2="74" y2="64"/>
-    <line x1="90" y1="16" x2="90" y2="64"/>
-    <line x1="106" y1="16" x2="106" y2="64"/>
-    <line x1="122" y1="18" x2="122" y2="62"/>
+  <path d="M20 32c0-9 14.6-23.4 36-30.8L104-10l48 11.2c21.4 7.4 36 21.8 36 30.8s-14.6 23.4-36 30.8L104 74 56 62.8C34.6 55.4 20 41 20 32z" fill="url(#panokEarlyHull)" stroke="#2f1a0d" stroke-width="3"/>
+  <path d="M44 32c0-6 9.8-13.2 32-17l22-3.4 22 3.4c22.2 3.8 32 11 32 17s-9.8 13.2-32 17l-22 3.4-22-3.4c-22.2-3.8-32-11-32-17z" fill="url(#panokEarlyDeck)"/>
+  <g transform="translate(104 32)">
+    <rect x="-34" y="-12" width="68" height="30" rx="12" fill="#caa772" stroke="#6d471f" stroke-width="2"/>
+    <rect x="-20" y="-18" width="40" height="12" rx="6" fill="#8a6232" stroke="#3d2413" stroke-width="1.6"/>
+    <rect x="-18" y="16" width="36" height="12" rx="6" fill="#2d3742" stroke="#0f151a" stroke-width="1.6"/>
   </g>
-  <!-- twin pagoda cabins -->
-  <rect x="60" y="24" width="20" height="28" rx="8" fill="#c8aa7a" stroke="#6d4924" stroke-width="1.6"/>
-  <rect x="108" y="24" width="20" height="28" rx="8" fill="#c8aa7a" stroke="#6d4924" stroke-width="1.6"/>
-  <g fill="#f0dcc0" stroke="#6c5942" stroke-width="1">
-    <rect x="64" y="28" width="8" height="16" rx="3"/>
-    <rect x="116" y="28" width="8" height="16" rx="3"/>
+  <g fill="#be3f35" stroke="#411414" stroke-width="1.3">
+    <circle cx="66" cy="32" r="4.8"/>
+    <circle cx="142" cy="32" r="4.8"/>
   </g>
-  <!-- side armor -->
-  <g fill="#7a4a1f" opacity="0.75">
-    <rect x="50" y="30" width="6" height="20" rx="3"/>
-    <rect x="132" y="30" width="6" height="20" rx="3"/>
-  </g>
-  <!-- oars -->
-  <g fill="#d2a061" stroke="#6b3d19" stroke-width="2.2">
-    <path d="M54 22l-18 -12 4 -6 26 12z"/>
-    <path d="M72 20l-18 -12 4 -6 26 12z"/>
-    <path d="M118 20l18 -12-4 -6-26 12z"/>
-    <path d="M136 22l18 -12-4 -6-26 12z"/>
-    <path d="M54 52l-18 12 4 6 26-12z"/>
-    <path d="M72 54l-18 12 4 6 26-12z"/>
-    <path d="M118 54l18 12-4 6-26-12z"/>
-    <path d="M136 52l18 12-4 6-26-12z"/>
-  </g>
-  <!-- banner -->
-  <rect x="88" y="8" width="4" height="18" rx="1.5" fill="#6f4524"/>
-  <path d="M92 12l18 6-18 6z" fill="#1f4f9a" stroke="#1a3160" stroke-width="1.3"/>
 </svg>

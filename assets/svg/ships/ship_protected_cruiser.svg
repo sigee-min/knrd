@@ -1,6 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 64">
-  <!-- Protected cruiser top-down -->
-  <path d="M10 32 L16 27 L34 26 L48 28 L58 32 L48 36 L34 38 L16 37 Z" fill="#5d7a96" stroke="#2a3a4c" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="24" y="27" width="12" height="10" rx="1" fill="#8fb1cf" stroke="#2a3a4c" stroke-width="1"/>
-  <circle cx="52" cy="32" r="2.5" fill="#b8c8d6" stroke="#2a3a4c" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 56">
+  <defs>
+    <linearGradient id="protectedHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6b8195"/>
+      <stop offset="1" stop-color="#2f3a46"/>
+    </linearGradient>
+    <linearGradient id="protectedDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d6c6a5"/>
+      <stop offset="1" stop-color="#b29e7a"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 28c0-8.4 14.4-21.8 36-28L102-10l44 10.8c21.6 6.2 36 19.6 36 28s-14.4 21.8-36 28L102 68.8 56 57C34.4 51 20 36.6 20 28z" fill="url(#protectedHull)" stroke="#1c252d" stroke-width="3"/>
+  <path d="M44 28c0-5.4 9.8-11.6 32-14.8l20-2.4 20 2.4c22.2 3.2 32 9.4 32 14.8s-9.8 11.6-32 14.8l-20 2.4-20-2.4c-22.2-3.2-32-9.4-32-14.8z" fill="url(#protectedDeck)"/>
+  <g transform="translate(100 28)">
+    <rect x="-30" y="-8" width="60" height="16" rx="6" fill="#3f4c59" stroke="#13191f" stroke-width="1.6"/>
+    <rect x="-10" y="-14" width="20" height="10" rx="3" fill="#27313a" stroke="#0e1418" stroke-width="1.2"/>
+  </g>
 </svg>

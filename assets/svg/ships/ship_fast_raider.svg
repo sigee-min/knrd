@@ -17,17 +17,6 @@
     <circle cx="12" cy="6" r="6" fill="#d9dee5" stroke="#2c343c" stroke-width="1.4"/>
     <path d="M12 6h18" stroke="#2c343c" stroke-width="3" stroke-linecap="round"/>
   </g>
-  <!-- oars -->
-  <g fill="#cfa062" stroke="#6a3d19" stroke-width="2">
-    <path d="M54 20l-16 -12 4 -6 24 10z"/>
-    <path d="M68 18l-16 -12 4 -6 24 10z"/>
-    <path d="M100 18l16 -12-4 -6-24 10z"/>
-    <path d="M114 20l16 -12-4 -6-24 10z"/>
-    <path d="M54 46l-16 12 4 6 24-10z"/>
-    <path d="M68 48l-16 12 4 6 24-10z"/>
-    <path d="M100 48l16 12-4 6-24-10z"/>
-    <path d="M114 46l16 12-4 6-24-10z"/>
-  </g>
   <!-- sail fin -->
   <path d="M90 12l18 10-18 10z" fill="#be2f38" stroke="#5a2020" stroke-width="1.4"/>
 </svg>

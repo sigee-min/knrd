@@ -265,14 +265,14 @@ body {
 
 
 .wave-skip-btn {
-  margin-top: 12px;
+  margin-top: 8px;
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
   border: 1px solid rgba(55, 160, 242, 0.6);
   background: linear-gradient(135deg, rgba(55, 160, 242, 0.28), rgba(24, 32, 48, 0.9));
   color: #e7f3ff;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;

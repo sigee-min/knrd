@@ -1,56 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 204 96">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 70">
   <defs>
-    <linearGradient id="turtle-var-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#5f3d21"/>
-      <stop offset="1" stop-color="#2f1a0f"/>
+    <linearGradient id="turtleVarHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5e3d22"/>
+      <stop offset="1" stop-color="#301a0e"/>
     </linearGradient>
-    <linearGradient id="turtle-var-shell" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#455a66"/>
-      <stop offset="1" stop-color="#23323b"/>
-    </linearGradient>
-    <linearGradient id="turtle-var-panel" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#5d7380"/>
-      <stop offset="1" stop-color="#31424b"/>
+    <linearGradient id="turtleVarShell" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#465b67"/>
+      <stop offset="1" stop-color="#25323b"/>
     </linearGradient>
   </defs>
-  <path d="M24 48c0-12 17-31.4 46-41l32-10 32 10c29 9.6 46 29 46 41s-17 31.4-46 41l-32 10-32-10C41 79.4 24 60 24 48z" fill="url(#turtle-var-hull)" stroke="#1b0e08" stroke-width="3"/>
-  <path d="M46 48c0-9 13.2-20.6 42-27l16-3 16 3c28.8 6.4 42 18 42 27s-13.2 20.6-42 27l-16 3-16-3c-28.8-6.4-42-18-42-27z" fill="url(#turtle-var-shell)" stroke="#152129" stroke-width="2"/>
-  <g fill="url(#turtle-var-panel)" stroke="#0f191f" stroke-width="1.6">
-    <rect x="76" y="20" width="52" height="56" rx="16"/>
-    <rect x="56" y="32" width="20" height="32" rx="8"/>
-    <rect x="128" y="32" width="20" height="32" rx="8"/>
+  <path d="M18 35c0-9.8 17-26.8 44-35.2L110-10l48 11.2c27 8.4 44 25.4 44 35.2s-17 26.8-44 35.2l-48 11.2-48-11.2C35 61.8 18 44.8 18 35z" fill="url(#turtleVarHull)" stroke="#1b0f08" stroke-width="3"/>
+  <path d="M44 35c0-7.6 11-17 38-22.2l16-2.8 16 2.8c27 5.2 38 14.6 38 22.2s-11 17-38 22.2l-16 2.8-16-2.8c-27-5.2-38-14.6-38-22.2z" fill="url(#turtleVarShell)"/>
+  <g stroke="#111a21" stroke-width="1.8" opacity="0.7">
+    <path d="M60 24l100 22"/>
+    <path d="M60 46l100-22"/>
+    <path d="M82 18l0 30"/>
+    <path d="M106 16l0 34"/>
+    <path d="M130 18l0 30"/>
   </g>
-  <g stroke="#0f191f" stroke-width="1.4" opacity="0.6">
-    <line x1="102" y1="20" x2="102" y2="76"/>
-    <line x1="76" y1="36" x2="128" y2="36"/>
-    <line x1="76" y1="48" x2="128" y2="48"/>
-    <line x1="76" y1="60" x2="128" y2="60"/>
+  <g fill="#ccd5df" stroke="#1c252c" stroke-width="1.4">
+    <circle cx="70" cy="30" r="3.6"/>
+    <circle cx="86" cy="26" r="3.6"/>
+    <circle cx="102" cy="24" r="3.6"/>
+    <circle cx="118" cy="26" r="3.6"/>
+    <circle cx="134" cy="30" r="3.6"/>
+    <circle cx="70" cy="40" r="3.6"/>
+    <circle cx="86" cy="44" r="3.6"/>
+    <circle cx="102" cy="46" r="3.6"/>
+    <circle cx="118" cy="44" r="3.6"/>
+    <circle cx="134" cy="40" r="3.6"/>
   </g>
-  <!-- deck guns -->
-  <g fill="#d4dce5" stroke="#1f2931" stroke-width="1.6">
-    <circle cx="80" cy="32" r="4.2"/>
-    <circle cx="124" cy="32" r="4.2"/>
-    <circle cx="80" cy="64" r="4.2"/>
-    <circle cx="124" cy="64" r="4.2"/>
-  </g>
-  <g stroke="#1f2931" stroke-width="3.2" stroke-linecap="round">
-    <line x1="80" y1="32" x2="64" y2="28"/>
-    <line x1="124" y1="32" x2="140" y2="28"/>
-    <line x1="80" y1="64" x2="64" y2="68"/>
-    <line x1="124" y1="64" x2="140" y2="68"/>
-  </g>
-  <!-- dragon head -->
-  <path d="M170 48c10.4 2.6 16.8 6.8 19.6 13.2-6.8 5.4-13.4 6.2-22 3.8z" fill="#b78635" stroke="#4c3213" stroke-width="2"/>
-  <circle cx="184" cy="56" r="3.6" fill="#1d1309"/>
-  <!-- oars -->
-  <g fill="#d2a261" stroke="#6b3d19" stroke-width="2.3">
-    <path d="M60 24l-20 -12 4 -6 28 10z"/>
-    <path d="M78 22l-20 -12 4 -6 28 10z"/>
-    <path d="M126 22l20 -12-4 -6-28 10z"/>
-    <path d="M144 24l20 -12-4 -6-28 10z"/>
-    <path d="M60 58l-20 12 4 6 28-10z"/>
-    <path d="M78 60l-20 12 4 6 28-10z"/>
-    <path d="M126 60l20 12-4 6-28-10z"/>
-    <path d="M144 58l20 12-4 6-28-10z"/>
-  </g>
+  <path d="M170 35c11.4 2.8 18.4 8.2 21.2 15.2-7.2 5.6-14.6 6.6-23.2 3.8z" fill="#c58b39" stroke="#4f3116" stroke-width="2"/>
+  <circle cx="182" cy="37" r="3.2" fill="#1f140a"/>
 </svg>

@@ -22,17 +22,6 @@
     <circle r="6" fill="#dce2ea" stroke="#2d3741" stroke-width="1.4"/>
     <path d="M0 0h16" stroke="#2d3741" stroke-width="3" stroke-linecap="round"/>
   </g>
-  <!-- oars -->
-  <g fill="#d2a061" stroke="#6a3d19" stroke-width="2">
-    <path d="M52 20l-16 -12 4 -6 24 10z"/>
-    <path d="M68 18l-16 -12 4 -6 24 10z"/>
-    <path d="M108 18l16 -12-4 -6-24 10z"/>
-    <path d="M124 20l16 -12-4 -6-24 10z"/>
-    <path d="M52 46l-16 12 4 6 24-10z"/>
-    <path d="M68 48l-16 12 4 6 24-10z"/>
-    <path d="M108 48l16 12-4 6-24-10z"/>
-    <path d="M124 46l16 12-4 6-24-10z"/>
-  </g>
   <!-- stern banner -->
   <rect x="88" y="8" width="4" height="16" rx="1.5" fill="#6f4524"/>
   <path d="M92 10l-18 6 18 6z" fill="#1f4f9a" stroke="#1a3160" stroke-width="1.2"/>

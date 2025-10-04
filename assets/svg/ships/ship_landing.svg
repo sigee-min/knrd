@@ -1,6 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 60">
-  <!-- Landing craft top-down with bow ramp -->
-  <rect x="10" y="24" width="52" height="12" rx="2" fill="#667a8a" stroke="#2e3a44" stroke-width="2"/>
-  <polygon points="62,24 70,30 62,36" fill="#7c8e9c" stroke="#2e3a44" stroke-width="1"/>
-  <rect x="16" y="24" width="12" height="12" rx="1" fill="#96a9b8" stroke="#2e3a44" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
+  <defs>
+    <linearGradient id="landingHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5b6f80"/>
+      <stop offset="1" stop-color="#293542"/>
+    </linearGradient>
+    <linearGradient id="landingDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d2c3a3"/>
+      <stop offset="1" stop-color="#b39f79"/>
+    </linearGradient>
+  </defs>
+  <path d="M18 30c0-8.4 14.2-21.6 36-27.6L100-10l46 10.8c21.8 6 36 19.2 36 27.6s-14.2 21.6-36 27.6L100 66.8 54 55.2C32.2 49.2 18 36 18 30z" fill="url(#landingHull)" stroke="#1a222a" stroke-width="3"/>
+  <path d="M42 30c0-5.2 9.8-11.6 32-15l24-2.6 24 2.6c22.2 3.4 32 9.8 32 15s-9.8 11.6-32 15l-24 2.6-24-2.6c-22.2-3.4-32-9.8-32-15z" fill="url(#landingDeck)"/>
+  <g transform="translate(100 30)">
+    <rect x="-34" y="-8" width="68" height="16" rx="6" fill="#3d4a56" stroke="#12191f" stroke-width="1.6"/>
+    <path d="M34 0h16" stroke="#12191f" stroke-width="2.8" stroke-linecap="round"/>
+  </g>
 </svg>

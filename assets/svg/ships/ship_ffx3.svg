@@ -1,15 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 64">
-  <!-- FFX-III frigate top-down -->
-  <path d="M8 32 L16 26 L34 24 L50 26 L64 32 L50 38 L34 40 L16 38 Z" fill="#3f5670" stroke="#1c2836" stroke-width="2" stroke-linejoin="round"/>
-  <!-- Superstructure -->
-  <rect x="28" y="25" width="14" height="14" rx="1" fill="#7592af" stroke="#1c2836" stroke-width="1"/>
-  <!-- VLS block -->
-  <g transform="translate(44,28)" fill="#8ea4ba" stroke="#1c2836" stroke-width="0.6">
-    <rect x="-3" y="0" width="2" height="2"/>
-    <rect x="0" y="0" width="2" height="2"/>
-    <rect x="-3" y="3" width="2" height="2"/>
-    <rect x="0" y="3" width="2" height="2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 52">
+  <defs>
+    <linearGradient id="ffx3Hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5f7488"/>
+      <stop offset="1" stop-color="#283341"/>
+    </linearGradient>
+    <linearGradient id="ffx3Deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d4c4a6"/>
+      <stop offset="1" stop-color="#b29e7a"/>
+    </linearGradient>
+  </defs>
+  <path d="M22 26c0-7.6 13.8-19.6 34-24.8L100-10l44 10.8c20.2 5.2 34 17.2 34 24.8s-13.8 19.6-34 24.8L100 66.8 56 50.8C35.8 45.6 22 33.6 22 26z" fill="url(#ffx3Hull)" stroke="#1b232b" stroke-width="3"/>
+  <path d="M44 26c0-4.4 9-9.2 28-12l24-2.2 24 2.2c19 2.8 28 7.6 28 12s-9 9.2-28 12l-24 2.2-24-2.2c-19-2.8-28-7.6-28-12z" fill="url(#ffx3Deck)"/>
+  <g transform="translate(100 26)">
+    <rect x="-28" y="-8" width="56" height="14" rx="5" fill="#3c4855" stroke="#11181e" stroke-width="1.4"/>
+    <rect x="-12" y="-14" width="24" height="9" rx="3" fill="#252e36" stroke="#0d1114" stroke-width="1.1"/>
   </g>
-  <!-- Helipad -->
-  <circle cx="14" cy="32" r="5" fill="none" stroke="#c9d7e4" stroke-width="1"/>
 </svg>

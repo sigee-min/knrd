@@ -26,7 +26,6 @@
     <line x1="118" y1="20" x2="118" y2="68"/>
     <line x1="136" y1="22" x2="136" y2="66"/>
   </g>
-  <!-- armor plating -->
   <g>
     <rect x="72" y="18" width="56" height="44" rx="16" fill="url(#goryeo-armored-plating)" stroke="#1f272f" stroke-width="2.4"/>
     <g fill="#ccd5de" stroke="#1b242c" stroke-width="1.5">
@@ -35,27 +34,14 @@
     </g>
     <rect x="84" y="46" width="32" height="12" rx="5" fill="#303a45" stroke="#10161c" stroke-width="1.6"/>
   </g>
-  <!-- bow cannon -->
   <g>
     <circle cx="152" cy="44" r="12" fill="url(#goryeo-armored-bronze)" stroke="#5c3918" stroke-width="2"/>
     <path d="M164 44h24" stroke="#5c3918" stroke-width="4" stroke-linecap="round"/>
   </g>
-  <!-- side plating -->
   <g fill="#6a4625" stroke="#3b2514" stroke-width="1.6" opacity="0.7">
     <rect x="48" y="32" width="8" height="22" rx="4"/>
     <rect x="58" y="30" width="8" height="24" rx="4"/>
     <rect x="130" y="30" width="8" height="24" rx="4" transform="scale(-1 1) translate(-268 0)"/>
     <rect x="140" y="32" width="8" height="22" rx="4" transform="scale(-1 1) translate(-288 0)"/>
-  </g>
-  <!-- oars -->
-  <g fill="#d1a265" stroke="#6a3d19" stroke-width="2.2">
-    <path d="M56 24l-20 -12 4 -6 28 10z"/>
-    <path d="M74 22l-20 -12 4 -6 28 10z"/>
-    <path d="M120 22l20 -12-4 -6-28 10z"/>
-    <path d="M138 24l20 -12-4 -6-28 10z"/>
-    <path d="M56 54l-20 12 4 6 28-10z"/>
-    <path d="M74 56l-20 12 4 6 28-10z"/>
-    <path d="M120 56l20 12-4 6-28-10z"/>
-    <path d="M138 54l20 12-4 6-28-10z"/>
   </g>
 </svg>

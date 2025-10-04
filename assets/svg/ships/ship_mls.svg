@@ -1,7 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Mine layer MLS top-down -->
-  <polygon points="8,32 16,27 32,26 44,28 52,32 44,36 32,38 16,37" fill="#5f7282" stroke="#28343e" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="24" y="26" width="10" height="8" rx="1" fill="#8ea2b0" stroke="#28343e" stroke-width="1"/>
-  <!-- Stern mine rack hint -->
-  <line x1="14" y1="30" x2="14" y2="34" stroke="#c9d7e4" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 52">
+  <defs>
+    <linearGradient id="mlsHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#586a7b"/>
+      <stop offset="1" stop-color="#25303a"/>
+    </linearGradient>
+    <linearGradient id="mlsDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#cfbf9f"/>
+      <stop offset="1" stop-color="#ad9874"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 26c0-7.6 13.8-19.6 34-24.8L100-10l46 11c20.2 5.2 34 17.2 34 24.8s-13.8 19.6-34 24.8L100 66.8 54 50.8C33.8 45.6 20 33.6 20 26z" fill="url(#mlsHull)" stroke="#182028" stroke-width="3"/>
+  <path d="M42 26c0-4.4 9-9.4 28-12l24-2.2 24 2.2c19 2.6 28 7.6 28 12s-9 9.4-28 12l-24 2.2-24-2.2c-19-2.6-28-7.6-28-12z" fill="url(#mlsDeck)"/>
+  <g transform="translate(100 26)">
+    <rect x="-24" y="-6" width="48" height="12" rx="4" fill="#34404b" stroke="#10171c" stroke-width="1.2"/>
+    <rect x="-10" y="-12" width="20" height="8" rx="2.5" fill="#242d34" stroke="#0c1114" stroke-width="1"/>
+  </g>
 </svg>

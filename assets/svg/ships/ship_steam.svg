@@ -1,7 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 64">
-  <!-- Steam trader top-down -->
-  <polygon points="10,32 16,28 34,27 46,29 58,32 46,35 34,37 16,36" fill="#5f7486" stroke="#2a3540" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="24" y="24" width="10" height="10" rx="1" fill="#8ea3b0" stroke="#2a3540" stroke-width="1"/>
-  <!-- Funnel -->
-  <circle cx="30" cy="21" r="3" fill="#cbd5dc" stroke="#2a3540" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 56">
+  <defs>
+    <linearGradient id="steamHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6e8094"/>
+      <stop offset="1" stop-color="#2f3945"/>
+    </linearGradient>
+    <linearGradient id="steamDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d6c4a0"/>
+      <stop offset="1" stop-color="#b4a078"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 28c0-8.2 14.4-21.4 36-27.2L102-10l46 10.8c21.6 5.8 36 19 36 27.2s-14.4 21.4-36 27.2L102 66.8 58 55C36.4 49.2 20 36.2 20 28z" fill="url(#steamHull)" stroke="#1e272f" stroke-width="3"/>
+  <path d="M44 28c0-5.2 9.8-11.4 32-14.4l24-2.8 24 2.8c22.2 3 32 9.2 32 14.4s-9.8 11.4-32 14.4l-24 2.8-24-2.8c-22.2-3-32-9.2-32-14.4z" fill="url(#steamDeck)"/>
+  <g transform="translate(100 28)">
+    <rect x="-32" y="-10" width="64" height="20" rx="8" fill="#3e4c5a" stroke="#161d23" stroke-width="1.8"/>
+    <rect x="-6" y="-16" width="12" height="12" rx="3" fill="#2f3945" stroke="#11161a" stroke-width="1.4"/>
+  </g>
 </svg>

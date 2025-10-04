@@ -1,62 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 84">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 204 62">
   <defs>
-    <linearGradient id="goryeo-cannon2-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#b87d3f"/>
-      <stop offset="1" stop-color="#73431c"/>
+    <linearGradient id="cannon2Hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a97336"/>
+      <stop offset="1" stop-color="#5a3318"/>
     </linearGradient>
-    <linearGradient id="goryeo-cannon2-deck" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#e7c896"/>
-      <stop offset="1" stop-color="#c09661"/>
+    <linearGradient id="cannon2Deck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d6b37c"/>
+      <stop offset="1" stop-color="#ad804e"/>
     </linearGradient>
-    <linearGradient id="goryeo-cannon2-casemate" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#5f6b77"/>
-      <stop offset="1" stop-color="#3a4654"/>
-    </linearGradient>
-    <linearGradient id="goryeo-cannon2-bronze" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#d9a94d"/>
-      <stop offset="1" stop-color="#946120"/>
+    <linearGradient id="cannon2Bronze" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ddb04f"/>
+      <stop offset="1" stop-color="#8f5c21"/>
     </linearGradient>
   </defs>
-  <path d="M20 42c0-10.8 17-28.8 44-37.2l32-9.8 32 9.8c27 8.4 44 26.4 44 37.2s-17 28.8-44 37.2l-32 9.8-32-9.8C37 70.8 20 52.8 20 42z" fill="url(#goryeo-cannon2-hull)" stroke="#3c2211" stroke-width="3"/>
-  <path d="M46 42c0-7.6 12-16.8 38-21.8l12-2.2 12 2.2c26 5 38 14.2 38 21.8s-12 16.8-38 21.8l-12 2.2-12-2.2c-26-5-38-14.2-38-21.8z" fill="url(#goryeo-cannon2-deck)" stroke="#8d5a2b" stroke-width="1.6"/>
-  <g stroke="#8d5a2b" stroke-width="1.2" opacity="0.55">
-    <line x1="62" y1="20" x2="62" y2="64"/>
-    <line x1="80" y1="18" x2="80" y2="66"/>
-    <line x1="98" y1="18" x2="98" y2="66"/>
-    <line x1="116" y1="18" x2="116" y2="66"/>
-    <line x1="134" y1="20" x2="134" y2="64"/>
+  <path d="M18 31c0-8.8 14.4-23 36-29.8L102-10l48 11.2c21.6 6.8 36 21 36 29.8s-14.4 23-36 29.8L102 72.2 54 60C32.4 54.2 18 39.8 18 31z" fill="url(#cannon2Hull)" stroke="#2d190c" stroke-width="3"/>
+  <path d="M44 31c0-5.8 9.8-12.6 30-16.6l24-3.6 24 3.6c20.2 4 30 10.8 30 16.6s-9.8 12.6-30 16.6l-24 3.6-24-3.6c-20.2-4-30-10.8-30-16.6z" fill="url(#cannon2Deck)"/>
+  <g transform="translate(106 31)">
+    <rect x="-30" y="-12" width="60" height="30" rx="12" fill="#485563" stroke="#1f272f" stroke-width="2"/>
+    <rect x="-24" y="-18" width="48" height="12" rx="6" fill="#718090" stroke="#1f272f" stroke-width="1.8"/>
+    <rect x="-18" y="18" width="36" height="10" rx="5" fill="#2f3842" stroke="#0f151a" stroke-width="1.6"/>
   </g>
-  <!-- double casemate -->
-  <g transform="translate(96 28)">
-    <rect x="-26" y="-10" width="52" height="44" rx="14" fill="url(#goryeo-cannon2-casemate)" stroke="#1f2730" stroke-width="2.4"/>
-    <rect x="-20" y="-16" width="40" height="12" rx="6" fill="#7a8794" stroke="#1f2730" stroke-width="2"/>
-    <rect x="-16" y="18" width="32" height="12" rx="6" fill="#2f3944" stroke="#10151a" stroke-width="2"/>
-    <g fill="#dce5f0" stroke="#1b242c" stroke-width="1.4">
-      <rect x="-12" y="-6" width="8" height="14" rx="3"/>
-      <rect x="4" y="-6" width="8" height="14" rx="3"/>
-    </g>
-  </g>
-  <!-- artillery -->
   <g>
-    <circle cx="142" cy="42" r="11" fill="url(#goryeo-cannon2-bronze)" stroke="#5c3918" stroke-width="2"/>
-    <circle cx="128" cy="32" r="8" fill="url(#goryeo-cannon2-bronze)" stroke="#5c3918" stroke-width="1.6"/>
-    <path d="M152 42h22" stroke="#5c3918" stroke-width="4" stroke-linecap="round"/>
-    <path d="M135 32l16-3" stroke="#5c3918" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="152" cy="31" r="9" fill="url(#cannon2Bronze)" stroke="#5c3918" stroke-width="1.8"/>
+    <circle cx="136" cy="23" r="7" fill="url(#cannon2Bronze)" stroke="#5c3918" stroke-width="1.6"/>
+    <circle cx="136" cy="39" r="7" fill="url(#cannon2Bronze)" stroke="#5c3918" stroke-width="1.6"/>
+    <path d="M160 31h20" stroke="#5c3918" stroke-width="3.2" stroke-linecap="round"/>
   </g>
-  <!-- shields -->
-  <g fill="#be4136" stroke="#431514" stroke-width="1.4">
-    <circle cx="60" cy="42" r="5.2"/>
-    <circle cx="132" cy="42" r="5.2"/>
-  </g>
-  <!-- oars -->
-  <g fill="#d1a164" stroke="#6a3d19" stroke-width="2.2">
-    <path d="M56 24l-18 -12 4 -6 26 12z"/>
-    <path d="M74 22l-18 -12 4 -6 26 12z"/>
-    <path d="M120 22l18 -12-4 -6-26 12z"/>
-    <path d="M138 24l18 -12-4 -6-26 12z"/>
-    <path d="M56 54l-18 12 4 6 26-12z"/>
-    <path d="M74 56l-18 12 4 6 26-12z"/>
-    <path d="M120 56l18 12-4 6-26-12z"/>
-    <path d="M138 54l18 12-4 6-26-12z"/>
+  <g fill="#be3f35" stroke="#411414" stroke-width="1.3">
+    <circle cx="66" cy="31" r="4.6"/>
+    <circle cx="130" cy="31" r="4.6"/>
   </g>
 </svg>

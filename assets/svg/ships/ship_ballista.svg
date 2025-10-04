@@ -1,56 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 184 76">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188 58">
   <defs>
-    <linearGradient id="ballista-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ae7336"/>
-      <stop offset="1" stop-color="#6b3f1c"/>
+    <linearGradient id="ballistaHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#986534"/>
+      <stop offset="1" stop-color="#553019"/>
     </linearGradient>
-    <linearGradient id="ballista-deck" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#e1bf8e"/>
-      <stop offset="1" stop-color="#b58a56"/>
-    </linearGradient>
-    <linearGradient id="ballista-frame" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#d5b07c"/>
-      <stop offset="1" stop-color="#a17a49"/>
+    <linearGradient id="ballistaDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#cdac78"/>
+      <stop offset="1" stop-color="#a97f51"/>
     </linearGradient>
   </defs>
-  <!-- hull -->
-  <path d="M18 38c0-9.6 15.2-25.8 40-33.2l34-9.8 34 9.8c24.8 7.4 40 23.6 40 33.2s-15.2 25.8-40 33.2l-34 9.8-34-9.8C33.2 63.8 18 47.6 18 38z" fill="url(#ballista-hull)" stroke="#3a2212" stroke-width="3"/>
-  <!-- deck -->
-  <path d="M42 38c0-7 11-15.6 36-19.6l14-2.4 14 2.4c25 4 36 12.6 36 19.6S131 53.6 106 57.6l-14 2.4-14-2.4C53 53.6 42 45 42 38z" fill="url(#ballista-deck)" stroke="#885629" stroke-width="1.6"/>
-  <g stroke="#885629" stroke-width="1.2" opacity="0.55">
-    <line x1="60" y1="18" x2="60" y2="58"/>
-    <line x1="78" y1="16" x2="78" y2="60"/>
-    <line x1="96" y1="16" x2="96" y2="60"/>
-    <line x1="114" y1="16" x2="114" y2="60"/>
-    <line x1="132" y1="18" x2="132" y2="58"/>
+  <path d="M18 29c0-8.4 13.6-21.6 34-28l39-11 39 11c20.4 6.4 34 19.6 34 28s-13.6 21.6-34 28l-39 11-39-11C31.6 50.6 18 37.4 18 29z" fill="url(#ballistaHull)" stroke="#2d180c" stroke-width="3"/>
+  <path d="M40 29c0-5.8 9.6-12.6 30-16.4l22-3.6 22 3.6c20.4 3.8 30 10.6 30 16.4s-9.6 12.6-30 16.4l-22 3.6-22-3.6c-20.4-3.8-30-10.6-30-16.4z" fill="url(#ballistaDeck)"/>
+  <g transform="translate(96 26)">
+    <rect x="-26" y="-10" width="52" height="28" rx="12" fill="#d2b07a" stroke="#6d471f" stroke-width="2"/>
+    <rect x="-20" y="-16" width="40" height="12" rx="6" fill="#885f32" stroke="#3d2713" stroke-width="1.6"/>
+    <path d="M-26 -6l-26 -9 4 10 22 1z" fill="#9d6a34" stroke="#3c2412" stroke-width="1.6"/>
+    <path d="M26 -6l26 -9-4 10-22 1z" fill="#9d6a34" stroke="#3c2412" stroke-width="1.6"/>
+    <path d="M-10 4h20" stroke="#3c2412" stroke-width="3"/>
   </g>
-  <!-- ballista carriage -->
-  <g transform="translate(96 24)">
-    <rect x="-20" y="-6" width="40" height="32" rx="10" fill="url(#ballista-frame)" stroke="#6d471f" stroke-width="2"/>
-    <rect x="-14" y="-12" width="28" height="10" rx="4" fill="#b58a56" stroke="#6d471f" stroke-width="2"/>
-    <rect x="-10" y="18" width="20" height="10" rx="4" fill="#8b6a43" stroke="#3a2412" stroke-width="1.4"/>
-    <path d="M-14 -6l-30 -8 4 10 26 2z" fill="#915f2e" stroke="#3a2412" stroke-width="2"/>
-    <path d="M14 -6l30 -8-4 10-26 2z" fill="#915f2e" stroke="#3a2412" stroke-width="2"/>
-    <path d="M-8 6h16" stroke="#3a2412" stroke-width="3"/>
-    <path d="M-6 20h12" stroke="#22140b" stroke-width="2" opacity="0.7"/>
-  </g>
-  <!-- crew shields -->
-  <g fill="#d0a062" stroke="#683d1a" stroke-width="2.2">
-    <path d="M54 26l-20 -14 4 -6 28 12z"/>
-    <path d="M70 24l-20 -14 4 -6 28 12z"/>
-    <path d="M122 24l20 -14-4 -6-28 12z"/>
-    <path d="M138 26l20 -14-4 -6-28 12z"/>
-    <path d="M54 50l-20 14 4 6 28-12z"/>
-    <path d="M70 52l-20 14 4 6 28-12z"/>
-    <path d="M122 52l20 14-4 6-28-12z"/>
-    <path d="M138 50l20 14-4 6-28-12z"/>
-  </g>
-
-  <!-- side oars -->
-  <g fill="#d0a062" stroke="#683d1a" stroke-width="2.2">
-    <path d="M54 50l-20 14 4 6 28-12z"/>
-    <path d="M70 52l-20 14 4 6 28-12z"/>
-    <path d="M122 52l20 14-4 6-28-12z"/>
-    <path d="M138 50l20 14-4 6-28-12z"/>
+  <g fill="#c04432" stroke="#401816" stroke-width="1.4">
+    <circle cx="60" cy="29" r="4.4"/>
+    <circle cx="132" cy="29" r="4.4"/>
   </g>
 </svg>

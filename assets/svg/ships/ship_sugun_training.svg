@@ -1,47 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 72">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 196 58">
   <defs>
-    <linearGradient id="sugun-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#3c5878"/>
-      <stop offset="1" stop-color="#1f2f42"/>
+    <linearGradient id="sugunHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7285a1"/>
+      <stop offset="1" stop-color="#334154"/>
     </linearGradient>
-    <linearGradient id="sugun-deck" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#d5b27a"/>
-      <stop offset="1" stop-color="#b18953"/>
+    <linearGradient id="sugunDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d5b382"/>
+      <stop offset="1" stop-color="#af8855"/>
     </linearGradient>
   </defs>
-  <path d="M20 36c0-9.2 14.8-23.8 36-30l32-8h0l32 8c21.2 6.2 36 20.8 36 30s-14.8 23.8-36 30l-32 8h0l-32-8c-21.2-6.2-36-20.8-36-30z" fill="url(#sugun-hull)" stroke="#13202e" stroke-width="3"/>
-  <path d="M40 36c0-6 9.2-13.4 28-16.6l20-3.4 20 3.4c18.8 3.2 28 10.6 28 16.6s-9.2 13.4-28 16.6l-20 3.4-20-3.4c-18.8-3.2-28-10.6-28-16.6z" fill="url(#sugun-deck)" stroke="#7d5025" stroke-width="1.4"/>
-  <g stroke="#7d5025" stroke-width="1.1" opacity="0.55">
-    <line x1="56" y1="20" x2="56" y2="52"/>
-    <line x1="72" y1="18" x2="72" y2="54"/>
-    <line x1="88" y1="18" x2="88" y2="54"/>
-    <line x1="104" y1="18" x2="104" y2="54"/>
-    <line x1="120" y1="20" x2="120" y2="52"/>
-  </g>
-  <!-- mast and banner -->
-  <rect x="86" y="10" width="4" height="52" rx="1.6" fill="#6b4724"/>
-  <path d="M90 14l20 6-20 6z" fill="#d9b13d" stroke="#6b4724" stroke-width="1.2"/>
-  <path d="M90 40l-18 6 18 6z" fill="#be2f38" stroke="#6b4724" stroke-width="1.2"/>
-  <!-- deckhouse -->
-  <rect x="66" y="24" width="44" height="20" rx="8" fill="#c2a87a" stroke="#6e4a27" stroke-width="1.6"/>
-  <g fill="#ded7c3" stroke="#6b5a3a" stroke-width="1">
-    <rect x="72" y="28" width="10" height="12" rx="3"/>
-    <rect x="94" y="28" width="10" height="12" rx="3"/>
-  </g>
-  <!-- oars -->
-  <g fill="#d2a061" stroke="#6a3d19" stroke-width="2.1">
-    <path d="M52 22l-18 -12 4 -6 26 12z"/>
-    <path d="M68 20l-18 -12 4 -6 26 12z"/>
-    <path d="M120 20l18 -12-4 -6-26 12z"/>
-    <path d="M136 22l18 -12-4 -6-26 12z"/>
-    <path d="M52 50l-18 12 4 6 26-12z"/>
-    <path d="M68 52l-18 12 4 6 26-12z"/>
-    <path d="M120 52l18 12-4 6-26-12z"/>
-    <path d="M136 50l18 12-4 6-26-12z"/>
-  </g>
-  <!-- shields -->
-  <g fill="#be3e35" stroke="#431414" stroke-width="1.3">
-    <circle cx="56" cy="36" r="4.6"/>
-    <circle cx="120" cy="36" r="4.6"/>
+  <path d="M20 29c0-8.4 14-21.8 36-28L102-10l46 11.2c22 6.2 36 19.6 36 28s-14 21.8-36 28L102 68.4 56 57C34 50.8 20 37.4 20 29z" fill="url(#sugunHull)" stroke="#1d2733" stroke-width="3"/>
+  <path d="M42 29c0-5.8 9.6-12.6 30-16.4l22-3.6 22 3.6c20.4 3.8 30 10.6 30 16.4s-9.6 12.6-30 16.4l-22 3.6-22-3.6c-20.4-3.8-30-10.6-30-16.4z" fill="url(#sugunDeck)"/>
+  <g transform="translate(96 28)">
+    <rect x="-30" y="-12" width="60" height="24" rx="10" fill="#c04636" stroke="#431816" stroke-width="2"/>
+    <rect x="-24" y="-18" width="48" height="12" rx="6" fill="#f1e2c8" stroke="#887453" stroke-width="1.6"/>
+    <g fill="#e6f0f8" stroke="#3b4a5c" stroke-width="1.2">
+      <rect x="-16" y="-4" width="12" height="12" rx="3"/>
+      <rect x="4" y="-4" width="12" height="12" rx="3"/>
+    </g>
   </g>
 </svg>

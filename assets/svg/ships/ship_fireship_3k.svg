@@ -1,50 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188 76">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188 60">
   <defs>
-    <linearGradient id="fire3k-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ba7031"/>
-      <stop offset="1" stop-color="#733c16"/>
+    <linearGradient id="fire3KHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b06e34"/>
+      <stop offset="1" stop-color="#623519"/>
     </linearGradient>
-    <linearGradient id="fire3k-deck" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#e7c28f"/>
-      <stop offset="1" stop-color="#c2955c"/>
+    <linearGradient id="fire3KDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#deb680"/>
+      <stop offset="1" stop-color="#ba8952"/>
     </linearGradient>
-    <radialGradient id="fire3k-flame" cx="0.7" cy="0.35" r="0.7">
-      <stop offset="0" stop-color="#ffe9a6"/>
-      <stop offset="0.4" stop-color="#ffb347"/>
-      <stop offset="1" stop-color="#d74a1b"/>
+    <radialGradient id="fire3KBlaze" cx="0.72" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#ffe7a5"/>
+      <stop offset="0.4" stop-color="#ffb24a"/>
+      <stop offset="1" stop-color="#d24b1a"/>
     </radialGradient>
   </defs>
-  <path d="M20 38c0-9.6 15.4-25.6 40-33.2l36-10.8 36 10.8c24.6 7.6 40 23.6 40 33.2s-15.4 25.6-40 33.2l-36 10.8-36-10.8C35.4 63.6 20 47.6 20 38z" fill="url(#fire3k-hull)" stroke="#3c2010" stroke-width="3"/>
-  <path d="M44 38c0-7 11.2-15.6 36-19.8l14-2.4 14 2.4c24.8 4.2 36 12.8 36 19.8s-11.2 15.6-36 19.8l-14 2.4-14-2.4c-24.8-4.2-36-12.8-36-19.8z" fill="url(#fire3k-deck)" stroke="#8a5527" stroke-width="1.6"/>
-  <g stroke="#8a5527" stroke-width="1.2" opacity="0.5">
-    <line x1="62" y1="18" x2="62" y2="58"/>
-    <line x1="80" y1="16" x2="80" y2="60"/>
-    <line x1="98" y1="16" x2="98" y2="60"/>
-    <line x1="116" y1="16" x2="116" y2="60"/>
-    <line x1="134" y1="18" x2="134" y2="58"/>
-  </g>
-  <!-- incendiary jars -->
+  <path d="M20 30c0-8.6 13.8-22.4 34-28.8l38-10.4 38 10.4c20.2 6.4 34 20.2 34 28.8s-13.8 22.4-34 28.8l-38 10.4-38-10.4C33.8 52.4 20 38.6 20 30z" fill="url(#fire3KHull)" stroke="#2a160c" stroke-width="3"/>
+  <path d="M40 30c0-5.8 9.4-12.6 30-16.4l22-3.6 22 3.6c20.6 3.8 30 10.6 30 16.4s-9.4 12.6-30 16.4l-22 3.6-22-3.6c-20.6-3.8-30-10.6-30-16.4z" fill="url(#fire3KDeck)"/>
   <g>
-    <circle cx="148" cy="38" r="12" fill="url(#fire3k-flame)"/>
-    <circle cx="130" cy="28" r="6" fill="url(#fire3k-flame)" opacity="0.85"/>
-    <circle cx="130" cy="48" r="6" fill="url(#fire3k-flame)" opacity="0.85"/>
-    <circle cx="114" cy="32" r="5" fill="url(#fire3k-flame)" opacity="0.7"/>
-    <circle cx="114" cy="44" r="5" fill="url(#fire3k-flame)" opacity="0.7"/>
+    <circle cx="142" cy="30" r="12" fill="url(#fire3KBlaze)"/>
+    <circle cx="124" cy="22" r="6" fill="url(#fire3KBlaze)" opacity="0.8"/>
+    <circle cx="124" cy="38" r="6" fill="url(#fire3KBlaze)" opacity="0.8"/>
   </g>
-  <circle cx="148" cy="38" r="3.4" fill="#41150b"/>
-  <!-- command deck -->
-  <rect x="84" y="18" width="20" height="40" rx="7" fill="#273641" stroke="#101821" stroke-width="1.6"/>
-  <circle cx="94" cy="26" r="3.6" fill="#dbe4ec"/>
-  <!-- oars -->
-  <g fill="#d2a062" stroke="#6a3d19" stroke-width="2.2">
-    <path d="M58 24l-18 -12 4 -6 26 12z"/>
-    <path d="M74 22l-18 -12 4 -6 26 12z"/>
-    <path d="M122 22l18 -12-4 -6-26 12z"/>
-    <path d="M138 24l18 -12-4 -6-26 12z"/>
-    <path d="M58 52l-18 12 4 6 26-12z"/>
-    <path d="M74 54l-18 12 4 6 26-12z"/>
-    <path d="M122 54l18 12-4 6-26-12z"/>
-    <path d="M138 52l18 12-4 6-26-12z"/>
-  </g>
-
+  <circle cx="142" cy="30" r="3.2" fill="#31130a"/>
 </svg>

@@ -80,9 +80,8 @@ let ctx;
 let minimapCanvas;
 let minimapCtx;
 
-// Sprite default art faces to the right (0 rad). If visuals appear reversed in motion,
-// apply a global heading offset. Using Math.PI flips orientation by 180 degrees.
-// Now that ship assets are rotated at load, only enemies keep 180° offset.
+// Ship sprites are authored nose-up (facing -Y). Heading offsets in core/constants/gameplay.js
+// convert that to the expected direction of travel so vessels point where they are moving.
 
 const battlefieldEl = document.querySelector('.battlefield');
 let cameraInitialized = false;

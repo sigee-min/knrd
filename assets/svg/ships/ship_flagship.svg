@@ -1,6 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 64">
-  <!-- Flagship top-down -->
-  <polygon points="10,32 16,26 34,24 50,26 62,32 50,38 34,40 16,38" fill="#8d5f33" stroke="#3c2a18" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="26" y="24" width="6" height="16" rx="1" fill="#d0b891" stroke="#6b5a3a" stroke-width="1"/>
-  <polygon points="32,18 46,24 32,30" fill="#eadfcb" stroke="#cbb48e" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188 58">
+  <defs>
+    <linearGradient id="flagHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b27a3d"/>
+      <stop offset="1" stop-color="#6a3a1c"/>
+    </linearGradient>
+    <linearGradient id="flagDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#dfbe8a"/>
+      <stop offset="1" stop-color="#ba8e57"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 29c0-8.6 13.8-22.6 34-29l38-10 38 10c20.2 6.4 34 20.4 34 29s-13.8 22.6-34 29l-38 10-38-10C33.8 51.6 20 37.6 20 29z" fill="url(#flagHull)" stroke="#301a0d" stroke-width="3"/>
+  <path d="M40 29c0-5.8 9.6-13 30-16.8l22-3.8 22 3.8c20.4 3.8 30 11 30 16.8s-9.6 13-30 16.8l-22 3.8-22-3.8c-20.4-3.8-30-11-30-16.8z" fill="url(#flagDeck)"/>
+  <g transform="translate(94 28)">
+    <rect x="-26" y="-12" width="52" height="30" rx="12" fill="#cfa978" stroke="#6d471f" stroke-width="2"/>
+    <rect x="-18" y="-18" width="36" height="14" rx="7" fill="#8f6030" stroke="#3c2413" stroke-width="1.6"/>
+    <path d="M-18 -6h36" stroke="#3c2413" stroke-width="3"/>
+    <path d="M-18 10h36" stroke="#3c2413" stroke-width="3"/>
+  </g>
+  <rect x="92" y="6" width="4" height="18" rx="1.4" fill="#6f4524"/>
+  <path d="M96 8l16 6-16 6z" fill="#d2b041" stroke="#6b4514" stroke-width="1.2"/>
 </svg>

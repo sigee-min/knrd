@@ -1,6 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
-  <!-- Patrol boat top-down -->
-  <polygon points="8,30 16,25 32,24 44,26 52,30 44,34 32,36 16,35" fill="#537592" stroke="#293a4a" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="23" y="24" width="10" height="8" rx="1" fill="#8fa9bd" stroke="#293a4a" stroke-width="1"/>
-  <circle cx="46" cy="30" r="2.2" fill="#b8c8d6" stroke="#293a4a" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 54">
+  <defs>
+    <linearGradient id="patrolHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a6d80"/>
+      <stop offset="1" stop-color="#27323e"/>
+    </linearGradient>
+    <linearGradient id="patrolDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d0c1a0"/>
+      <stop offset="1" stop-color="#b09c76"/>
+    </linearGradient>
+  </defs>
+  <path d="M22 27c0-7.6 13.6-19.8 34-25.4L100-10l44 11c20.4 5.6 34 17.8 34 25.4s-13.6 19.8-34 25.4L100 67.8 56 56.4C35.6 50.8 22 34.6 22 27z" fill="url(#patrolHull)" stroke="#192028" stroke-width="3"/>
+  <path d="M46 27c0-4.8 9.6-10.2 30-13.2l22-2.4 22 2.4c20.4 3 30 8.4 30 13.2s-9.6 10.2-30 13.2l-22 2.4-22-2.4c-20.4-3-30-8.4-30-13.2z" fill="url(#patrolDeck)"/>
+  <g transform="translate(100 27)">
+    <rect x="-26" y="-8" width="52" height="16" rx="6" fill="#3a4854" stroke="#11181e" stroke-width="1.6"/>
+    <rect x="-10" y="-14" width="20" height="10" rx="3" fill="#28323a" stroke="#0d1115" stroke-width="1.2"/>
+  </g>
 </svg>

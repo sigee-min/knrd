@@ -1,49 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 184 76">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188 58">
   <defs>
-    <linearGradient id="bow-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#b2783d"/>
-      <stop offset="1" stop-color="#6d441e"/>
+    <linearGradient id="bowHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a56f35"/>
+      <stop offset="1" stop-color="#5d341a"/>
     </linearGradient>
-    <linearGradient id="bow-deck" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#dec093"/>
-      <stop offset="1" stop-color="#bb925f"/>
-    </linearGradient>
-    <linearGradient id="bow-prow" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#d7a640"/>
-      <stop offset="1" stop-color="#8f5d1c"/>
+    <linearGradient id="bowDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d5b07d"/>
+      <stop offset="1" stop-color="#af8452"/>
     </linearGradient>
   </defs>
-  <!-- broadside hull -->
-  <path d="M18 38c0-10 16-26.6 42-34l32-8 32 8c26 7.4 42 24 42 34s-16 26.6-42 34l-32 8-32-8c-26-7.4-42-24-42-34z" fill="url(#bow-hull)" stroke="#3b2413" stroke-width="3"/>
-  <!-- deck -->
-  <path d="M42 38c0-7.4 11.8-16.4 38-20.4l14-2.2 14 2.2c26.2 4 38 13 38 20.4s-11.8 16.4-38 20.4l-14 2.2-14-2.2c-26.2-4-38-13-38-20.4z" fill="url(#bow-deck)" stroke="#8c5c30" stroke-width="1.6"/>
-  <g stroke="#8c5c30" stroke-width="1.2" opacity="0.55">
-    <line x1="60" y1="18" x2="60" y2="58"/>
-    <line x1="76" y1="16" x2="76" y2="60"/>
-    <line x1="92" y1="16" x2="92" y2="60"/>
-    <line x1="108" y1="16" x2="108" y2="60"/>
-    <line x1="124" y1="18" x2="124" y2="58"/>
-  </g>
-  <!-- central fighting top -->
-  <rect x="86" y="18" width="12" height="40" rx="5" fill="#263540" stroke="#101821" stroke-width="1.6"/>
-  <circle cx="92" cy="24" r="4" fill="#d5e0ea"/>
-  <!-- arrow racks -->
-  <g fill="#5f3521" stroke="#2b1810" stroke-width="1.2">
-    <rect x="48" y="20" width="10" height="28" rx="3"/>
-    <rect x="126" y="20" width="10" height="28" rx="3"/>
-  </g>
-  <g stroke="#392010" stroke-width="2" opacity="0.75">
-    <line x1="50" y1="48" x2="40" y2="62"/>
-    <line x1="54" y1="48" x2="44" y2="62"/>
-    <line x1="130" y1="48" x2="140" y2="62"/>
-    <line x1="134" y1="48" x2="144" y2="62"/>
-  </g>
-  <!-- ceremonial prow -->
-  <path d="M150 36c9 2.2 15 6.2 18 12.2-6 5.4-12 6.4-20 4.2z" fill="url(#bow-prow)" stroke="#68421c" stroke-width="2"/>
-  <circle cx="164" cy="44" r="3.4" fill="#352312"/>
-  <!-- stern banner -->
-  <g>
-    <rect x="86" y="6" width="4" height="18" rx="1.5" fill="#6d4524"/>
-    <path d="M90 8l18 6-18 6z" fill="#be2f38" stroke="#542020" stroke-width="1.3"/>
+  <path d="M20 29c0-8.2 13.4-21.4 34-27.6l40-11.4 40 11.4c20.6 6.2 34 19.4 34 27.6s-13.4 21.4-34 27.6l-40 11.4-40-11.4C33.4 50.4 20 37.2 20 29z" fill="url(#bowHull)" stroke="#2d1a0f" stroke-width="3"/>
+  <path d="M42 29c0-5.8 9.2-12.8 30-16.4l22-3.4 22 3.4c20.8 3.6 30 10.6 30 16.4s-9.2 12.8-30 16.4l-22 3.4-22-3.4c-20.8-3.6-30-10.6-30-16.4z" fill="url(#bowDeck)"/>
+  <path d="M138 29c6.6 1.6 11.4 4.4 14.4 9.4-4.8 4-10 4.8-16.4 3.2z" fill="#d2ac42" stroke="#6a4316" stroke-width="1.5"/>
+  <g stroke="#61381b" stroke-width="1.6" opacity="0.45">
+    <path d="M52 18l36 22"/>
+    <path d="M52 40l36-22"/>
+    <path d="M72 16l0 26"/>
   </g>
 </svg>

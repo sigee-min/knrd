@@ -1,32 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Hull silhouette (frigate), bow to the right -->
-  <path d="M10 32 L18 26 L36 24 L50 26 L58 32 L50 38 L36 40 L18 38 Z" fill="#627c92" stroke="#2a3a4c" stroke-width="2" stroke-linejoin="round"/>
-
-  <!-- Forecastle turret -->
-  <circle cx="50" cy="32" r="3" fill="#b2c0cf" stroke="#2a3a4c" stroke-width="1"/>
-  <line x1="53" y1="32" x2="57" y2="32" stroke="#2a3a4c" stroke-width="2"/>
-
-  <!-- VLS block (stylized) -->
-  <g transform="translate(40,28)" fill="#9fb1c5" stroke="#2a3a4c" stroke-width="0.6">
-    <rect x="-3" y="0" width="2" height="2"/>
-    <rect x="0" y="0" width="2" height="2"/>
-    <rect x="-3" y="3" width="2" height="2"/>
-    <rect x="0" y="3" width="2" height="2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 54">
+  <defs>
+    <linearGradient id="ffHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#657a90"/>
+      <stop offset="1" stop-color="#2c3847"/>
+    </linearGradient>
+    <linearGradient id="ffDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d2c3a4"/>
+      <stop offset="1" stop-color="#b19e7b"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 27c0-7.8 14.4-20.6 36-26.4L102-10l42 10.6c21.6 5.8 36 18.6 36 26.4s-14.4 20.6-36 26.4L102 66.4 56 53.4C34.4 47.6 20 34.8 20 27z" fill="url(#ffHull)" stroke="#1b242c" stroke-width="3"/>
+  <path d="M44 27c0-5 9.8-10.8 32-13.8l24-2.6 24 2.6c22.2 3 32 8.8 32 13.8s-9.8 10.8-32 13.8l-24 2.6-24-2.6c-22.2-3-32-8.8-32-13.8z" fill="url(#ffDeck)"/>
+  <g transform="translate(100 27)">
+    <rect x="-30" y="-8" width="60" height="16" rx="6" fill="#3d4956" stroke="#12191f" stroke-width="1.6"/>
+    <rect x="-12" y="-14" width="24" height="10" rx="3" fill="#27313a" stroke="#0e1418" stroke-width="1.2"/>
   </g>
-
-  <!-- Superstructure -->
-  <rect x="20" y="25" width="13" height="14" rx="1" fill="#8fb1cf" stroke="#2a3a4c" stroke-width="1"/>
-  <rect x="22.5" y="24" width="8" height="3" fill="#a7c3db"/>
-
-  <!-- Mast -->
-  <line x1="26.5" y1="24" x2="26.5" y2="20" stroke="#2a3a4c" stroke-width="1.5"/>
-  <circle cx="26.5" cy="19" r="1.5" fill="#a7c3db" stroke="#2a3a4c" stroke-width="1"/>
-
-  <!-- Helipad marking at stern -->
-  <circle cx="14" cy="32" r="6" fill="none" stroke="#c9d7e4" stroke-width="1"/>
-  <line x1="14" y1="27.5" x2="14" y2="36.5" stroke="#c9d7e4" stroke-width="1"/>
-  <line x1="10.5" y1="32" x2="17.5" y2="32" stroke="#c9d7e4" stroke-width="1"/>
-
-  <!-- Centerline -->
-  <line x1="12" y1="32" x2="55" y2="32" stroke="#c9d7e4" stroke-width="0.75" stroke-dasharray="2 2" opacity="0.7"/>
 </svg>

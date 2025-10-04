@@ -1,46 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 80">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 60">
   <defs>
-    <linearGradient id="sail-hull" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#b98345"/>
-      <stop offset="1" stop-color="#754b24"/>
+    <linearGradient id="sailHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a77439"/>
+      <stop offset="1" stop-color="#64381c"/>
     </linearGradient>
-    <linearGradient id="sail-deck" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#ddc092"/>
-      <stop offset="1" stop-color="#b99563"/>
+    <linearGradient id="sailDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#daba88"/>
+      <stop offset="1" stop-color="#b38855"/>
     </linearGradient>
-    <linearGradient id="sailcloth" x1="0" y1="0" x2="0.8" y2="1">
-      <stop offset="0" stop-color="#f4f1e4"/>
-      <stop offset="1" stop-color="#cdc6b1"/>
+    <linearGradient id="sailCloth" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#f5f0de"/>
+      <stop offset="1" stop-color="#cbc3af"/>
     </linearGradient>
   </defs>
-  <!-- tapered hull -->
-  <path d="M20 40c0-10.4 16.2-27.2 42-34l26-6h0l26 6c25.8 6.8 42 23.6 42 34s-16.2 27.2-42 34l-26 6h0l-26-6c-25.8-6.8-42-23.6-42-34z" fill="url(#sail-hull)" stroke="#3d2515" stroke-width="3"/>
-  <!-- deck with planks -->
-  <path d="M42 40c0-7.6 11.6-16.8 36-20.6l10-1.4 10 1.4c24.4 3.8 36 13 36 20.6s-11.6 16.8-36 20.6l-10 1.4-10-1.4c-24.4-3.8-36-13-36-20.6z" fill="url(#sail-deck)" stroke="#8c5c31" stroke-width="1.6"/>
-  <g stroke="#8c5c31" stroke-width="1.2" opacity="0.5">
-    <line x1="60" y1="20" x2="60" y2="60"/>
-    <line x1="76" y1="18" x2="76" y2="62"/>
-    <line x1="92" y1="18" x2="92" y2="62"/>
-    <line x1="108" y1="18" x2="108" y2="62"/>
-    <line x1="124" y1="20" x2="124" y2="60"/>
+  <path d="M20 30c0-8.8 13.8-23 34-29.2l32-8.8 32 8.8c20.2 6.2 34 20.4 34 29.2s-13.8 23-34 29.2l-32 8.8-32-8.8C33.8 53 20 38.8 20 30z" fill="url(#sailHull)" stroke="#2f1d10" stroke-width="3"/>
+  <path d="M40 30c0-5.8 9.4-12.8 30-16.6l18-3.2 18 3.2c20.6 3.8 30 10.8 30 16.6s-9.4 12.8-30 16.6l-18 3.2-18-3.2c-20.6-3.8-30-10.8-30-16.6z" fill="url(#sailDeck)"/>
+  <g transform="translate(90 16)">
+    <rect x="-6" y="-6" width="12" height="40" rx="3" fill="#6f4a28" stroke="#3a2414" stroke-width="1.4"/>
+    <path d="M0 -4l46 14-46 14z" fill="url(#sailCloth)" stroke="#b7ad94" stroke-width="1.6"/>
+    <path d="M0 10l32 22-32 0z" fill="#d7c4a0" stroke="#9e8459" stroke-width="1.2" opacity="0.85"/>
   </g>
-  <!-- mast -->
-  <rect x="86" y="10" width="8" height="56" rx="3" fill="#6f4b2a" stroke="#3a2413" stroke-width="1.5"/>
-  <!-- spar and sail cloth seen from above -->
-  <path d="M90 16l40 12-12 12 18 10-40 12-40-12 18-10-12-12z" fill="url(#sailcloth)" stroke="#b7a688" stroke-width="2"/>
-  <path d="M90 16v48" stroke="#876845" stroke-width="2" opacity="0.8"/>
-  <!-- rigging -->
-  <g stroke="#5b452c" stroke-width="1.6" opacity="0.7">
-    <line x1="90" y1="16" x2="50" y2="30"/>
-    <line x1="90" y1="16" x2="130" y2="30"/>
-    <line x1="90" y1="64" x2="50" y2="50"/>
-    <line x1="90" y1="64" x2="130" y2="50"/>
-  </g>
-  <!-- decorative shields along rails -->
-  <g fill="#b03f3f" stroke="#331616" stroke-width="1.4">
-    <circle cx="56" cy="40" r="4.5"/>
-    <circle cx="68" cy="44" r="4.5"/>
-    <circle cx="112" cy="44" r="4.5"/>
-    <circle cx="124" cy="40" r="4.5"/>
+  <g stroke="#55361b" stroke-width="1.4" opacity="0.35">
+    <line x1="38" y1="30" x2="142" y2="30"/>
+    <line x1="50" y1="18" x2="128" y2="42"/>
+    <line x1="50" y1="42" x2="128" y2="18"/>
   </g>
 </svg>

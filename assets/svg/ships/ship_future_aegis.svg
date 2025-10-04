@@ -1,15 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 64">
-  <!-- Future AEGIS destroyer top-down -->
-  <path d="M6 32 L14 26 L34 24 L52 26 L74 32 L52 38 L34 40 L14 38 Z" fill="#38506a" stroke="#182434" stroke-width="2" stroke-linejoin="round"/>
-  <!-- Superstructure -->
-  <rect x="30" y="23" width="14" height="18" rx="1" fill="#6f8aa4" stroke="#182434" stroke-width="1"/>
-  <!-- VLS grid -->
-  <g transform="translate(52,27)" fill="#8aa2b9" stroke="#182434" stroke-width="0.6">
-    <rect x="0" y="0" width="3" height="3"/>
-    <rect x="4" y="0" width="3" height="3"/>
-    <rect x="0" y="4" width="3" height="3"/>
-    <rect x="4" y="4" width="3" height="3"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 52">
+  <defs>
+    <linearGradient id="futureHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#70849a"/>
+      <stop offset="1" stop-color="#2d3a47"/>
+    </linearGradient>
+    <linearGradient id="futureDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d2c4a8"/>
+      <stop offset="1" stop-color="#b39f7b"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 26c0-7.6 14.2-19.8 34-25.2L100-10l46 11.2c19.8 5.4 34 17.6 34 25.2s-14.2 19.8-34 25.2L100 67.2 54 51.2C34.2 45.8 20 33.6 20 26z" fill="url(#futureHull)" stroke="#1b232b" stroke-width="3"/>
+  <path d="M44 26c0-4.6 9.4-9.8 30-12.6l26-2.2 26 2.2c20.6 2.8 30 8 30 12.6s-9.4 9.8-30 12.6l-26 2.2-26-2.2c-20.6-2.8-30-8-30-12.6z" fill="url(#futureDeck)"/>
+  <g transform="translate(100 26)">
+    <rect x="-30" y="-8" width="60" height="14" rx="5" fill="#3d4956" stroke="#11181f" stroke-width="1.4"/>
+    <rect x="-16" y="-14" width="32" height="10" rx="3" fill="#25303a" stroke="#0d1216" stroke-width="1.1"/>
   </g>
-  <!-- Bow gun -->
-  <circle cx="72" cy="32" r="3.5" fill="#b8c8d6" stroke="#182434" stroke-width="1"/>
 </svg>

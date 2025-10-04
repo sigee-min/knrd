@@ -1,7 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- PKX top-down -->
-  <path d="M6 32 L16 24 L34 23 L48 26 L58 32 L48 38 L34 41 L16 40 Z" fill="#2f7d7d" stroke="#154444" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="22" y="25" width="13" height="14" rx="1" fill="#6ec0c0" stroke="#154444" stroke-width="1"/>
-  <rect x="38" y="28" width="6" height="8" rx="1" fill="#8cdada" stroke="#154444" stroke-width="1"/>
-  <circle cx="54" cy="32" r="2.5" fill="#b8c8d6" stroke="#154444" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48">
+  <defs>
+    <linearGradient id="pkxHull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#586a7c"/>
+      <stop offset="1" stop-color="#242f39"/>
+    </linearGradient>
+    <linearGradient id="pkxDeck" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d3c2a1"/>
+      <stop offset="1" stop-color="#b19e79"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 24c0-6.8 13.4-16.8 32-22L100-10l48 12c18.6 5.2 32 15.2 32 22s-13.4 16.8-32 22L100 68 52 46C33.4 40.8 20 30.8 20 24z" fill="url(#pkxHull)" stroke="#182028" stroke-width="3"/>
+  <path d="M44 24c0-4 8.8-8.4 26-11l24-2.2 24 2.2c17.2 2.6 26 7 26 11s-8.8 8.4-26 11l-24 2.2-24-2.2c-17.2-2.6-26-7-26-11z" fill="url(#pkxDeck)"/>
+  <g transform="translate(100 24)">
+    <rect x="-22" y="-6" width="44" height="12" rx="4" fill="#333f49" stroke="#11171c" stroke-width="1.2"/>
+    <rect x="-4" y="-10" width="8" height="8" rx="2" fill="#232a32" stroke="#0d1114" stroke-width="0.9"/>
+  </g>
 </svg>
