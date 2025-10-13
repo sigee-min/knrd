@@ -429,9 +429,7 @@ function canSkipCurrentWave() {
   if (!GAME_STATE.waveActive) return { ok: false, reason: '라운드 진행 중 아님' };
   if (GAME_STATE.round === 0) return { ok: false, reason: '준비 라운드' };
   if (GAME_STATE.isBossWave) {
-    if (!GAME_STATE.bossSpawned) return { ok: false, reason: '보스 대기 중' };
-    if (GAME_STATE.bossMustDie) return { ok: false, reason: '보스 생존 중' };
-    return { ok: true };
+    return { ok: false, reason: '보스 라운드' };
   }
   const target = GAME_STATE.spawnTarget ?? 0;
   const spawned = GAME_STATE.spawnedThisWave ?? 0;
@@ -459,9 +457,6 @@ function handleCommand(command, options = {}) {
       if (!ok) {
         setWaveStatus(`스킵 불가: ${reason}`);
         break;
-      }
-      if (Array.isArray(GAME_STATE.enemies) && GAME_STATE.enemies.length > 0) {
-        GAME_STATE.enemies = [];
       }
       GAME_STATE.projectiles = [];
       GAME_STATE.hitBlips = [];
